@@ -42,6 +42,15 @@
     align-items: center;
     background: lighten($background, 5);
   }
+  &.selectedContainer {
+    margin: 0.5em 0;
+    width: 20em;
+    padding: 10px;
+    border-radius: $borderRadius;
+    display: flex;
+    align-items: center;
+    background: lighten($background, 20);
+  }
   &.name {
     font-weight: 300;
     margin-left: 5px;
