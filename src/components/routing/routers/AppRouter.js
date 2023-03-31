@@ -5,6 +5,13 @@ import {LoginGuard} from "components/routing/routeProtectors/LoginGuard";
 import Login from "components/views/Login";
 import Register from "../../views/Register";
 import {RegisterGuard} from "../routeProtectors/RegisterGuard";
+import Profile from "../../views/Profile";
+import {ProfileGuard} from "../routeProtectors/ProfileGuard";
+import Rules from "../../views/Rules";
+import {RulesGuard} from "../routeProtectors/RulesGuard";
+import Lobby from "../../views/Lobby";
+import {LobbyGuard} from "../routeProtectors/LobbyGuard";
+import Game from "../../views/Game";
 
 /**
  * Main router of your application.
@@ -33,6 +40,26 @@ const AppRouter = () => {
           <RegisterGuard>
             <Register/>
           </RegisterGuard>
+        </Route>
+        <Route exact path="/profile/:id">
+          <ProfileGuard>
+            <Profile/>
+          </ProfileGuard>
+        </Route>
+        <Route exact path="/rules">
+          <RulesGuard>
+            <Rules/>
+          </RulesGuard>
+        </Route>
+        <Route exact path="/lobby/:id">
+          <LobbyGuard>
+            <Lobby/>
+          </LobbyGuard>
+        </Route>
+        <Route exact path="/game/:id">
+          <GameGuard>
+            <Game/>
+          </GameGuard>
         </Route>
         <Route exact path="/">
           <Redirect to="/game"/>
