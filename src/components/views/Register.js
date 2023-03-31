@@ -47,7 +47,7 @@ const Register = () => {
                 localStorage.setItem('token', token);
             }
             localStorage.setItem('username', user.username);
-            history.push(`/game`);
+            history.push(`/overview`);
 
         } catch (error) {
             alert(`Something went wrong during registering \n${handleError(error)}`);
