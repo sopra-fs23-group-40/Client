@@ -1,6 +1,5 @@
 import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import {GameGuard} from "components/routing/routeProtectors/GameGuard";
-import GameRouter from "components/routing/routers/GameRouter";
 import {LoginGuard} from "components/routing/routeProtectors/LoginGuard";
 import Login from "components/views/Login";
 import Register from "../../views/Register";
@@ -12,6 +11,8 @@ import {RulesGuard} from "../routeProtectors/RulesGuard";
 import Lobby from "../../views/Lobby";
 import {LobbyGuard} from "../routeProtectors/LobbyGuard";
 import Game from "../../views/Game";
+import Overview from "../../views/Overview";
+import {OverviewGuard} from "../routeProtectors/OverviewGuard";
 
 /**
  * Main router of your application.
@@ -23,50 +24,50 @@ import Game from "../../views/Game";
  * Documentation about routing in React: https://reacttraining.com/react-router/web/guides/quick-start
  */
 const AppRouter = () => {
-  return (
-    <BrowserRouter>
-      <Switch>
-        <Route path="/game">
-          <GameGuard>
-            <GameRouter base="/game"/>
-          </GameGuard>
-        </Route>
-        <Route exact path="/login">
-          <LoginGuard>
-            <Login/>
-          </LoginGuard>
-        </Route>
-        <Route exact path="/register">
-          <RegisterGuard>
-            <Register/>
-          </RegisterGuard>
-        </Route>
-        <Route exact path="/profile/:id">
-          <ProfileGuard>
-            <Profile/>
-          </ProfileGuard>
-        </Route>
-        <Route exact path="/rules">
-          <RulesGuard>
-            <Rules/>
-          </RulesGuard>
-        </Route>
-        <Route exact path="/lobby/:id">
-          <LobbyGuard>
-            <Lobby/>
-          </LobbyGuard>
-        </Route>
-        <Route exact path="/game/:id">
-          <GameGuard>
-            <Game/>
-          </GameGuard>
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/game"/>
-        </Route>
-      </Switch>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Switch>
+                <Route path="/overview">
+                    <OverviewGuard>
+                        <Overview/>
+                    </OverviewGuard>
+                </Route>
+                <Route exact path="/login">
+                    <LoginGuard>
+                        <Login/>
+                    </LoginGuard>
+                </Route>
+                <Route exact path="/register">
+                    <RegisterGuard>
+                        <Register/>
+                    </RegisterGuard>
+                </Route>
+                <Route exact path="/profile/:id">
+                    <ProfileGuard>
+                        <Profile/>
+                    </ProfileGuard>
+                </Route>
+                <Route exact path="/rules">
+                    <RulesGuard>
+                        <Rules/>
+                    </RulesGuard>
+                </Route>
+                <Route exact path="/lobby/:id">
+                    <LobbyGuard>
+                        <Lobby/>
+                    </LobbyGuard>
+                </Route>
+                <Route exact path="/game/:id">
+                    <GameGuard>
+                        <Game/>
+                    </GameGuard>
+                </Route>
+                <Route exact path="/">
+                    <Redirect to="/overview"/>
+                </Route>
+            </Switch>
+        </BrowserRouter>
+    );
 };
 
 /*
