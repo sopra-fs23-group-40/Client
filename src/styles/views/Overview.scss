@@ -33,6 +33,40 @@
   & p,h2 {
     margin: 0.5em 0;
   }
+
+  &.menu {
+
+    flex-wrap: wrap;
+
+    position: fixed;
+    top: 0;
+    right: 0;
+
+    background-color: $accentDark;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: row;
+    width: 14em;
+    justify-content: center;
+
+    &.menuItem {
+      &.toggleable {
+        display: none;
+      }
+      position: static;
+      & p {
+        color: #000000;
+        display: inline-block;
+      }
+      & svg {
+        margin: 1%;
+      }
+    }
+
+
+  }
+
 }
 
 .player {
