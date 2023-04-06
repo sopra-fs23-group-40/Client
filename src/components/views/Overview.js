@@ -17,6 +17,7 @@ const Player = ({user}) => {
 
             <div className="player username">{user.username}</div>
             <div className="player id">id: {user.id}</div>
+            <div className="player lock"></div>
         </div>
     );
 }

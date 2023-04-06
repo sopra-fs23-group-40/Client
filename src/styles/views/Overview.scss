@@ -30,7 +30,7 @@
     justify-content: center;
   }
 
-  & p, h2 {
+  & p,h2 {
     margin: 0.5em 0;
   }
 }
@@ -54,6 +54,31 @@
     display: flex;
     align-items: center;
     background: lighten($background, 20);
+  }
+  &.lock {
+    background: gray;
+    border-radius: 3px;
+    width: 25px;
+    height: 20px;
+    margin-top: 60px;
+    margin-left: 60px;
+    position: relative;
+    align-items: center;
+
+  }
+
+  &.lock:before {
+    content: "";
+    display: block;
+    position: absolute;
+    border:3px solid gray;
+    top: -14px;
+    left: 2.3px;
+    width: 15px;
+    height: 27px;
+    align-items: center;
+
+    border-radius: 35px 35px 0 0;
   }
 
   &.name {
