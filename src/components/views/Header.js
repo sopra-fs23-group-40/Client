@@ -1,5 +1,4 @@
 import React from "react";
-import {ReactLogo} from "components/ui/ReactLogo";
 import PropTypes from "prop-types";
 import "styles/views/Header.scss";
 
@@ -13,8 +12,6 @@ import "styles/views/Header.scss";
  */
 const Header = props => (
   <div className="header container" style={{height: props.height}}>
-    {/*<h1 className="header title">SoPra FS23 - Group 40!</h1>
-    <ReactLogo width="60px" height="60px"/>*/}
       <img src={require("BigLogo.png")} alt="BigLogo" style={{marginTop: "20px"}}/>
 
   </div>
