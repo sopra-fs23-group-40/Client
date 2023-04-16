@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
-import {NavLink, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import 'styles/views/Login.scss';
 import BaseContainer from "components/ui/BaseContainer";
@@ -80,7 +80,9 @@ const Login = () => {
   return (
       <BaseContainer>
         <div className="login container">
+          <h2>Login</h2>
           <div className="login form">
+
             <FormField
                 label="Username"
                 type="text"
@@ -115,7 +117,13 @@ const Login = () => {
             </div>
             <div className="login labelRegister">
               <label>
-                <NavLink className={'text-center mt-4 mb-4'} to="/register">Register</NavLink>
+
+                <Button
+                    width="70%"
+                    onClick={() => history.push("/register")}
+                >
+                  Register new user?
+                </Button>
               </label>
             </div>
           </div>

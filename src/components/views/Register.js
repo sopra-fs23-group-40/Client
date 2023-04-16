@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
 import User from 'models/User';
-import {NavLink, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import 'styles/views/Login.scss';
 import BaseContainer from "components/ui/BaseContainer";
@@ -94,10 +94,15 @@ const Register = () => {
                         </Button>
                     </div>
 
+
+
                     <div className="login labelRegister">
-                        <label>
-                            <NavLink className={'text-center mt-4 mb-4'} to="/login">return to Login-Page</NavLink>
-                        </label>
+                        <Button
+                            width="70%"
+                            onClick={() => history.push("/login")}
+                        >
+                            back to login
+                        </Button>
                     </div>
                 </div>
             </div>
