@@ -59,6 +59,7 @@ const Register = () => {
     return (
         <BaseContainer>
             <div className="login container">
+                <h2>Register</h2>
                 <div className="login form">
                     <FormField
                         label="Username"

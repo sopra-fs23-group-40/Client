@@ -122,7 +122,7 @@ const Login = () => {
                     width="70%"
                     onClick={() => history.push("/register")}
                 >
-                  Register new user?
+                  Register as a new user?
                 </Button>
               </label>
             </div>
