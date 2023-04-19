@@ -8,7 +8,21 @@ import {useHistory} from "react-router-dom";
 
 const Profile = () => {
     const history = useHistory();
-    const [stat, setStat] = useState({gamesPlayed: "", gamesWon: "", minutesPlayed: ""})
+    const [loggedInUser, setLoggedInUser] = useState("");
+    const [stat, setStat] = useState({gamesPlayed: "", gamesWon: "", minutesPlayed: "", winPercentage: "", blocksPlaced: ""})
+
+    const fetchLoggedInUsername = async () => {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers:{
+                token
+            }
+        };
+        const response = await api.get('/loggedInName', config);
+        if (response.data != null) {
+            setLoggedInUser(response.data);
+        }
+    }
 
     useEffect(() => {
         async function fetchData() {
@@ -21,7 +35,8 @@ const Profile = () => {
                 }
                 const response = await api.get('/statistics', config);
                 setStat(response.data)
-                console.log(JSON.stringify(response.data.gamesPlayed))
+                await fetchLoggedInUsername();
+                console.log(JSON.stringify(response.data))
             } catch (error) {
                 alert(`Something went wrong during fetching the statistics \n${handleError(error)}`);
             }
@@ -42,7 +57,7 @@ const Profile = () => {
                         {String.fromCharCode(8592)}Go Back to Lobby Overview
                     </Button>
                     <table id="vertical-1">
-                        <caption> <h2>User statistics</h2></caption>
+                        <caption> <h2>{loggedInUser}'s statistics</h2></caption>
                         <tbody>
                         <tr className="profile row-style">
                             <th style ={{width: '150px'}}>Total games Played:</th>
@@ -54,7 +69,15 @@ const Profile = () => {
                         </tr>
                         <tr className="profile row-style">
                             <th>Total minutes played:</th>
-                            <td>{stat.minutesPlayed}</td>
+                            <td>{stat.minutesPlayed}min</td>
+                        </tr>
+                        <tr className="profile row-style">
+                            <th>Win percentage:</th>
+                            <td>{stat.winPercentage}%</td>
+                        </tr>
+                        <tr className="profile row-style">
+                            <th>Total blocks placed:</th>
+                            <td>{stat.blocksPlaced}</td>
                         </tr>
                         </tbody>
                     </table>
