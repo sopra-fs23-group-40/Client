@@ -59,7 +59,12 @@ const Overview = () => {
             }
         };
         if (token != null) {
-            await api.post('/logout', null, config);
+            try {
+                await api.post('/logout', null, config);
+            } catch (error) {
+                console.error("Something went wrong while logging out!");
+                console.error("Details:", error);
+            }
         }
         localStorage.removeItem('token');
         history.push('/login');
