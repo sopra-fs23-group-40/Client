@@ -50,7 +50,6 @@ const Overview = () => {
     // a component can have as many state variables as you like.
     // more information can be found under https://reactjs.org/docs/hooks-state.html
     const [lobbies, setLobbies] = useState(null);
-    const [loggedInUser, setLoggedInUser] = useState("");
 
     const logout = async () => {
         const token = localStorage.getItem('token');
