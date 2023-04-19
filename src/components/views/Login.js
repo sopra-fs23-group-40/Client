@@ -6,6 +6,7 @@ import {Button} from 'components/ui/Button';
 import 'styles/views/Login.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
+import Header from "./Header";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -79,6 +80,7 @@ const Login = () => {
   };
   return (
       <BaseContainer>
+        <Header height="100"/>
         <div className="login container">
           <h2>Login</h2>
           <div className="login form">

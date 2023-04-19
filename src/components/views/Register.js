@@ -5,6 +5,7 @@ import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import 'styles/views/Login.scss';
 import BaseContainer from "components/ui/BaseContainer";
+import Header from "./Header";
 
 const FormField = props => {
     return (
@@ -58,6 +59,7 @@ const Register = () => {
 
     return (
         <BaseContainer>
+            <Header height="100"/>
             <div className="login container">
                 <h2>Register</h2>
                 <div className="login form">

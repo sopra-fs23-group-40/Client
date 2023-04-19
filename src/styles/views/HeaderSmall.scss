@@ -1,0 +1,13 @@
+@import 'styles/theme';
+
+.headersmall {
+  &.container {
+    @include left;
+  }
+
+  &.title {
+    font-weight: bold;
+    color: black;
+    text-align: center;
+  }
+}
