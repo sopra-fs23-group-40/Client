@@ -3,14 +3,16 @@ import {useHistory} from "react-router-dom";
 import React from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Button} from "../ui/Button";
+import HeaderSmall from "./HeaderSmall";
 
 const Rules = () => {
     // use react-router-dom's hook to access the history
     const history = useHistory();
 
     return (
+        <BaseContainer>
+            <HeaderSmall height="10"/>
         <BaseContainer className="overview container">
-
             <h1>Rules</h1>
             <p>
                 Try to fit as many of your squares on the board as you can.
@@ -31,6 +33,7 @@ const Rules = () => {
             >
                 Back to overview
             </Button>
+        </BaseContainer>
         </BaseContainer>
     );
 }
