@@ -6,6 +6,7 @@ import {useHistory} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import "styles/views/Overview.scss";
+import HeaderSmall from "./HeaderSmall";
 
 
 const Player = ({user}) => {
@@ -135,6 +136,8 @@ const Overview = () => {
     }
 
     return (
+        <BaseContainer>
+            <HeaderSmall height="10"/>
         <BaseContainer className="overview container">
 
             <div className="overview menu">
@@ -173,6 +176,7 @@ const Overview = () => {
             <h1 className="overview title">Overview of all open lobbies:</h1>
 
             {content}
+        </BaseContainer>
         </BaseContainer>
     );
 }

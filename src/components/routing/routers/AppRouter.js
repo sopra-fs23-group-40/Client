@@ -42,7 +42,7 @@ const AppRouter = () => {
                         <Register/>
                     </RegisterGuard>
                 </Route>
-                <Route exact path="/profile/:id">
+                <Route exact path="/profile">
                     <ProfileGuard>
                         <Profile/>
                     </ProfileGuard>
