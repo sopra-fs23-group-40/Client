@@ -7,6 +7,7 @@ import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 import "styles/views/Overview.scss";
 import HeaderSmall from "./HeaderSmall";
+import LobbyModel from "../../models/LobbyModel";
 
 
 const Player = ({user}) => {
@@ -71,6 +72,24 @@ const Overview = () => {
         history.push('/login');
     }
 
+    async function createLobby() {
+        const username = localStorage.getItem('username')
+        const token = localStorage.getItem('token')
+        const requestBody = JSON.stringify({username, token})
+        try {
+            const response = await api.post('/createLobby', requestBody);
+            const lobby = new LobbyModel(response.data)
+            localStorage.setItem('lobbyname', lobby.name)
+            console.log(lobby.lobbyType)
+            localStorage.setItem('lobbytype', lobby.lobbyType)
+            localStorage.setItem('lobbytoken', lobby.lobbyToken)
+            history.push('/lobby/' + lobby.lobbyId)
+        } catch (error) {
+            console.error("Something went wrong while creating a lobby!");
+            console.error("Details:", error)
+        }
+    }
+
     // the effect hook can be used to react to change in your component.
     // in this case, the effect hook is only run once, the first time the component is mounted
     // this can be achieved by leaving the second argument an empty array.
@@ -113,7 +132,7 @@ const Overview = () => {
                 </ul>
                 <Button
                     width="100%"
-                    // TODO: onClick={}
+                    onClick={createLobby}
                 >
                     Create New Lobby
                 </Button>
