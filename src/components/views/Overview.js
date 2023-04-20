@@ -114,6 +114,8 @@ const Overview = () => {
             } catch (error) {
                 console.error("Something went wrong while fetching the lobbies!");
                 console.error("Details:", error);
+                localStorage.removeItem('token');
+                history.push('/login');
             }
         }
 
