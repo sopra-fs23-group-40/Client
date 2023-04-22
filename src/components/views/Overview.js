@@ -27,7 +27,6 @@ const Player = ({user}) => {
 
 const Lobby = ({lobby}) => {
     const [cont, setCont] = useState("player container");
-    const [isPublic, setIsPublic] = useState(false)
     return (
         <div className={cont} onMouseEnter={() => setCont("player selectedContainer")}
              onMouseLeave={() => setCont("player container")}
@@ -36,7 +35,7 @@ const Lobby = ({lobby}) => {
             <div className="player username">{lobby.name}</div>
             <div className="player id">players: X/X</div>
             <Grid>
-                {isPublic? <LockOpenIcon/>: <LockOutlinedIcon/>}
+                {lobby.lobbyType === "PUBLIC"? <LockOpenIcon/>: <LockOutlinedIcon/>}
             </Grid>
         </div>
     )
