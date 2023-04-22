@@ -8,7 +8,9 @@ import PropTypes from "prop-types";
 import "styles/views/Overview.scss";
 import HeaderSmall from "./HeaderSmall";
 import LobbyModel from "../../models/LobbyModel";
-
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import Grid from "@mui/material/Grid";
 
 const Player = ({user}) => {
     const [cont, setCont] = useState("player container");
@@ -19,13 +21,13 @@ const Player = ({user}) => {
 
             <div className="player username">{user.username}</div>
             <div className="player id">id: {user.id}</div>
-            <div className="player lock"></div>
         </div>
     );
 }
 
 const Lobby = ({lobby}) => {
     const [cont, setCont] = useState("player container");
+    const [isPublic, setIsPublic] = useState(false)
     return (
         <div className={cont} onMouseEnter={() => setCont("player selectedContainer")}
              onMouseLeave={() => setCont("player container")}
@@ -33,7 +35,9 @@ const Lobby = ({lobby}) => {
 
             <div className="player username">{lobby.name}</div>
             <div className="player id">players: X/X</div>
-            <div className="player lock"></div>
+            <Grid>
+                {isPublic? <LockOpenIcon/>: <LockOutlinedIcon/>}
+            </Grid>
         </div>
     )
 }
@@ -165,7 +169,6 @@ const Overview = () => {
         <BaseContainer>
             <HeaderSmall height="10"/>
         <BaseContainer className="overview container">
-
             <div className="overview menu">
                 <div className="overview menu menuItem" onClick={toggleItems}>
                     <svg width="30" height="28">
