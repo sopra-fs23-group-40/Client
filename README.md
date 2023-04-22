@@ -42,5 +42,4 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-
 > Thanks to Lucas Pelloni and Kyrill Hux for working on the template.
