@@ -13,10 +13,17 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Grid from "@mui/material/Grid";
 
 const Lobby = ({lobby}) => {
+    const history = useHistory();
     const [cont, setCont] = useState("player container");
     return (
         <div className={cont} onMouseEnter={() => setCont("player selectedContainer")}
              onMouseLeave={() => setCont("player container")}
+             onClick={() => lobby.lobbyType === "PUBLIC"? history.push('/lobby/' + lobby.lobbyId): history.push({
+                 pathname : '/join/lobby/'+lobby.lobbyId,
+                 state :{
+                     lobby_name : lobby.name //passing lobby-name along
+                 }
+             } )}
         >
 
             <div className="player username">{lobby.name}</div>
@@ -70,7 +77,7 @@ const Overview = () => {
             const response = await api.post('/createLobby', requestBody);
             const lobby = new LobbyModel(response.data)
             localStorage.setItem('lobbyname', lobby.name)
-            console.log(lobby.lobbyType)
+            console.log(lobby.lobbyId)
             localStorage.setItem('lobbytype', lobby.lobbyType)
             localStorage.setItem('lobbytoken', lobby.lobbyToken)
             history.push('/lobby/' + lobby.lobbyId)

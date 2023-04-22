@@ -13,6 +13,7 @@ import {LobbyGuard} from "../routeProtectors/LobbyGuard";
 import Game from "../../views/Game";
 import Overview from "../../views/Overview";
 import {OverviewGuard} from "../routeProtectors/OverviewGuard";
+import JoinPrivateLobby from "../../views/JoinPrivateLobby";
 
 /**
  * Main router of your application.
@@ -55,6 +56,11 @@ const AppRouter = () => {
                 <Route exact path="/lobby/:id">
                     <LobbyGuard>
                         <Lobby/>
+                    </LobbyGuard>
+                </Route>
+                <Route exact path="/join/lobby/:id">
+                    <LobbyGuard>
+                        <JoinPrivateLobby/>
                     </LobbyGuard>
                 </Route>
                 <Route exact path="/game/:id">
