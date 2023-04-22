@@ -7,6 +7,7 @@ class LobbyModel {
         this.lobbyId = null;
         this.lobbyType = null;
         this.lobbyToken = null;
+        this.playerList = null;
         Object.assign(this, data)
     }
 }
