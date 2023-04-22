@@ -52,6 +52,7 @@ const Overview = () => {
                 console.error("Details:", error);
             }
         }
+        //Test
         localStorage.removeItem('token');
         history.push('/login');
     }
