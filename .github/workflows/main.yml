@@ -22,8 +22,6 @@ jobs:
         with:
           node-version: '18.x'
           
-      - run: npm install
-          
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
