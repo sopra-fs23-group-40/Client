@@ -27,7 +27,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          NODEJS_HOME: /opt/hostedtoolcache/node/18.16.0/x64
+          NODEJS_HOME: /opt/hostedtoolcache/node
 
   deploy:
     name: Deploying to Google Cloud
