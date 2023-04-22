@@ -40,18 +40,20 @@ const JoinPrivateLobby = () => {
     const history = useHistory();
     const ln = history.location.state.lobby_name
 
-    // TODO: might need to change the requestBody => depends on what the server wants exactly
     const joinLobby = async () => {
         try {
             const token = localStorage.getItem('token');
             const username = localStorage.getItem('username')
+            const config = {
+                headers: {
+                    username, token
+                }
+            };
             const id = params.id;
-            const requestBody = JSON.stringify({token, username,id,passcode});
-            console.log("requestBody:" + JSON.stringify(requestBody));
+            const requestBody = JSON.stringify({passcode});
 
-            const response = await api.post('/joinlobby', requestBody);
+            await api.post('/joinLobby/'+id, requestBody, config);
 
-            console.log("response:" + JSON.stringify(response.status));
             history.push(`/lobby/`+id);
         } catch (error) {
             alert(`Something went wrong, try again \n${handleError(error)}`);
