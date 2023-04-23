@@ -26,7 +26,7 @@
     "extends": "react-app"
   },
   "engines": {
-    "node": ">=6.9.0"
+    "node": ">= 18"
   },
   "browserslist": [
     ">0.2%",
