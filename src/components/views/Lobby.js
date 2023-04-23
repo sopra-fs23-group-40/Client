@@ -8,8 +8,6 @@ import {useEffect, useState} from "react";
 import LobbyModel from "../../models/LobbyModel";
 
 
-
-
 const Lobby = () => {
     const [lobbyName, setLobbyName] = useState(null)
     const [lobbyType, setLobbyType] = useState(null)
@@ -66,20 +64,46 @@ const Lobby = () => {
     }, [history, params]);
 
 
-
     const change_lobbytype = async () => {
         const token = localStorage.getItem('token')
         const username = localStorage.getItem('username')
         const requestBody = JSON.stringify({username, token})
-        try{
+        try {
             const response = await api.put('/lobbytype/' + params.id, requestBody)
-            console.log(response)
             setLobbyType(response.data)
-        }
-        catch (error){
+        } catch (error) {
             console.error("Something went wrong while changing the lobbytype!");
             console.error("Details:", error)
         }
+    }
+
+    const leave_lobby = async () => {
+        const token = localStorage.getItem('token')
+        const username = localStorage.getItem('username')
+        if (isHost) {
+            try {
+                const config = {
+                    headers: {
+                        token, username
+                    }
+                }
+                await api.delete("/deletelobby/" + params.id, config)
+                console.log("lobby was deleted.")
+            } catch (error) {
+                console.error("Something went wrong while deleting the lobby");
+                console.error("Details:", error)
+            }
+        }
+        else{
+            try {
+                const requestBody = JSON.stringify({username, token})
+                await api.put("/leavelobby/" + params.id, requestBody)
+            } catch (error){
+                console.error("Something went wrong while leaving the lobby");
+                console.error("Details:", error)
+            }
+        }
+        history.push("/overview")
     }
 
 
@@ -105,7 +129,7 @@ const Lobby = () => {
 
                 <Button
                     width={"50%"}
-                    onClick={() => history.push("/overview")}
+                    onClick={() => leave_lobby()}
                 >
                     leave lobby
                 </Button>
