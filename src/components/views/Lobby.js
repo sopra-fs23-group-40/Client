@@ -161,6 +161,9 @@ const Lobby = () => {
                     leave lobby
                 </Button>
             </BaseContainer>
+            <Button onClick={() => history.push("/game/"+params.id)}>
+                Test-Redirect to Game
+            </Button>
         </BaseContainer>
     );
 }
