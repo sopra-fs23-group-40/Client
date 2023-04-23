@@ -59,9 +59,11 @@ const Lobby = () => {
                 const split = lobby.playerList.split(',')
                 setPlayerList(split)
 
+
                 if (lobby.lobbyToken != null) {
-                    localStorage.setItem('lobbyToken', lobby.lobbyToken)
+                    localStorage.setItem('lobbytoken', lobby.lobbyToken)
                 }
+
                 const isHost = await api.get("/lobby/" + id + "/checkhost", config)
                 setIsHost(isHost.data)
                 await new Promise(resolve => setTimeout(resolve, 2000));
@@ -100,7 +102,6 @@ const Lobby = () => {
                     }
                 }
                 await api.delete("/deletelobby/" + params.id, config)
-                console.log("lobby was deleted.")
             } catch (error) {
                 console.error("Something went wrong while deleting the lobby");
                 console.error("Details:", error)
