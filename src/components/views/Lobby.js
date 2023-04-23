@@ -123,6 +123,7 @@ const Lobby = () => {
                     width={"50%"}
                     onClick={() => change_lobbytype()}
                     disabled={!isHost}
+                    style={{ visibility: isHost ? "visible" : "hidden" }}
                 >
                     {lobbyType}
                 </Button>

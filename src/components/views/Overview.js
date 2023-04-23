@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {api} from 'helpers/api';
+import {api, handleError} from 'helpers/api';
 import {Spinner} from 'components/ui/Spinner';
 import {Button} from 'components/ui/Button';
 import {useHistory} from 'react-router-dom';
@@ -12,12 +12,30 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import Grid from "@mui/material/Grid";
 
 const Lobby = ({lobby}) => {
+    const joinPublicLobby = async (id) => {
+        try {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username')
+            const config = {
+                headers: {
+                    username, token
+                }
+            };
+            const requestBody = JSON.stringify({id, passcode:""});
+
+            await api.post('/joinLobby', requestBody, config);
+
+            history.push(`/lobby/` + id);
+        } catch (error) {
+            alert(`Something went wrong, try again \n${handleError(error)}`);
+        }
+    };
     const history = useHistory();
     const [cont, setCont] = useState("player container");
     return (
         <div className={cont} onMouseEnter={() => setCont("player selectedContainer")}
              onMouseLeave={() => setCont("player container")}
-             onClick={() => lobby.lobbyType === "PUBLIC" ? history.push('/lobby/' + lobby.lobbyId) : history.push({
+             onClick={() => lobby.lobbyType === "PUBLIC" ? joinPublicLobby(lobby.lobbyId) : history.push({
                  pathname: '/join/lobby/' + lobby.lobbyId,
                  state: {
                      lobby_name: lobby.name //passing lobby-name along
