@@ -4,9 +4,21 @@ import BaseContainer from "../ui/BaseContainer";
 import HeaderSmall from "./HeaderSmall";
 import {Button} from "../ui/Button";
 import {api} from "../../helpers/api";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import LobbyModel from "../../models/LobbyModel";
+import {Spinner} from "../ui/Spinner";
+import PropTypes from "prop-types";
 
+const Player = ({player}) => {
+    return (<div className="player container">
+            <div className="player username">{player}</div>
+        </div>
+    )
+}
+
+Player.propTypes = {
+    player: PropTypes.string
+};
 
 const Lobby = () => {
     const [lobbyName, setLobbyName] = useState(null)
@@ -93,17 +105,30 @@ const Lobby = () => {
                 console.error("Something went wrong while deleting the lobby");
                 console.error("Details:", error)
             }
-        }
-        else{
+        } else {
             try {
                 const requestBody = JSON.stringify({username, token})
                 await api.put("/leavelobby/" + params.id, requestBody)
-            } catch (error){
+            } catch (error) {
                 console.error("Something went wrong while leaving the lobby");
                 console.error("Details:", error)
             }
         }
         history.push("/overview")
+    }
+
+    let content = <Spinner/>;
+
+    if (playerList) {
+        content = (
+            <div className="lobby">
+                <ul className="lobby user-list">
+                    {playerList.map(player => (
+                        <Player player={player} key={player}/>
+                    ))}
+                </ul>
+            </div>
+        );
     }
 
 
@@ -116,14 +141,14 @@ const Lobby = () => {
                 {tokendisplay}
 
                 <BaseContainer className={"lobby container"}>
-                    {playerList}
+                    {content}
                 </BaseContainer>
 
                 <Button
                     width={"50%"}
                     onClick={() => change_lobbytype()}
                     disabled={!isHost}
-                    style={{ visibility: isHost ? "visible" : "hidden" }}
+                    style={{visibility: isHost ? "visible" : "hidden"}}
                 >
                     {lobbyType}
                 </Button>
