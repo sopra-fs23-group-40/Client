@@ -50,9 +50,9 @@ const JoinPrivateLobby = () => {
                 }
             };
             const id = params.id;
-            const requestBody = JSON.stringify({passcode});
+            const requestBody = JSON.stringify({id, passcode});
 
-            await api.post('/joinLobby/'+id, requestBody, config);
+            await api.post('/joinLobby', requestBody, config);
 
             history.push(`/lobby/`+id);
         } catch (error) {
