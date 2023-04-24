@@ -14,7 +14,7 @@ const HeaderSmall = props => (
   <div className="headersmall container" style={{height: props.height}}>
     {/*<h1 className="header title">SoPra FS23 - Group 40!</h1>
     <ReactLogo width="60px" height="60px"/>*/}
-      <img src={require("BigLogo.png")} alt="BigLogo" style={{marginTop: "1px", width: "184px", height: "50px"}}/>
+      <img src={require("BigLogo.png")} alt="BigLogo" style={{marginTop: "1px", marginBottom: "10px",width: "184px", height: "50px"}}/>
 
   </div>
 );
