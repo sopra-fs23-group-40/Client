@@ -21,6 +21,7 @@ Player.propTypes = {
 };
 
 const Lobby = () => {
+    const [tip, setTip] = useState(null)
     const [lobbyName, setLobbyName] = useState(null)
     const [lobbyType, setLobbyType] = useState(null)
     const [playerList, setPlayerList] = useState(null)
@@ -82,6 +83,7 @@ const Lobby = () => {
         }
 
         fetchData();
+        setRandomTip();
     }, [history, params]);
 
 
@@ -140,6 +142,24 @@ const Lobby = () => {
         );
     }
 
+    function setRandomTip() {
+        const tips = [
+            "You can change whether a Lobby is public or private with the button above.",
+            "You can start the game by clicking on the button below when the Lobby is full (currently 4 Players).",
+            "You can invite your friends by sending them the lobbytoken.",
+            "Try to cover up as much space as possible to prevent others from placing their blocks.",
+            "Pick your blocks wisely, you can only place them once.",
+            "Click this text to get a new tip.",
+            "You can leave the Lobby by clicking on the button above.",
+            "You can see your statistics when you leave the lobby and open the top right menu.",
+            "Log out when you stop playing for security reasons.",
+            "In the Lobby list, the lock indicates whether a Lobby is public or private.",
+            "Go back to the Lobby overview and open the menu to read the rules of the game.",
+            "Only the host of a Lobby (the one who created it) can start the game.",
+            "Invite your friends to play with you! But don't tell them your strategies."
+        ];
+        setTip(tips[Math.floor(Math.random() * tips.length)]);
+    }
 
     async function startGame() {
         try {
@@ -187,6 +207,8 @@ const Lobby = () => {
                 >
                     leave lobby
                 </Button>
+
+                <p onClick={setRandomTip} style={{cursor:'pointer'}}>Tip: {tip}</p>
             </BaseContainer>
             <Button onClick={() => history.push("/game/"+params.id)}>
                 Test-Redirect to Game
