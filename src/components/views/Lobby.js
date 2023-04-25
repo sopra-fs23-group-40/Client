@@ -34,7 +34,14 @@ const Lobby = () => {
     if (lobbyType === "PRIVATE") {
         tokendisplay = (
             <div>
-                Lobbytoken: {localStorage.getItem('lobbytoken')}
+                Private Lobby<br />
+                Token: {localStorage.getItem('lobbytoken')}
+            </div>
+        )
+    } else {
+        tokendisplay = (
+            <div>
+                Public Lobby<br />
             </div>
         )
     }
@@ -115,6 +122,7 @@ const Lobby = () => {
                 console.error("Details:", error)
             }
         }
+        localStorage.removeItem('lobbytoken');
         history.push("/overview")
     }
 
