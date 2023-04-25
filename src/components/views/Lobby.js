@@ -22,6 +22,7 @@ Player.propTypes = {
 
 const Lobby = () => {
     const [tip, setTip] = useState(null)
+    const [evtSource, setEvtSource] = useState(null);
     const [lobbyName, setLobbyName] = useState(null)
     const [lobbyType, setLobbyType] = useState(null)
     const [playerList, setPlayerList] = useState(null)
@@ -35,22 +36,27 @@ const Lobby = () => {
     if (lobbyType === "PRIVATE") {
         tokendisplay = (
             <div>
-                Private Lobby<br />
+                Private Lobby<br/>
                 Token: {localStorage.getItem('lobbytoken')}
             </div>
         )
     } else {
         tokendisplay = (
             <div>
-                Public Lobby<br />
+                Public Lobby<br/>
             </div>
         )
     }
 
+    const setValue = async () => {
+        setEvtSource(new EventSource('http://localhost:8080/live-scores'))
+    }
+
+
     useEffect(() => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
-
+            await setValue()
             try {
                 const token = localStorage.getItem('token')
                 const username = localStorage.getItem('username')
@@ -84,8 +90,33 @@ const Lobby = () => {
 
         fetchData();
         setRandomTip();
+
     }, [history, params]);
 
+    if(evtSource) {
+        evtSource.onmessage = async (e) => {
+            console.log("Message received: " + e.data)
+            try {
+                const token = localStorage.getItem('token')
+                const username = localStorage.getItem('username')
+                const id = params.id
+                const config = {
+                    headers: {
+                        token, username
+                    }
+                }
+                const response = await api.get('/lobby/' + id, config);
+                const lobby = new LobbyModel(response.data);
+                setLobbyType(lobby.lobbyType)
+                setLobbyName(lobby.name)
+                const split = lobby.playerList.split(',')
+                setPlayerList(split)
+            } catch (error) {
+                console.error("Something went wrong while fetching the lobbydata!");
+                console.error("Details:", error);
+            }
+        }
+    }
 
     const change_lobbytype = async () => {
         const token = localStorage.getItem('token')
@@ -124,6 +155,7 @@ const Lobby = () => {
                 console.error("Details:", error)
             }
         }
+        evtSource.close()
         localStorage.removeItem('lobbytoken');
         history.push("/overview")
     }
@@ -174,7 +206,7 @@ const Lobby = () => {
 
             const gameId = await api.post('/games', id, config);
             console.log(gameId)
-            history.push(`/game/`+gameId.data);
+            history.push(`/game/` + gameId.data);
         } catch (error) {
             alert(`Something went wrong, try again \n${handleError(error)}`);
         }
@@ -208,9 +240,9 @@ const Lobby = () => {
                     leave lobby
                 </Button>
 
-                <p onClick={setRandomTip} style={{cursor:'pointer'}}>Tip: {tip}</p>
+                <p onClick={setRandomTip} style={{cursor: 'pointer'}}>Tip: {tip}</p>
             </BaseContainer>
-            <Button onClick={() => history.push("/game/"+params.id)}>
+            <Button onClick={() => history.push("/game/" + params.id)}>
                 Test-Redirect to Game
             </Button>
             <Button onClick={() => startGame()}>
