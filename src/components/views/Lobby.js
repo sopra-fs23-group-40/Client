@@ -3,7 +3,7 @@ import {useHistory, useParams} from "react-router-dom";
 import BaseContainer from "../ui/BaseContainer";
 import HeaderSmall from "./HeaderSmall";
 import {Button} from "../ui/Button";
-import {api} from "../../helpers/api";
+import {api, handleError} from "../../helpers/api";
 import React, {useEffect, useState} from "react";
 import LobbyModel from "../../models/LobbyModel";
 import {Spinner} from "../ui/Spinner";
@@ -133,6 +133,25 @@ const Lobby = () => {
     }
 
 
+    async function startGame() {
+        try {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username')
+            const config = {
+                headers: {
+                    username, token
+                }
+            };
+            const id = params.id;
+
+            const gameId = await api.post('/games', id, config);
+            console.log(gameId)
+            history.push(`/game/`+gameId.data);
+        } catch (error) {
+            alert(`Something went wrong, try again \n${handleError(error)}`);
+        }
+    }
+
     return (
         <BaseContainer>
             <HeaderSmall height="10"/>
@@ -163,6 +182,9 @@ const Lobby = () => {
             </BaseContainer>
             <Button onClick={() => history.push("/game/"+params.id)}>
                 Test-Redirect to Game
+            </Button>
+            <Button onClick={() => startGame()}>
+                Start Game
             </Button>
         </BaseContainer>
     );
