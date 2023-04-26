@@ -10,7 +10,7 @@ const Game = () => {
     const numCols = 20;
 
     const numInvRows = 4;
-    const numInvCols = 30;
+    const numInvCols = 45;
 
     const invSize = "1.46em";
 
@@ -19,6 +19,9 @@ const Game = () => {
     const handleInvClick = (row, col) => {
         const block = invCells[row][col];
         console.log(`Clicked inventory cell (${row},${col})`);
+
+        if(block === null) return;
+
         if(pickedUpBlock === null) {
             // Picking up new block
             pickedUpBlock = block;
@@ -63,7 +66,7 @@ const Game = () => {
 
     const invCells = [];
     for(let i = 0; i < 4; i++) {
-        invCells.push(new Array(20).fill(null));
+        invCells.push(new Array(numInvCols).fill(null));
     }
 
     var colOffset = 0;
