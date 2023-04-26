@@ -11,7 +11,9 @@ const Game = () => {
     const numCols = 20;
 
     const numInvRows = 4;
-    const numInvCols = 20;
+    const numInvCols = 30;
+
+    const invSize = "1.46em";
 
     const handleInvClick = (row, col) => {
         console.log(`Clicked inventory cell (${row},${col})`);
@@ -71,7 +73,7 @@ const Game = () => {
                     key={`${row}-${col}`}
                     row={row}
                     col={col}
-                    style={invCells[row][col] ? {backgroundColor: "red"} : null}
+                    style={invCells[row][col] ? {backgroundColor: "red", width: invSize, height: invSize} : {width: invSize, height: invSize}}
                     onClick={() => handleInvClick(row, col)}
                 >
                 </Cell>
