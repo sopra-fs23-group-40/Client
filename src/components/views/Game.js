@@ -59,17 +59,12 @@ const Game = () => {
         }
     }
 
-    function colorCells(block, color, row, col) {
-        console.log("Block:");
-        console.log(block);
-        console.log("Color:");
-        console.log(color);
+    function colorCells(block, color, row, column) {
         for(let i = 0; i < block.length; i++) {
             for(let j = 0; j < block.height; j++) {
-                if(block.shape[i][j]) {
-                    console.log("Coloring cell (" + (row + i) + "," + (col + j) + ")");
-
-                    document.getElementById("cell-" + (row + i) + "-" + (col + j)).style.backgroundColor = color;
+                if(block.shape[j][i]) {
+                    console.log("Coloring cell (" + (row+j) + "/" + (column+i) + ") " + color);
+                    document.getElementById("cell-" + (row+j) + "-" + (column+i)).style.backgroundColor = color;
                 }
             }
         }
@@ -96,7 +91,9 @@ const Game = () => {
             if (response.status !== 200) {
                 alert("This move is not possible!");
             } else {
-                colorCells(pickedUpBlock, "red", row, col);
+                console.log("Placement of " + pickedUpBlock.name + " at (" + row + "/" + col + ") successful")
+                await colorCells(pickedUpBlock, "red", row, col);
+                await removeBlockFromCursor();
             }
         } catch (e) {
             alert("This move is not possible!");
