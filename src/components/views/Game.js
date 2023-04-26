@@ -19,6 +19,16 @@ const Game = () => {
 
     let pickedUpBlock = null;
 
+    const removeBlockFromCursor = () => {
+        console.log("Removing block from cursor");
+        // TODO: Visualize
+    }
+
+    const fixBlockToCursor = (block) => {
+        console.log("Picking up block " + block.name);
+        // TODO: Visualize
+    }
+
     const handleInvClick = (row, col) => {
         const block = invCells[row][col];
         console.log(`Clicked inventory cell (${row},${col})`);
@@ -28,20 +38,21 @@ const Game = () => {
 
             // Picking up new block
             pickedUpBlock = block;
-            console.log("Picked up block : " + pickedUpBlock.name);
             console.log(pickedUpBlock);
+            fixBlockToCursor(block);
         } else {
             if(block === null) {
                 pickedUpBlock = null;
-                console.log("Dropped block");
+                removeBlockFromCursor();
             } else {
                 // Swapping Blocks
                 if(pickedUpBlock === block) {
-                    console.log("Dropped block");
                     pickedUpBlock = null;
+                    removeBlockFromCursor();
                 } else {
-                    console.log("Swapping " + pickedUpBlock.name + " with " + block.name);
                     pickedUpBlock = block;
+                    removeBlockFromCursor();
+                    fixBlockToCursor(block);
                 }
             }
         }
