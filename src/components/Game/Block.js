@@ -1,13 +1,4 @@
-import React from "react";
-
-//function handleInvClick(cell) {
-//    console.log("Clicked inventory block " + cell.name);
-//}
-
 export class Block1 {
-
-    constructor() {
-    }
 
     name = "Block1";
     numberOfSquares = 2;
@@ -25,9 +16,6 @@ export class Block1 {
 }
 
 export class Block2 {
-
-    constructor() {
-    }
 
     name = "Block2";
     numberOfSquares = 5;
