@@ -5,12 +5,12 @@ import {api, handleError} from "../../helpers/api";
 import {useEffect, useState} from "react";
 import {Button} from "../ui/Button";
 import {useHistory} from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 const Profile = () => {
     const history = useHistory();
     const [loggedInUser, setLoggedInUser] = useState("");
     const [stat, setStat] = useState({gamesPlayed: "", gamesWon: "", minutesPlayed: "", winPercentage: "", blocksPlaced: ""})
-
     const fetchLoggedInUsername = async () => {
         const token = localStorage.getItem('token');
         const config = {
@@ -37,6 +37,8 @@ const Profile = () => {
                 setStat(response.data)
                 await fetchLoggedInUsername();
                 console.log(JSON.stringify(response.data))
+
+
             } catch (error) {
                 alert(`Something went wrong during fetching the statistics \n${handleError(error)}`);
             }
@@ -56,8 +58,19 @@ const Profile = () => {
                     >
                         {String.fromCharCode(8592)}Go Back to Lobby Overview
                     </Button>
+                        <Grid container direction="row" alignItems="center" margin={"10px"} justifyContent="center">
+                            <Grid item>
+                                <h2>{loggedInUser}'s statistics</h2>
+                            </Grid>
+                            <Grid item>
+                                <img
+                                    src={`https://api.dicebear.com/6.x/bottts/svg?seed=${loggedInUser}`}
+                                    alt="avatar"
+                                    style={{width: "80px", height: "80px"}}
+                                />
+                            </Grid>
+                        </Grid>
                     <table id="vertical-1">
-                        <caption> <h2>{loggedInUser}'s statistics</h2></caption>
                         <tbody>
                         <tr className="profile row-style">
                             <th style ={{width: '150px'}}>Total games Played:</th>
@@ -83,8 +96,6 @@ const Profile = () => {
                     </table>
                     <br/>
                 </div>
-
-
             </BaseContainer>
         </BaseContainer>
 

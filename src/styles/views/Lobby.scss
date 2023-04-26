@@ -10,6 +10,12 @@
     align-items: center;
     box-shadow: $dropShadow;
   }
+  &.containerWaitingForHost {
+    background: rgba(182, 41, 41, 0.64);
+    border-radius: $borderRadius;
+    margin: 1em;
+    padding: 0.5em;
+  }
   &.user-list {
     list-style: none;
     padding-left: 0;
