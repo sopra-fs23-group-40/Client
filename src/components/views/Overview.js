@@ -148,6 +148,7 @@ const Overview = () => {
                 >
                     Create New Lobby
                 </Button>
+                <br/><br/>
                 <Button
                     width="100%"
                     onClick={() => window.location.reload()}
