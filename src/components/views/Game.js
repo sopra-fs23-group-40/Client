@@ -1,15 +1,18 @@
 import "styles/views/Game.scss";
 import HeaderSmall from "./HeaderSmall";
-import React from "react";
+import React, {useEffect} from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
 import {api} from "../../helpers/api";
+import {useParams} from "react-router-dom";
 import {
     Block1, Block2, Block3, Block4, Block5, Block6, Block7, Block8, Block9, Block10, Block11, Block12, Block13, Block14,
     Block15, Block16, Block17, Block18, Block19, Block20, Block21
         } from "../Game/Block";
 
 const Game = () => {
+    const params = useParams();
+    const id = params.id
     const numRows = 20;
     const numCols = 20;
 
@@ -190,10 +193,30 @@ const Game = () => {
         inventoryCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
 
+    useEffect(() => {
+        // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
+        async function fetchData() {
+            try {
+                // TODO: throws error if you get redirected by clicking on "Test-Redirect to Game" in Lobby (so either ignore error or start valid game with valid gameID)
+                const response = await api.get('/games/' + id + "/players");
+                console.log(JSON.stringify(response))
+
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+            } catch (error) {
+                console.error("Something went wrong while fetching the lobbydata!");
+                console.error("Details:", error);
+            }
+        }
+
+        fetchData();
+
+    }, []);
+
     return (
         <BaseContainer>
             <HeaderSmall height="10" />
-            <BaseContainer classname={'game container'}>
+            <BaseContainer className={'game container'}>
                 <div className="cell-field">{cells}</div>
                 <br/>
                 <div className="cell-field">{inventoryCells}</div>
