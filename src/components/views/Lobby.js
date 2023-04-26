@@ -30,8 +30,11 @@ Player.propTypes = {
 };
 
 const Lobby = () => {
+    const baseURL = getDomain()
+    const params = useParams();
+    const id = params.id
     const [tip, setTip] = useState(null)
-    const [evtSource, setEvtSource] = useState(null);
+    const [evtSource, setEvtSource] = useState(null)
     const [lobbyName, setLobbyName] = useState(null)
     const [lobbyType, setLobbyType] = useState(null)
     const [playerList, setPlayerList] = useState(null)
@@ -39,9 +42,11 @@ const Lobby = () => {
     const history = useHistory();
     const username = localStorage.getItem('username')
     const token = localStorage.getItem('token')
-    const params = useParams();
-    const id = params.id
 
+
+    if (evtSource == null){
+        setEvtSource(new EventSource(baseURL + '/lobby-updates'))
+    }
 
     let tokendisplay
     let startbutton
@@ -103,17 +108,10 @@ const Lobby = () => {
         )
     }
 
-    const setValue = async () => {
-        const baseURL = getDomain()
-        setEvtSource(new EventSource(baseURL + '/lobby-updates'))
-        console.log(baseURL + '/lobby-updates')
-    }
-
 
     useEffect(() => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
-            await setValue()
             try {
                 const config = {
                     headers: {
@@ -149,24 +147,27 @@ const Lobby = () => {
 
     if (evtSource) {
         evtSource.onmessage = async (e) => {
-            console.log("Message received: " + e.data)
-            if (e.data === "JOINED" || e.data === "LEFT") {
-                try {
-                    const config = {
-                        headers: {
-                            token, username
+            const parse = JSON.parse(e.data)
+            console.log(baseURL + '/lobby-updates/' + params.id)
+            if (parse.id.toString() === params.id.toString()) {
+                if (parse.message === "JOINED" || parse.message === "LEFT") {
+                    try {
+                        const config = {
+                            headers: {
+                                token, username
+                            }
                         }
+                        const response = await api.get('/lobby/' + id, config);
+                        const lobby = new LobbyModel(response.data);
+                        const split = lobby.playerList.split(',')
+                        setPlayerList(split)
+                    } catch (error) {
+                        console.error("Something went wrong while fetching the lobbydata!");
+                        console.error("Details:", error);
                     }
-                    const response = await api.get('/lobby/' + id, config);
-                    const lobby = new LobbyModel(response.data);
-                    const split = lobby.playerList.split(',')
-                    setPlayerList(split)
-                } catch (error) {
-                    console.error("Something went wrong while fetching the lobbydata!");
-                    console.error("Details:", error);
+                } else if (parse.message === "DELETED") {
+                    history.push("/overview")
                 }
-            } else if (e.data === "DELETED") {
-                history.push("/overview")
             }
         }
     }
