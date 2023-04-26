@@ -30,6 +30,25 @@ const Game = () => {
         // TODO: Visualize
     }
 
+    const removeBlockFromInventory = (block) => {
+        console.log("Removing " + block.name + " from inventory");
+        console.log("InvCells:");
+        console.log(invCells);
+        console.log("inventoryCells:");
+        console.log(inventoryCells);
+
+        for(let i = 0; i < numInvCols; i++) {
+            for(let j = 0; j < numInvRows; j++) {
+                if(invCells[j][i] === block) {
+                    console.log("uncoloring cell (" + j + "," + i + ")");
+                    invCells[j][i] = null;
+                    document.getElementById("invcell-" + (j) + "-" + (i)).style.backgroundColor = "#eeeeee";
+                }
+            }
+        }
+
+    }
+
     const handleInvClick = (row, col) => {
         const block = invCells[row][col];
         console.log(`Clicked inventory cell (${row},${col})`);
@@ -94,6 +113,7 @@ const Game = () => {
                 console.log("Placement of " + pickedUpBlock.name + " at (" + row + "/" + col + ") successful")
                 await colorCells(pickedUpBlock, "red", row, col);
                 await removeBlockFromCursor();
+                await removeBlockFromInventory(pickedUpBlock);
             }
         } catch (e) {
             alert("This move is not possible!");
@@ -157,6 +177,7 @@ const Game = () => {
             rowCells.push([
                 <Cell
                     key={`${row}-${col}`}
+                    id={`invcell-${row}-${col}`}
                     row={row}
                     col={col}
                     style={invCells[row][col] ? {backgroundColor: "red", width: invSize, height: invSize} : {width: invSize, height: invSize}}
