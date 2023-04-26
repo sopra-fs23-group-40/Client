@@ -3,6 +3,7 @@ import HeaderSmall from "./HeaderSmall";
 import React from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
+import {api} from "../../helpers/api";
 import {
     Block1, Block2, Block3, Block4, Block5, Block6, Block7, Block8, Block9, Block10, Block11, Block12, Block13, Block14,
     Block15, Block16, Block17, Block18, Block19, Block20, Block21
@@ -58,12 +59,29 @@ const Game = () => {
         }
     }
 
-    const handleCellClick = (row, col) => {
+    const handleCellClick = async (row, col) => {
         console.log(`Clicked cell (${row},${col})`);
 
-        if(pickedUpBlock === null) return;
+        if (pickedUpBlock === null) return;
 
         console.log("Placing block : " + pickedUpBlock.name);
+
+
+        const gameId = localStorage.getItem('gameId');
+        const username = localStorage.getItem('username');
+        // TODO: submit player id or change server endpoint to username
+
+        // TODO: Server error "Required request body is missing: public void ch.uzh.ifi.hase.soprafs23.controller.GameController.placeBlock(java.lang.String,java.lang.String,java.lang.String,int,int)
+        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col});
+
+        console.log("BODY:");
+        console.log(requestBody);
+
+        const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
+
+        console.log("Response:");
+        console.log(response.data);
+
         pickedUpBlock = null;
         // TODO: check that piece is selected, if piece can be placed place it in back-end
         //  and change the color in front-end
