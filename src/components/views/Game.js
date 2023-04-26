@@ -14,13 +14,27 @@ const Game = () => {
 
     const invSize = "1.46em";
 
+    let pickedUpBlock = null;
+
     const handleInvClick = (row, col) => {
         const block = invCells[row][col];
-        console.log(`Clicked inventory cell (${row},${col}) (${block !== null ? block.name : "empty"})`);
+        console.log(`Clicked inventory cell (${row},${col})`);
+        if(pickedUpBlock === null) {
+            // Picking up new block
+            pickedUpBlock = block;
+            console.log("Picked up block : " + pickedUpBlock.name);
+        } else {
+            // Swapping Blocks
+            pickedUpBlock = block;
+        }
     }
 
     const handleCellClick = (row, col) => {
         console.log(`Clicked cell (${row},${col})`);
+        if(pickedUpBlock !== null) {
+            console.log("Placing block : " + pickedUpBlock.name);
+            pickedUpBlock = null;
+        }
         // TODO: check that piece is selected, if piece can be placed place it in back-end
         //  and change the color in front-end
     };
