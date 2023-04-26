@@ -46,6 +46,8 @@ const Lobby = () => {
 
     if (evtSource == null){
         setEvtSource(new EventSource(baseURL + '/lobby-updates'))
+        console.log(baseURL + '/lobby-updates/' + params.id)
+
     }
 
     let tokendisplay
