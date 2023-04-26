@@ -34,10 +34,11 @@ const Game = () => {
 
     const handleCellClick = (row, col) => {
         console.log(`Clicked cell (${row},${col})`);
-        if(pickedUpBlock !== null) {
-            console.log("Placing block : " + pickedUpBlock.name);
-            pickedUpBlock = null;
-        }
+
+        if(pickedUpBlock === null) return;
+
+        console.log("Placing block : " + pickedUpBlock.name);
+        pickedUpBlock = null;
         // TODO: check that piece is selected, if piece can be placed place it in back-end
         //  and change the color in front-end
     };
