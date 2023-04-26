@@ -3,7 +3,6 @@ import HeaderSmall from "./HeaderSmall";
 import React from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
-// import all block classes from ../Game/Block
 import {Block1, Block2} from "../Game/Block";
 
 const Game = () => {
@@ -16,7 +15,8 @@ const Game = () => {
     const invSize = "1.46em";
 
     const handleInvClick = (row, col) => {
-        console.log(`Clicked inventory cell (${row},${col})`);
+        const block = invCells[row][col];
+        console.log(`Clicked inventory cell (${row},${col}) (${block !== null ? block.name : "empty"})`);
     }
 
     const handleCellClick = (row, col) => {
@@ -82,8 +82,6 @@ const Game = () => {
         }
         inventoryCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
-
-    console.log(invCells);
 
     return (
         <BaseContainer>
