@@ -211,7 +211,7 @@ const Game = () => {
 
         fetchData();
 
-    }, []);
+    }, [id]);
 
     return (
         <BaseContainer>

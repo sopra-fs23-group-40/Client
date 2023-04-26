@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import {getDomain} from "../../helpers/getDomain";
 import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
 import Grid from "@mui/material/Grid";
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 
 const Player = ({player}) => {
     return (<div className="player container">
@@ -286,8 +287,16 @@ const Lobby = () => {
                 >
                     leave lobby
                 </Button>
-
-                <p onClick={setRandomTip} style={{cursor: 'pointer'}}>Tip: {tip}</p>
+                <p onClick={setRandomTip} style={{cursor: 'pointer'}}>
+                    <Grid container direction="row" alignItems="center">
+                        <Grid item>
+                            <TipsAndUpdatesIcon/>
+                        </Grid>
+                        <Grid item marginLeft={"5px"}>
+                            Tip: {tip}
+                        </Grid>
+                    </Grid>
+                </p>
                 <br/>
                 {startbutton}
                 <br/>
