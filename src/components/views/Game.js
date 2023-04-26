@@ -69,9 +69,7 @@ const Game = () => {
 
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
-        // TODO: submit player id or change server endpoint to username
 
-        // TODO: Server error "Required request body is missing: public void ch.uzh.ifi.hase.soprafs23.controller.GameController.placeBlock(java.lang.String,java.lang.String,java.lang.String,int,int)
         const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col});
 
         console.log("BODY:");
