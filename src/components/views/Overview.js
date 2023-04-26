@@ -82,7 +82,7 @@ const Overview = () => {
                 console.error("Details:", error);
             }
         }
-        localStorage.removeItem('token');
+        localStorage.clear();
         history.push('/login');
     }
 
