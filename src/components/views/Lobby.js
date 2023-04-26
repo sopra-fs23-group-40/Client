@@ -8,9 +8,16 @@ import React, {useEffect, useState} from "react";
 import LobbyModel from "../../models/LobbyModel";
 import {Spinner} from "../ui/Spinner";
 import PropTypes from "prop-types";
+import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
+import Grid from "@mui/material/Grid";
 
 const Player = ({player}) => {
     return (<div className="player container">
+            <img
+                src={`https://api.dicebear.com/6.x/bottts/svg?seed=${player}`}
+                alt="avatar"
+                style={{width: "40px", height: "40px"}}
+            />
             <div className="player username">{player}</div>
         </div>
     )
@@ -32,19 +39,61 @@ const Lobby = () => {
     const params = useParams();
 
     let tokendisplay = (<div></div>)
+    let startbutton = (<div></div>)
 
     if (lobbyType === "PRIVATE") {
-        tokendisplay = (
-            <div>
-                Private Lobby<br/>
-                Token: {localStorage.getItem('lobbytoken')}
-            </div>
-        )
+        if(isHost) {
+            tokendisplay = (
+                <div>
+                    Private Lobby<br/>
+                    Token: {localStorage.getItem('lobbytoken')}
+                </div>
+
+            )
+        }
+        else {
+            tokendisplay = (
+                <div>
+                    Private Lobby<br/>
+                </div>
+
+            )
+        }
     } else {
         tokendisplay = (
             <div>
                 Public Lobby<br/>
             </div>
+        )
+    }
+
+    // returns the START button if Host, else return element which includes Hourglass-Icon and Text "Waiting for Host"
+    if(isHost) {
+        startbutton = (
+            <Button
+                width={"25%"}
+                onClick={() => startGame()}
+                disabled={!isHost || playerList.length < 4}
+                style={{cursor: !isHost || playerList.length < 4 ? "not-allowed" : "pointer", visibility: isHost ? "visible" : "hidden"}}
+                title={!isHost || playerList.length < 4 ? "You need to be the host and have 4 players in the lobby to be able to start the game." : "Start the game!"}
+            >
+                Start Game
+            </Button>
+        )
+    }
+    else {
+        startbutton = (
+            <div className={"lobby containerWaitingForHost"}>
+                <Grid container direction="row" alignItems="center">
+                    <Grid item>
+                        <HourglassBottomTwoToneIcon/>
+                    </Grid>
+                    <Grid item>
+                        Waiting for the Host to start the Game!
+                    </Grid>
+                </Grid>
+            </div>
+
         )
     }
 
@@ -244,18 +293,11 @@ const Lobby = () => {
                 </Button>
 
                 <p onClick={setRandomTip} style={{cursor: 'pointer'}}>Tip: {tip}</p>
-
-                <Button
-                    width={"25%"}
-                    onClick={() => startGame()}
-                    disabled={!isHost || playerList.length < 4}
-                    style={{cursor: !isHost || playerList.length < 4 ? "not-allowed" : "pointer"}}
-                    title={!isHost || playerList.length < 4 ? "You need to be the host and have 4 players in the lobby to be able to start the game." : "Start the game!"}
-                >
-                    Start Game
-                </Button>
+                <br/>
+                {startbutton}
                 <br/>
                 <Button
+                    // TODO: remove this before deadline. Redirects to view '/game/lobby.id' and not an actual new game view
                     onClick={() => history.push("/game/" + params.id)}
                 >
                     Test-Redirect to Game
