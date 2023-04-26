@@ -224,30 +224,42 @@ const Lobby = () => {
                     {content}
                 </BaseContainer>
 
+                <br/>
+
                 <Button
-                    width={"50%"}
+                    width={"25%"}
                     onClick={() => change_lobbytype()}
                     disabled={!isHost}
                     style={{visibility: isHost ? "visible" : "hidden"}}
                 >
                     {lobbyType}
                 </Button>
-
+                <br/>
                 <Button
-                    width={"50%"}
+                    width={"25%"}
                     onClick={() => leave_lobby()}
                 >
                     leave lobby
                 </Button>
 
                 <p onClick={setRandomTip} style={{cursor: 'pointer'}}>Tip: {tip}</p>
+
+                <Button
+                    width={"25%"}
+                    onClick={() => startGame()}
+                    disabled={!isHost || playerList.length < 4}
+                    style={{cursor: !isHost || playerList.length < 4 ? "not-allowed" : "pointer"}}
+                    title={!isHost || playerList.length < 4 ? "You need to be the host and have 4 players in the lobby to be able to start the game." : "Start the game!"}
+                >
+                    Start Game
+                </Button>
+                <br/>
+                <Button
+                    onClick={() => history.push("/game/" + params.id)}
+                >
+                    Test-Redirect to Game
+                </Button>
             </BaseContainer>
-            <Button onClick={() => history.push("/game/" + params.id)}>
-                Test-Redirect to Game
-            </Button>
-            <Button onClick={() => startGame()}>
-                Start Game
-            </Button>
         </BaseContainer>
     );
 }
