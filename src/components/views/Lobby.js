@@ -8,6 +8,7 @@ import React, {useEffect, useState} from "react";
 import LobbyModel from "../../models/LobbyModel";
 import {Spinner} from "../ui/Spinner";
 import PropTypes from "prop-types";
+import {getDomain} from "../../helpers/getDomain";
 import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
 import Grid from "@mui/material/Grid";
 
@@ -35,14 +36,17 @@ const Lobby = () => {
     const [playerList, setPlayerList] = useState(null)
     const [isHost, setIsHost] = useState(false)
     const history = useHistory();
-
+    const username = localStorage.getItem('username')
+    const token = localStorage.getItem('token')
     const params = useParams();
+    const id = params.id
 
-    let tokendisplay = (<div></div>)
-    let startbutton = (<div></div>)
+
+    let tokendisplay
+    let startbutton
 
     if (lobbyType === "PRIVATE") {
-        if(isHost) {
+        if (isHost) {
             tokendisplay = (
                 <div>
                     Private Lobby<br/>
@@ -50,8 +54,7 @@ const Lobby = () => {
                 </div>
 
             )
-        }
-        else {
+        } else {
             tokendisplay = (
                 <div>
                     Private Lobby<br/>
@@ -68,20 +71,22 @@ const Lobby = () => {
     }
 
     // returns the START button if Host, else return element which includes Hourglass-Icon and Text "Waiting for Host"
-    if(isHost) {
+    if (isHost) {
         startbutton = (
             <Button
                 width={"25%"}
                 onClick={() => startGame()}
                 disabled={!isHost || playerList.length < 4}
-                style={{cursor: !isHost || playerList.length < 4 ? "not-allowed" : "pointer", visibility: isHost ? "visible" : "hidden"}}
+                style={{
+                    cursor: !isHost || playerList.length < 4 ? "not-allowed" : "pointer",
+                    visibility: isHost ? "visible" : "hidden"
+                }}
                 title={!isHost || playerList.length < 4 ? "You need to be the host and have 4 players in the lobby to be able to start the game." : "Start the game!"}
             >
                 Start Game
             </Button>
         )
-    }
-    else {
+    } else {
         startbutton = (
             <div className={"lobby containerWaitingForHost"}>
                 <Grid container direction="row" alignItems="center">
@@ -98,7 +103,9 @@ const Lobby = () => {
     }
 
     const setValue = async () => {
-        setEvtSource(new EventSource('http://localhost:8080/live-scores'))
+        const baseURL = getDomain()
+        setEvtSource(new EventSource(baseURL + '/lobby-updates'))
+        console.log(baseURL + '/lobby-updates')
     }
 
 
@@ -107,15 +114,12 @@ const Lobby = () => {
         async function fetchData() {
             await setValue()
             try {
-                const token = localStorage.getItem('token')
-                const username = localStorage.getItem('username')
-                const id = params.id
                 const config = {
                     headers: {
                         token, username
                     }
                 }
-                const response = await api.get('/lobby/' + id, config);
+                const response = await api.get('/lobby/' + params.id, config);
                 const lobby = new LobbyModel(response.data);
                 setLobbyType(lobby.lobbyType)
                 setLobbyName(lobby.name)
@@ -127,7 +131,7 @@ const Lobby = () => {
                     localStorage.setItem('lobbytoken', lobby.lobbyToken)
                 }
 
-                const isHost = await api.get("/lobby/" + id + "/checkhost", config)
+                const isHost = await api.get("/lobby/" + params.id + "/checkhost", config)
                 setIsHost(isHost.data)
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -140,36 +144,33 @@ const Lobby = () => {
         fetchData();
         setRandomTip();
 
-    }, [history, params]);
+    }, [history, params, token, username]);
 
-    if(evtSource) {
+    if (evtSource) {
         evtSource.onmessage = async (e) => {
             console.log("Message received: " + e.data)
-            try {
-                const token = localStorage.getItem('token')
-                const username = localStorage.getItem('username')
-                const id = params.id
-                const config = {
-                    headers: {
-                        token, username
+            if (e.data === "JOINED" || e.data === "LEFT") {
+                try {
+                    const config = {
+                        headers: {
+                            token, username
+                        }
                     }
+                    const response = await api.get('/lobby/' + id, config);
+                    const lobby = new LobbyModel(response.data);
+                    const split = lobby.playerList.split(',')
+                    setPlayerList(split)
+                } catch (error) {
+                    console.error("Something went wrong while fetching the lobbydata!");
+                    console.error("Details:", error);
                 }
-                const response = await api.get('/lobby/' + id, config);
-                const lobby = new LobbyModel(response.data);
-                setLobbyType(lobby.lobbyType)
-                setLobbyName(lobby.name)
-                const split = lobby.playerList.split(',')
-                setPlayerList(split)
-            } catch (error) {
-                console.error("Something went wrong while fetching the lobbydata!");
-                console.error("Details:", error);
+            } else if (e.data === "DELETED") {
+                history.push("/overview")
             }
         }
     }
 
     const change_lobbytype = async () => {
-        const token = localStorage.getItem('token')
-        const username = localStorage.getItem('username')
         const requestBody = JSON.stringify({username, token})
         try {
             const response = await api.put('/lobbytype/' + params.id, requestBody)
@@ -181,8 +182,6 @@ const Lobby = () => {
     }
 
     const leave_lobby = async () => {
-        const token = localStorage.getItem('token')
-        const username = localStorage.getItem('username')
         if (isHost) {
             try {
                 const config = {
@@ -244,15 +243,11 @@ const Lobby = () => {
 
     async function startGame() {
         try {
-            const token = localStorage.getItem('token');
-            const username = localStorage.getItem('username')
             const config = {
                 headers: {
                     username, token
                 }
             };
-            const id = params.id;
-
             const gameId = await api.post('/games', id, config);
             console.log("GameId = " + gameId.data);
             localStorage.setItem('gameId', gameId.data);
