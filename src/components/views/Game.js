@@ -59,6 +59,22 @@ const Game = () => {
         }
     }
 
+    function colorCells(block, color, row, col) {
+        console.log("Block:");
+        console.log(block);
+        console.log("Color:");
+        console.log(color);
+        for(let i = 0; i < block.length; i++) {
+            for(let j = 0; j < block.height; j++) {
+                if(block.shape[i][j]) {
+                    console.log("Coloring cell (" + (row + i) + "," + (col + j) + ")");
+
+                    document.getElementById("cell-" + (row + i) + "-" + (col + j)).style.backgroundColor = color;
+                }
+            }
+        }
+    }
+
     const handleCellClick = async (row, col) => {
         console.log(`Clicked cell (${row},${col})`);
 
@@ -75,14 +91,18 @@ const Game = () => {
         console.log("BODY:");
         console.log(requestBody);
 
-        const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
-
-        console.log("Response:");
-        console.log(response.data);
+        try {
+            const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
+            if (response.status !== 200) {
+                alert("This move is not possible!");
+            } else {
+                colorCells(pickedUpBlock, "red", row, col);
+            }
+        } catch (e) {
+            alert("This move is not possible!");
+        }
 
         pickedUpBlock = null;
-        // TODO: check that piece is selected, if piece can be placed place it in back-end
-        //  and change the color in front-end
     };
 
     // Create a 2D array to store the Cells
@@ -93,6 +113,7 @@ const Game = () => {
             rowCells.push(
                 <Cell
                     key={`${row}-${col}`}
+                    id={`cell-${row}-${col}`}
                     row={row}
                     col={col}
                     onClick={() => handleCellClick(row, col)}
