@@ -3,14 +3,17 @@ import HeaderSmall from "./HeaderSmall";
 import React from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
-import {Block1, Block2} from "../Game/Block";
+import {
+    Block1, Block2, Block3, Block4, Block5, Block6, Block7, Block8, Block9, Block10, Block11, Block12, Block13, Block14,
+    Block15, Block16, Block17, Block18, Block19, Block20, Block21
+        } from "../Game/Block";
 
 const Game = () => {
     const numRows = 20;
     const numCols = 20;
 
-    const numInvRows = 4;
-    const numInvCols = 45;
+    const numInvRows = 9;
+    const numInvCols = 40;
 
     const invSize = "1.46em";
 
@@ -20,15 +23,27 @@ const Game = () => {
         const block = invCells[row][col];
         console.log(`Clicked inventory cell (${row},${col})`);
 
-        if(block === null) return;
-
         if(pickedUpBlock === null) {
+            if(block === null) return;
+
             // Picking up new block
             pickedUpBlock = block;
             console.log("Picked up block : " + pickedUpBlock.name);
+            console.log(pickedUpBlock);
         } else {
-            // Swapping Blocks
-            pickedUpBlock = block;
+            if(block === null) {
+                pickedUpBlock = null;
+                console.log("Dropped block");
+            } else {
+                // Swapping Blocks
+                if(pickedUpBlock === block) {
+                    console.log("Dropped block");
+                    pickedUpBlock = null;
+                } else {
+                    console.log("Swapping " + pickedUpBlock.name + " with " + block.name);
+                    pickedUpBlock = block;
+                }
+            }
         }
     }
 
@@ -63,19 +78,27 @@ const Game = () => {
 
     // TODO: Get Blocks from backend
 
-    const blocks = [new Block1(), new Block2()];
+    const blocks = [new Block1(), new Block2(), new Block3(), new Block4(), new Block5(), new Block6(),
+        new Block7(), new Block8(), new Block9(), new Block10(), new Block11(), new Block12(), new Block13(),
+        new Block14(), new Block15(), new Block16(), new Block17(), new Block18(), new Block19(), new Block20(),
+        new Block21()];
 
     const invCells = [];
-    for(let i = 0; i < 4; i++) {
+    for(let i = 0; i < numInvRows; i++) {
         invCells.push(new Array(numInvCols).fill(null));
     }
 
     var colOffset = 0;
+    var rowOffset = 0;
     for(let block of blocks) {
+        if(colOffset + block.length > numInvCols) {
+            colOffset = 0;
+            rowOffset += 5;
+        }
         for(let row = 0; row < block.height; row++) {
             for(let col = 0; col < block.length; col++) {
                 if(block.shape[row][col]) {
-                    invCells[row][col + colOffset] = block;
+                    invCells[row + rowOffset][col + colOffset] = block;
                 }
             }
         }
