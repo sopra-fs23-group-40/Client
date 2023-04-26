@@ -205,7 +205,8 @@ const Lobby = () => {
             const id = params.id;
 
             const gameId = await api.post('/games', id, config);
-            console.log(gameId)
+            console.log("GameId = " + gameId.data);
+            localStorage.setItem('gameId', gameId.data);
             history.push(`/game/` + gameId.data);
         } catch (error) {
             alert(`Something went wrong, try again \n${handleError(error)}`);
