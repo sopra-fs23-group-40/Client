@@ -151,7 +151,7 @@ const Lobby = () => {
         fetchData();
         setRandomTip();
 
-    }, [history, params, token, username]);
+    }, [history, params]);
 
     if (evtSource){
         evtSource.onmessage = async (e) => {
@@ -197,10 +197,10 @@ const Lobby = () => {
     }
 
     const leave_lobby = async () => {
+        const username = localStorage.getItem('username')
+        const token = localStorage.getItem('token')
         if (isHost) {
             try {
-                const username = localStorage.getItem('username')
-                const token = localStorage.getItem('token')
                 const config = {
                     headers: {
                         token, username
