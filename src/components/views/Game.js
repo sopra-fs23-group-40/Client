@@ -16,10 +16,20 @@ const Game = () => {
     const numRows = 20;
     const numCols = 20;
 
-    const player1Color = "RED";
-    const player2Color = "GREEN";
-    const player3Color = "YELLOW";
-    const player4Color = "ORANGE";
+    const player1Color = "#CF141E";
+    const player2Color = "#71AD58";
+    const player3Color = "#F1DD5D";
+    const player4Color = "#35599B";
+
+    var inventoryColor = "";
+
+    // get player list form backend
+    api.get("/games/" + localStorage.getItem('gameId') + "/players").then((response) => {
+        if(response.data[0].playerName === localStorage.getItem('username')) inventoryColor = player1Color;
+        if(response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
+        if(response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
+        if(response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
+    });
 
     const numInvRows = 9;
     const numInvCols = 40;
@@ -248,7 +258,7 @@ const Game = () => {
                 for(let col = 0; col < block.length; col++) {
                     if(block.shape[row][col]) {
                         invCells[row + rowOffset][col + colOffset] = block;
-                        document.getElementById("invcell-" + (row + rowOffset) + "-" + (col + colOffset)).style.backgroundColor = "RED";
+                        document.getElementById("invcell-" + (row + rowOffset) + "-" + (col + colOffset)).style.backgroundColor = inventoryColor;
                     }
                 }
             }
