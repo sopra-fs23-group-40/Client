@@ -108,9 +108,7 @@ const Lobby = () => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
-                setEvtSource(new EventSource(baseURL + 'lobby-updates', {
-                    withCredentials: true
-                }))
+                setEvtSource(new EventSource(baseURL + 'lobby-updates'))
                 console.log("The url for updates: " + baseURL + 'lobby-updates')
                 const username = localStorage.getItem('username')
                 const token = localStorage.getItem('token')
@@ -153,7 +151,7 @@ const Lobby = () => {
         }
 
         evtSource.onmessage = async (e) => {
-            console.log("The eventsource is: " + evtSource)
+            console.log("The eventsource URL is: " + evtSource.url)
             console.log("Event was received:" + JSON.stringify(e))
             const parse = JSON.parse(e.data)
             if (parse.id.toString() === params.id.toString()) {
@@ -323,6 +321,12 @@ const Lobby = () => {
                 >
                     Test-Redirect to Game
                 </Button>
+                <p
+                    onClick={() => window.location.reload()}
+                    title={"This text is here because synchronization doesn't work over google app engine yet"}
+                >
+                    <u>Click to Reload page</u>
+                </p>
             </BaseContainer>
         </BaseContainer>
     );
