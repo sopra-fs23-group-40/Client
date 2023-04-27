@@ -109,6 +109,7 @@ const Lobby = () => {
         async function fetchData() {
             try {
                 setEvtSource(new EventSource(baseURL + 'lobby-updates'))
+                console.log("The url for updates: " + baseURL + 'lobby-updates')
                 const username = localStorage.getItem('username')
                 const token = localStorage.getItem('token')
                 const config = {
@@ -116,7 +117,6 @@ const Lobby = () => {
                         token, username
                     }
                 }
-                console.log("ID: "+params.id)
                 const response = await api.get('/lobby/' + params.id, config);
                 const lobby = new LobbyModel(response.data);
                 setLobbyType(lobby.lobbyType)
