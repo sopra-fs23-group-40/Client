@@ -38,25 +38,6 @@ const Game = () => {
         // TODO: Visualize
     }
 
-    const removeBlockFromInventory = (block) => {
-        console.log("Removing " + block.name + " from inventory");
-        console.log("InvCells:");
-        console.log(invCells);
-        console.log("inventoryCells:");
-        console.log(inventoryCells);
-
-        for(let i = 0; i < numInvCols; i++) {
-            for(let j = 0; j < numInvRows; j++) {
-                if(invCells[j][i] === block) {
-                    console.log("uncoloring cell (" + j + "," + i + ")");
-                    invCells[j][i] = null;
-                    document.getElementById("invcell-" + (j) + "-" + (i)).style.backgroundColor = "#eeeeee";
-                }
-            }
-        }
-
-    }
-
     const handleInvClick = (row, col) => {
         const block = invCells[row][col];
         console.log(`Clicked inventory cell (${row},${col})`);
@@ -134,7 +115,7 @@ const Game = () => {
             } else {
                 console.log("Placement of " + pickedUpBlock.name + " at (" + row + "/" + col + ") successful");
                 await removeBlockFromCursor();
-                await removeBlockFromInventory(pickedUpBlock);
+                await updateInventory();
                 // TODO: When SSE works, remove the next line (loadGameboard()), as it will be done when receiving the event - no matter which player's turn it was
                 await loadGameboard();
             }
@@ -166,33 +147,119 @@ const Game = () => {
 
     loadGameboard();
 
-    // TODO: Get Blocks from backend
 
-    const blocks = [new Block1(), new Block2(), new Block3(), new Block4(), new Block5(), new Block6(),
-        new Block7(), new Block8(), new Block9(), new Block10(), new Block11(), new Block12(), new Block13(),
-        new Block14(), new Block15(), new Block16(), new Block17(), new Block18(), new Block19(), new Block20(),
-        new Block21()];
+    var blocks = [];
+    const updateInventory = async () => {
+        console.log("Updating inventory from backend");
+        const gameId = localStorage.getItem('gameId');
+        const username = localStorage.getItem('username');
+        const response = await api.get("/games/" + gameId + "/" + username + "/inventory");
+
+        blocks = [];
+
+        for (let block of response.data) {
+            switch (block.blockName) {
+                case "Block1":
+                    blocks.push(new Block1());
+                    break;
+                case "Block2":
+                    blocks.push(new Block2());
+                    break;
+                case "Block3":
+                    blocks.push(new Block3());
+                    break;
+                case "Block4":
+                    blocks.push(new Block4());
+                    break;
+                case "Block5":
+                    blocks.push(new Block5());
+                    break;
+                case "Block6":
+                    blocks.push(new Block6());
+                    break;
+                case "Block7":
+                    blocks.push(new Block7());
+                    break;
+                case "Block8":
+                    blocks.push(new Block8());
+                    break;
+                case "Block9":
+                    blocks.push(new Block9());
+                    break;
+                case "Block10":
+                    blocks.push(new Block10());
+                    break;
+                case "Block11":
+                    blocks.push(new Block11());
+                    break;
+                case "Block12":
+                    blocks.push(new Block12());
+                    break;
+                case "Block13":
+                    blocks.push(new Block13());
+                    break;
+                case "Block14":
+                    blocks.push(new Block14());
+                    break;
+                case "Block15":
+                    blocks.push(new Block15());
+                    break;
+                case "Block16":
+                    blocks.push(new Block16());
+                    break;
+                case "Block17":
+                    blocks.push(new Block17());
+                    break;
+                case "Block18":
+                    blocks.push(new Block18());
+                    break;
+                case "Block19":
+                    blocks.push(new Block19());
+                    break;
+                case "Block20":
+                    blocks.push(new Block20());
+                    break;
+                case "Block21":
+                    blocks.push(new Block21());
+                    break;
+                default:
+                    console.log("Block not found: " + block.blockName);
+                    break;
+            }
+        }
+
+        console.log("Blocks from backend:")
+        console.log(blocks);
+
+        for(let i = 0; i < numInvRows; i++) {
+            for(let j = 0; j < numInvCols; j++) {
+                document.getElementById("invcell-" + i + "-" + j).style.backgroundColor = "#eeeeee";
+            }
+        }
+
+        var colOffset = 0;
+        var rowOffset = 0;
+        for(let block of blocks) {
+            if(colOffset + block.length > numInvCols) {
+                colOffset = 0;
+                rowOffset += 5;
+            }
+            for(let row = 0; row < block.height; row++) {
+                for(let col = 0; col < block.length; col++) {
+                    if(block.shape[row][col]) {
+                        invCells[row + rowOffset][col + colOffset] = block;
+                        document.getElementById("invcell-" + (row + rowOffset) + "-" + (col + colOffset)).style.backgroundColor = "RED";
+                    }
+                }
+            }
+            colOffset += block.length + 1;
+        }
+
+    }
 
     const invCells = [];
     for(let i = 0; i < numInvRows; i++) {
         invCells.push(new Array(numInvCols).fill(null));
-    }
-
-    var colOffset = 0;
-    var rowOffset = 0;
-    for(let block of blocks) {
-        if(colOffset + block.length > numInvCols) {
-            colOffset = 0;
-            rowOffset += 5;
-        }
-        for(let row = 0; row < block.height; row++) {
-            for(let col = 0; col < block.length; col++) {
-                if(block.shape[row][col]) {
-                    invCells[row + rowOffset][col + colOffset] = block;
-                }
-            }
-        }
-        colOffset += block.length + 1;
     }
 
     const inventoryCells = [];
@@ -205,7 +272,7 @@ const Game = () => {
                     id={`invcell-${row}-${col}`}
                     row={row}
                     col={col}
-                    style={invCells[row][col] ? {backgroundColor: "red", width: invSize, height: invSize} : {width: invSize, height: invSize}}
+                    style={{width: invSize, height: invSize}}
                     onClick={() => handleInvClick(row, col)}
                 >
                 </Cell>
@@ -214,6 +281,8 @@ const Game = () => {
         }
         inventoryCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
+
+    updateInventory();
 
     useEffect(() => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
