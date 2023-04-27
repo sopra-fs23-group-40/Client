@@ -135,6 +135,7 @@ const Game = () => {
                 console.log("Placement of " + pickedUpBlock.name + " at (" + row + "/" + col + ") successful");
                 await removeBlockFromCursor();
                 await removeBlockFromInventory(pickedUpBlock);
+                // TODO: When SSE works, remove the next line (loadGameboard()), as it will be done when receiving the event - no matter which player's turn it was
                 await loadGameboard();
             }
         } catch (e) {
