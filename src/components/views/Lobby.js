@@ -40,11 +40,13 @@ const Lobby = () => {
     const [playerList, setPlayerList] = useState(null)
     const [isHost, setIsHost] = useState(false)
     const history = useHistory();
-    const username = localStorage.getItem('username')
-    const token = localStorage.getItem('token')
+    //const username = localStorage.getItem('username')
+    //const token = localStorage.getItem('token')
 
 
     if (evtSource == null){
+        const resp = new EventSource(baseURL + 'lobby-updates')
+        console.log(JSON.stringify(resp))
         setEvtSource(new EventSource(baseURL + 'lobby-updates'))
         console.log(baseURL + 'lobby-updates')
         console.log("this lobbies ID is that: " + params.id)
@@ -116,11 +118,14 @@ const Lobby = () => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
+                const username = localStorage.getItem('username')
+                const token = localStorage.getItem('token')
                 const config = {
                     headers: {
                         token, username
                     }
                 }
+                console.log("ID: "+params.id)
                 const response = await api.get('/lobby/' + params.id, config);
                 const lobby = new LobbyModel(response.data);
                 setLobbyType(lobby.lobbyType)
@@ -151,11 +156,13 @@ const Lobby = () => {
     if (evtSource){
         evtSource.onmessage = async (e) => {
             console.log("The eventsource is: " + evtSource)
-            console.log("Event was received:" + e.data)
+            console.log("Event was received:" + JSON.stringify(e))
             const parse = JSON.parse(e.data)
             if (parse.id.toString() === params.id.toString()) {
                 if (parse.message === "JOINED" || parse.message === "LEFT") {
                     try {
+                        const username = localStorage.getItem('username')
+                        const token = localStorage.getItem('token')
                         const config = {
                             headers: {
                                 token, username
@@ -177,6 +184,8 @@ const Lobby = () => {
     }
 
     const change_lobbytype = async () => {
+        const username = localStorage.getItem('username')
+        const token = localStorage.getItem('token')
         const requestBody = JSON.stringify({username, token})
         try {
             const response = await api.put('/lobbytype/' + params.id, requestBody)
@@ -190,6 +199,8 @@ const Lobby = () => {
     const leave_lobby = async () => {
         if (isHost) {
             try {
+                const username = localStorage.getItem('username')
+                const token = localStorage.getItem('token')
                 const config = {
                     headers: {
                         token, username
@@ -249,6 +260,8 @@ const Lobby = () => {
 
     async function startGame() {
         try {
+            const username = localStorage.getItem('username')
+            const token = localStorage.getItem('token')
             const config = {
                 headers: {
                     username, token
