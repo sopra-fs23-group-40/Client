@@ -238,10 +238,18 @@ const Game = () => {
     return (
         <BaseContainer>
             <HeaderSmall height="10" />
-            <BaseContainer className={'game container'}>
+            <BaseContainer className='game container'>
                 <div className="cell-field">{cells}</div>
                 <br/>
                 <div className="cell-field">{inventoryCells}</div>
+
+                <p
+                    style={{color: "red"}}
+                    onClick={() => window.location.reload()}
+                    title={"This text is here because synchronization doesn't work over google app engine yet"}
+                >
+                    <u>Click to Reload page</u>
+                </p>
             </BaseContainer>
         </BaseContainer>
     );
