@@ -1,6 +1,6 @@
 import "styles/views/Game.scss";
 import HeaderSmall from "./HeaderSmall";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
 import {api} from "../../helpers/api";
@@ -9,8 +9,11 @@ import {
     Block1, Block2, Block3, Block4, Block5, Block6, Block7, Block8, Block9, Block10, Block11, Block12, Block13, Block14,
     Block15, Block16, Block17, Block18, Block19, Block20, Block21
         } from "../Game/Block";
+import {getDomain} from "../../helpers/getDomain";
 
 const Game = () => {
+    const baseURL = getDomain()
+    const [evtSource, setEvtSource] = useState(null)
     const params = useParams();
     const id = params.id
     const numRows = 20;
@@ -298,14 +301,14 @@ const Game = () => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
-                // TODO: throws error if you get redirected by clicking on "Test-Redirect to Game" in Lobby (so either ignore error or start valid game with valid gameID)
+                setEvtSource(new EventSource(baseURL + 'gameboard-updates'))
                 const response = await api.get('/games/' + id + "/players");
                 console.log(JSON.stringify(response))
 
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
             } catch (error) {
-                console.error("Something went wrong while fetching the lobbydata!");
+                console.error("Something went wrong while fetching the game!");
                 console.error("Details:", error);
             }
         }
@@ -313,6 +316,28 @@ const Game = () => {
         fetchData();
 
     }, [id]);
+
+    if (evtSource){
+        evtSource.onerror = (error) => {
+            console.log("An error occurred while attempting to connect.");
+            console.log(error)
+        }
+
+        evtSource.onmessage = async (e) => {
+            console.log("Event was received:" + JSON.stringify(e))
+            const parse = JSON.parse(e.data)
+            if (parse.id.toString() === params.id.toString()) {
+                if (parse.message === "MOVE") {
+                    try {
+                        await loadGameboard()
+                    } catch (error) {
+                        console.error("Something went wrong while fetching the gameboard!");
+                        console.error("Details:", error);
+                    }
+                }
+            }
+        }
+    }
 
     return (
         <BaseContainer>
