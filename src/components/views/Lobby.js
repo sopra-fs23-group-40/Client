@@ -108,7 +108,9 @@ const Lobby = () => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
-                setEvtSource(new EventSource(baseURL + 'lobby-updates'))
+                setEvtSource(new EventSource(baseURL + 'lobby-updates', {
+                    withCredentials: true
+                }))
                 console.log("The url for updates: " + baseURL + 'lobby-updates')
                 const username = localStorage.getItem('username')
                 const token = localStorage.getItem('token')
@@ -296,6 +298,7 @@ const Lobby = () => {
                 >
                     leave lobby
                 </Button>
+                <br/>
                 <div onClick={setRandomTip} style={{cursor: 'pointer'}}>
                     <Grid container direction="row" alignItems="center">
                         <Grid item>
