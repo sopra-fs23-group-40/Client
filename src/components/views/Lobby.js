@@ -147,6 +147,11 @@ const Lobby = () => {
     }, [history, params, baseURL]);
 
     if (evtSource){
+        evtSource.onerror = (error) => {
+            console.log("An error occurred while attempting to connect.");
+            console.log(error)
+        }
+
         evtSource.onmessage = async (e) => {
             console.log("The eventsource is: " + evtSource)
             console.log("Event was received:" + JSON.stringify(e))
