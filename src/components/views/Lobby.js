@@ -319,12 +319,6 @@ const Lobby = () => {
                 <br/>
                 {startbutton}
                 <br/>
-                <Button
-                    // TODO: remove this before deadline. Redirects to view '/game/lobby.id' and not an actual new game view
-                    onClick={() => history.push("/game/" + params.id)}
-                >
-                    Test-Redirect to Game
-                </Button>
                 <p
                     onClick={() => window.location.reload()}
                     title={"This text is here because synchronization doesn't work over google app engine yet"}
