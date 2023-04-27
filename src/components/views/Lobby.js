@@ -174,6 +174,10 @@ const Lobby = () => {
                     }
                 } else if (parse.message === "DELETED") {
                     history.push("/overview")
+                } else if (parse.message.split(',')[0] === "START"){
+                    localStorage.setItem("gameId", parse.message.split(',')[1])
+                    evtSource.close()
+                    history.push("/game/" + parse.message.split(',')[1])
                 }
             }
         }
