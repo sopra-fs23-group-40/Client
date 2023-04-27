@@ -148,8 +148,10 @@ const Lobby = () => {
 
     }, [history, params, token, username]);
 
-    if (evtSource) {
+    if (evtSource){
         evtSource.onmessage = async (e) => {
+            console.log("The eventsource is: " + evtSource)
+            console.log("Event was received:" + e.data)
             const parse = JSON.parse(e.data)
             if (parse.id.toString() === params.id.toString()) {
                 if (parse.message === "JOINED" || parse.message === "LEFT") {
