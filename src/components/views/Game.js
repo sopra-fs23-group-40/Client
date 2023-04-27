@@ -324,15 +324,18 @@ const Game = () => {
         }
 
         evtSource.onmessage = async (e) => {
-            console.log("Event was received:" + JSON.stringify(e))
             const parse = JSON.parse(e.data)
-            if (parse.id.toString() === params.id.toString()) {
-                if (parse.message === "MOVE") {
-                    try {
-                        await loadGameboard()
-                    } catch (error) {
-                        console.error("Something went wrong while fetching the gameboard!");
-                        console.error("Details:", error);
+            if (parse.id === localStorage.getItem("gameId")) {
+                console.log("Event was received:" + JSON.stringify(e))
+                const parse = JSON.parse(e.data)
+                if (parse.id.toString() === params.id.toString()) {
+                    if (parse.message === "MOVE") {
+                        try {
+                            await loadGameboard()
+                        } catch (error) {
+                            console.error("Something went wrong while fetching the gameboard!");
+                            console.error("Details:", error);
+                        }
                     }
                 }
             }
