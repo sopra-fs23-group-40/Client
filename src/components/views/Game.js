@@ -16,6 +16,11 @@ const Game = () => {
     const numRows = 20;
     const numCols = 20;
 
+    const player1Color = "RED";
+    const player2Color = "GREEN";
+    const player3Color = "YELLOW";
+    const player4Color = "ORANGE";
+
     const numInvRows = 9;
     const numInvCols = 40;
 
@@ -81,12 +86,26 @@ const Game = () => {
         }
     }
 
-    function colorCells(block, color, row, column) {
-        for(let i = 0; i < block.length; i++) {
-            for(let j = 0; j < block.height; j++) {
-                if(block.shape[j][i]) {
-                    console.log("Coloring cell (" + (row+j) + "/" + (column+i) + ") " + color);
-                    document.getElementById("cell-" + (row+j) + "-" + (column+i)).style.backgroundColor = color;
+    const loadGameboard = async () => {
+        const gameId = localStorage.getItem('gameId');
+        const response = await api.get("/games/" + gameId + "/status");
+        for(let i = 0; i < numCols; i++) {
+            for(let j = 0; j < numRows; j++) {
+                switch (response.data[j][i]) {
+                    case "PLAYER1":
+                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player1Color;
+                        break;
+                    case "PLAYER2":
+                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player2Color;
+                        break;
+                    case "PLAYER3":
+                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player3Color;
+                        break;
+                    case "PLAYER4":
+                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player4Color;
+                        break;
+                    default:
+                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = "#eeeeee";
                 }
             }
         }
@@ -113,10 +132,10 @@ const Game = () => {
             if (response.status !== 200) {
                 alert("This move is not possible!");
             } else {
-                console.log("Placement of " + pickedUpBlock.name + " at (" + row + "/" + col + ") successful")
-                await colorCells(pickedUpBlock, "red", row, col);
+                console.log("Placement of " + pickedUpBlock.name + " at (" + row + "/" + col + ") successful");
                 await removeBlockFromCursor();
                 await removeBlockFromInventory(pickedUpBlock);
+                await loadGameboard();
             }
         } catch (e) {
             alert("This move is not possible!");
@@ -143,6 +162,8 @@ const Game = () => {
         }
         cells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
+
+    loadGameboard();
 
     // TODO: Get Blocks from backend
 
