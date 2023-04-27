@@ -45,8 +45,9 @@ const Lobby = () => {
 
 
     if (evtSource == null){
-        setEvtSource(new EventSource(baseURL + '/lobby-updates'))
-        console.log(baseURL + '/lobby-updates/' + params.id)
+        setEvtSource(new EventSource(baseURL + 'lobby-updates'))
+        console.log(baseURL + 'lobby-updates')
+        console.log("this lobbies ID is that: " + params.id)
 
     }
 
@@ -150,7 +151,6 @@ const Lobby = () => {
     if (evtSource) {
         evtSource.onmessage = async (e) => {
             const parse = JSON.parse(e.data)
-            console.log(baseURL + '/lobby-updates/' + params.id)
             if (parse.id.toString() === params.id.toString()) {
                 if (parse.message === "JOINED" || parse.message === "LEFT") {
                     try {
