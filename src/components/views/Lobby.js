@@ -43,16 +43,6 @@ const Lobby = () => {
     //const username = localStorage.getItem('username')
     //const token = localStorage.getItem('token')
 
-
-    if (evtSource == null){
-        const resp = new EventSource(baseURL + 'lobby-updates')
-        console.log(JSON.stringify(resp))
-        setEvtSource(new EventSource(baseURL + 'lobby-updates'))
-        console.log(baseURL + 'lobby-updates')
-        console.log("this lobbies ID is that: " + params.id)
-
-    }
-
     let tokendisplay
     let startbutton
 
@@ -118,6 +108,7 @@ const Lobby = () => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
+                setEvtSource(new EventSource(baseURL + 'lobby-updates'))
                 const username = localStorage.getItem('username')
                 const token = localStorage.getItem('token')
                 const config = {
@@ -151,7 +142,7 @@ const Lobby = () => {
         fetchData();
         setRandomTip();
 
-    }, [history, params]);
+    }, [history, params, baseURL]);
 
     if (evtSource){
         evtSource.onmessage = async (e) => {
@@ -305,7 +296,7 @@ const Lobby = () => {
                 >
                     leave lobby
                 </Button>
-                <p onClick={setRandomTip} style={{cursor: 'pointer'}}>
+                <div onClick={setRandomTip} style={{cursor: 'pointer'}}>
                     <Grid container direction="row" alignItems="center">
                         <Grid item>
                             <TipsAndUpdatesIcon/>
@@ -314,7 +305,7 @@ const Lobby = () => {
                             Tip: {tip}
                         </Grid>
                     </Grid>
-                </p>
+                </div>
                 <br/>
                 {startbutton}
                 <br/>
