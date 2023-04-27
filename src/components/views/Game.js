@@ -315,7 +315,7 @@ const Game = () => {
 
         fetchData();
 
-    }, [id]);
+    }, [id, baseURL]);
 
     if (evtSource){
         evtSource.onerror = (error) => {
