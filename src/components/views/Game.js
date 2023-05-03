@@ -14,6 +14,7 @@ import {getDomain} from "../../helpers/getDomain";
 const Game = () => {
     const baseURL = getDomain()
     const [evtSource, setEvtSource] = useState(null)
+    const [currentPlayer, setCurrentPlayer] = useState(null)
     const params = useParams();
     const id = params.id
     const numRows = 20;
@@ -103,6 +104,10 @@ const Game = () => {
                 }
             }
         }
+
+        await api.get("/games/" + localStorage.getItem('gameId') + "/currentPlayer").then((response) => {
+            setCurrentPlayer(response.data.playerName);
+        });
     }
 
     const handleCellClick = async (row, col) => {
@@ -160,6 +165,13 @@ const Game = () => {
 
     loadGameboard();
 
+    function getCurrentPlayer() {
+        if(currentPlayer === localStorage.getItem('username')) {
+            return "It's your turn!";
+        } else {
+            return "Please wait... current player: " + currentPlayer;
+        }
+    }
 
     var blocks = [];
     const updateInventory = async () => {
@@ -346,6 +358,7 @@ const Game = () => {
         <BaseContainer>
             <HeaderSmall height="10" />
             <BaseContainer className='game container'>
+                <p style={{color: "black"}}>{getCurrentPlayer()}</p>
                 <div className="cell-field">{cells}</div>
                 <br/>
                 <div className="cell-field">{inventoryCells}</div>
