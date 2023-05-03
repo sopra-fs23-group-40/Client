@@ -11,7 +11,10 @@ import PropTypes from "prop-types";
 import {getDomain} from "../../helpers/getDomain";
 import HourglassBottomTwoToneIcon from '@mui/icons-material/HourglassBottomTwoTone';
 import Grid from "@mui/material/Grid";
+import InfoIcon from "@mui/icons-material/Info";
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+import {FormControlLabel, IconButton, Tooltip} from "@mui/material";
+import Switch from '@mui/material/Switch';
 
 const Player = ({player}) => {
     return (<div className="player container">
@@ -50,8 +53,7 @@ const Lobby = () => {
         if (isHost) {
             tokendisplay = (
                 <div>
-                    Private Lobby<br/>
-                    Token: {localStorage.getItem('lobbytoken')}
+                    Passcode: {localStorage.getItem('lobbytoken')}
                 </div>
 
             )
@@ -144,7 +146,7 @@ const Lobby = () => {
 
     }, [history, params, baseURL]);
 
-    if (evtSource){
+    if (evtSource) {
         evtSource.onerror = (error) => {
             console.log("An error occurred while attempting to connect.");
             console.log(error)
@@ -174,7 +176,7 @@ const Lobby = () => {
                     }
                 } else if (parse.message === "DELETED") {
                     history.push("/overview")
-                } else if (parse.message.split(',')[0] === "START"){
+                } else if (parse.message.split(',')[0] === "START") {
                     localStorage.setItem("gameId", parse.message.split(',')[1])
                     evtSource.close()
                     history.push("/game/" + parse.message.split(',')[1])
@@ -280,25 +282,37 @@ const Lobby = () => {
         <BaseContainer>
             <HeaderSmall height="10"/>
             <BaseContainer className="lobby container">
-                {lobbyName}
+                <h1><u>{lobbyName}</u></h1>
 
                 {tokendisplay}
 
                 <BaseContainer className={"lobby container"}>
                     {content}
                 </BaseContainer>
-
                 <br/>
+                <div style={{display: isHost? "inline": "none", marginTop: "10px", marginBottom: "10px"}}>
+                    <Grid container direction="row" alignItems="center">
+                        <Grid item>
 
-                <Button
-                    width={"25%"}
-                    onClick={() => change_lobbytype()}
-                    disabled={!isHost}
-                    style={{visibility: isHost ? "visible" : "hidden"}}
-                >
-                    {lobbyType}
-                </Button>
-                <br/>
+                            <FormControlLabel
+                                control={
+                                    <Switch checked={lobbyType === "PUBLIC"} onChange={() => change_lobbytype()}/>
+                                }
+                                label={lobbyType}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Tooltip
+                                title="Public lobbies can be entered by everyone without a passcode."
+                                placement="right"
+                            >
+                                <IconButton>
+                                    <InfoIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                    </Grid>
+                </div>
                 <Button
                     width={"25%"}
                     onClick={() => leave_lobby()}

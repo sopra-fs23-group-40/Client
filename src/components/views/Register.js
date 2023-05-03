@@ -104,7 +104,7 @@ const Register = () => {
                             width="70%"
                             onClick={() => history.push("/login")}
                         >
-                            back to login
+                            {String.fromCharCode(8592)}back to login
                         </Button>
                     </div>
                 </div>
