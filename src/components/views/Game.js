@@ -8,7 +8,7 @@ import {useParams} from "react-router-dom";
 import {
     Block1, Block2, Block3, Block4, Block5, Block6, Block7, Block8, Block9, Block10, Block11, Block12, Block13, Block14,
     Block15, Block16, Block17, Block18, Block19, Block20, Block21
-        } from "../Game/Block";
+} from "../Game/Block";
 import {getDomain} from "../../helpers/getDomain";
 
 const Game = () => {
@@ -24,15 +24,16 @@ const Game = () => {
     const player2Color = "#71AD58";
     const player3Color = "#F1DD5D";
     const player4Color = "#35599B";
+    const opacity = "80"
 
     var inventoryColor = "";
 
     // get player list form backend
     api.get("/games/" + localStorage.getItem('gameId') + "/players").then((response) => {
-        if(response.data[0].playerName === localStorage.getItem('username')) inventoryColor = player1Color;
-        if(response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
-        if(response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
-        if(response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
+        if (response.data[0].playerName === localStorage.getItem('username')) inventoryColor = player1Color;
+        if (response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
+        if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
+        if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
     });
 
     const numInvRows = 9;
@@ -56,20 +57,20 @@ const Game = () => {
         const block = invCells[row][col];
         console.log(`Clicked inventory cell (${row},${col})`);
 
-        if(pickedUpBlock === null) {
-            if(block === null) return;
+        if (pickedUpBlock === null) {
+            if (block === null) return;
 
             // Picking up new block
             pickedUpBlock = block;
             console.log(pickedUpBlock);
             fixBlockToCursor(block);
         } else {
-            if(block === null) {
+            if (block === null) {
                 pickedUpBlock = null;
                 removeBlockFromCursor();
             } else {
                 // Swapping Blocks
-                if(pickedUpBlock === block) {
+                if (pickedUpBlock === block) {
                     pickedUpBlock = null;
                     removeBlockFromCursor();
                 } else {
@@ -84,24 +85,38 @@ const Game = () => {
     const loadGameboard = async () => {
         const gameId = localStorage.getItem('gameId');
         const response = await api.get("/games/" + gameId + "/status");
-        for(let i = 0; i < numCols; i++) {
-            for(let j = 0; j < numRows; j++) {
-                switch (response.data[j][i]) {
-                    case "PLAYER1":
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player1Color;
-                        break;
-                    case "PLAYER2":
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player2Color;
-                        break;
-                    case "PLAYER3":
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player3Color;
-                        break;
-                    case "PLAYER4":
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player4Color;
-                        break;
-                    default:
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = "#eeeeee";
-                }
+        for (let i = 0; i < numCols; i++) {
+            for (let j = 0; j < numRows; j++) {
+                    switch (response.data[j][i]) {
+                        case "PLAYER1":
+                            document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player1Color;
+                            break;
+                        case "PLAYER2":
+                            document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player2Color;
+                            break;
+                        case "PLAYER3":
+                            document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player3Color;
+                            break;
+                        case "PLAYER4":
+                            document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player4Color;
+                            break;
+                        default:
+                            if (i === 0 && j === 0) {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player1Color+opacity;
+                            } else if (i === 0 && j === numRows - 1) {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player2Color+opacity;
+                            } else if (i === numRows - 1 && j === 0) {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player3Color+opacity;
+                            } else if (i === numRows - 1 && j === numCols - 1) {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player4Color+opacity;
+                            }
+                            else {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = "#eeeeee";
+                            }
+
+
+                    }
+
             }
         }
 
@@ -166,7 +181,7 @@ const Game = () => {
     loadGameboard();
 
     function getCurrentPlayer() {
-        if(currentPlayer === localStorage.getItem('username')) {
+        if (currentPlayer === localStorage.getItem('username')) {
             return "It's your turn!";
         } else {
             return "Please wait... current player: " + currentPlayer;
@@ -256,22 +271,22 @@ const Game = () => {
         console.log("Blocks from backend:")
         console.log(blocks);
 
-        for(let i = 0; i < numInvRows; i++) {
-            for(let j = 0; j < numInvCols; j++) {
+        for (let i = 0; i < numInvRows; i++) {
+            for (let j = 0; j < numInvCols; j++) {
                 document.getElementById("invcell-" + i + "-" + j).style.backgroundColor = "#eeeeee";
             }
         }
 
         var colOffset = 0;
         var rowOffset = 0;
-        for(let block of blocks) {
-            if(colOffset + block.length > numInvCols) {
+        for (let block of blocks) {
+            if (colOffset + block.length > numInvCols) {
                 colOffset = 0;
                 rowOffset += 5;
             }
-            for(let row = 0; row < block.height; row++) {
-                for(let col = 0; col < block.length; col++) {
-                    if(block.shape[row][col]) {
+            for (let row = 0; row < block.height; row++) {
+                for (let col = 0; col < block.length; col++) {
+                    if (block.shape[row][col]) {
                         invCells[row + rowOffset][col + colOffset] = block;
                         document.getElementById("invcell-" + (row + rowOffset) + "-" + (col + colOffset)).style.backgroundColor = inventoryColor;
                     }
@@ -283,14 +298,14 @@ const Game = () => {
     }
 
     const invCells = [];
-    for(let i = 0; i < numInvRows; i++) {
+    for (let i = 0; i < numInvRows; i++) {
         invCells.push(new Array(numInvCols).fill(null));
     }
 
     const inventoryCells = [];
-    for(let row = 0; row < numInvRows; row++) {
+    for (let row = 0; row < numInvRows; row++) {
         const rowCells = [];
-        for(let col = 0; col < numInvCols; col++) {
+        for (let col = 0; col < numInvCols; col++) {
             rowCells.push([
                 <Cell
                     key={`${row}-${col}`}
@@ -329,7 +344,7 @@ const Game = () => {
 
     }, [id, baseURL]);
 
-    if (evtSource){
+    if (evtSource) {
         evtSource.onerror = (error) => {
             console.log("An error occurred while attempting to connect.");
             console.log(error)
@@ -356,7 +371,7 @@ const Game = () => {
 
     return (
         <BaseContainer>
-            <HeaderSmall height="10" />
+            <HeaderSmall height="10"/>
             <BaseContainer className='game container'>
                 <p style={{color: "black"}}>{getCurrentPlayer()}</p>
                 <div className="cell-field">{cells}</div>
