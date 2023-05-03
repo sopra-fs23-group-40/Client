@@ -44,7 +44,7 @@ const Lobby = ({lobby}) => {
         >
 
             <div className="player username">{lobby.name}</div>
-            <div className="player id">players: X/X</div>
+            <div className="player id">players: {lobby.currentPlayers}/4</div>
             <Grid>
                 {lobby.lobbyType === "PUBLIC" ? <LockOpenIcon/> : <LockOutlinedIcon/>}
             </Grid>
