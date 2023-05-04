@@ -84,7 +84,6 @@ const Login = () => {
         <div className="login container">
           <h2>Login</h2>
           <div className="login form">
-
             <FormField
                 label="Username"
                 type="text"
@@ -124,7 +123,7 @@ const Login = () => {
                     width="70%"
                     onClick={() => history.push("/register")}
                 >
-                  Register as a new user?
+                  <u>Register as a new user?</u>
                 </Button>
               </label>
             </div>
