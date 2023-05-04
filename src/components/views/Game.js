@@ -384,6 +384,7 @@ const Game = () => {
                     if (parse.message === "MOVE") {
                         try {
                             await loadGameboard()
+                            await updateInventory();
                         } catch (error) {
                             console.error("Something went wrong while fetching the gameboard!");
                             console.error("Details:", error);
@@ -405,9 +406,10 @@ const Game = () => {
             <HeaderSmall height="10"/>
             <BaseContainer className='game container'>
                 {timer}
-                <p style={{color: "black"}}>{getCurrentPlayer()}</p>
+                <h1 style={{color: "black"}}>{getCurrentPlayer()}</h1>
                 <div className="cell-field">{cells}</div>
                 <br/>
+                <p style={{color: "black"}}>Your block-inventory</p>
                 <div className="cell-field">{inventoryCells}</div>
 
                 <p
