@@ -6,27 +6,8 @@ import {Cell} from "../ui/Cell";
 import {api} from "../../helpers/api";
 import {useParams} from "react-router-dom";
 import {
-    Block1,
-    Block10,
-    Block11,
-    Block12,
-    Block13,
-    Block14,
-    Block15,
-    Block16,
-    Block17,
-    Block18,
-    Block19,
-    Block2,
-    Block20,
-    Block21,
-    Block3,
-    Block4,
-    Block5,
-    Block6,
-    Block7,
-    Block8,
-    Block9
+    Block1, Block2, Block3, Block4, Block5, Block6, Block7, Block8, Block9, Block10, Block11, Block12, Block13, Block14,
+    Block15, Block16, Block17, Block18, Block19, Block20, Block21
 } from "../Game/Block";
 import {getDomain} from "../../helpers/getDomain";
 
@@ -65,6 +46,7 @@ const Game = () => {
     const player2Color = "#71AD58";
     const player3Color = "#F1DD5D";
     const player4Color = "#35599B";
+    const opacity = "80"
 
     var inventoryColor = "";
 
@@ -127,22 +109,36 @@ const Game = () => {
         const response = await api.get("/games/" + gameId + "/status");
         for (let i = 0; i < numCols; i++) {
             for (let j = 0; j < numRows; j++) {
-                switch (response.data[j][i]) {
-                    case "PLAYER1":
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player1Color;
-                        break;
-                    case "PLAYER2":
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player2Color;
-                        break;
-                    case "PLAYER3":
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player3Color;
-                        break;
-                    case "PLAYER4":
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player4Color;
-                        break;
-                    default:
-                        document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = "#eeeeee";
-                }
+                    switch (response.data[j][i]) {
+                        case "PLAYER1":
+                            document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player1Color;
+                            break;
+                        case "PLAYER2":
+                            document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player2Color;
+                            break;
+                        case "PLAYER3":
+                            document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player3Color;
+                            break;
+                        case "PLAYER4":
+                            document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player4Color;
+                            break;
+                        default:
+                            if (i === 0 && j === 0) {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player1Color+opacity;
+                            } else if (i === 0 && j === numRows - 1) {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player2Color+opacity;
+                            } else if (i === numRows - 1 && j === 0) {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player3Color+opacity;
+                            } else if (i === numRows - 1 && j === numCols - 1) {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player4Color+opacity;
+                            }
+                            else {
+                                document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = "#eeeeee";
+                            }
+
+
+                    }
+
             }
         }
 
@@ -365,7 +361,6 @@ const Game = () => {
         }
 
         fetchData();
-
 
     }, [id, baseURL]);
 
