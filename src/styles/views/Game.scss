@@ -17,6 +17,9 @@
     align-items: center;
     box-shadow: $dropShadow;
     justify-content: center;
+    &#cursor-cells {
+      pointer-events: none;
+    }
   }
   &.user-list {
     list-style: none;
