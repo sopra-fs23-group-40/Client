@@ -12,8 +12,7 @@ import "styles/views/Header.scss";
  */
 const Header = props => (
   <div className="header container" style={{height: props.height}}>
-      <img src={require("BigLogo.png")} alt="BigLogo" style={{marginTop: "10px"}}/>
-
+      <img src={require("assets/BigLogo.png")} alt="BigLogo" style={{marginTop: "10px"}}/>
   </div>
 );
 
