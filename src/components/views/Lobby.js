@@ -268,6 +268,7 @@ const Lobby = () => {
     }
 
     async function startGame() {
+        stop();
         try {
             const username = localStorage.getItem('username')
             const token = localStorage.getItem('token')
