@@ -12,6 +12,8 @@ import {
 import {getDomain} from "../../helpers/getDomain";
 import useSound from 'use-sound';
 import backgroundMusic from '../../assets/backgroundMusic.mp3';
+import blockPlacingEffect from '../../assets/blockPlacingEffect.mp3';
+import placementNotPossibleEffect from '../../assets/placementNotPossibleEffect.mp3';
 
 const Timer = () => {
     const timerEl = document.getElementById("Timer")
@@ -45,6 +47,8 @@ const Game = () => {
     const numRows = 20;
     const numCols = 20;
     const [play, {stop}] = useSound(backgroundMusic, { volume: 0.4, loop: true });
+    const [playBlockPlacingEffect] = useSound(blockPlacingEffect, { volume: 0.4, loop: false });
+    const [playPlacementNotPossibleEffect] = useSound(placementNotPossibleEffect, { volume: 0.2, loop: false });
 
     const player1Color = "#CF141E";
     const player2Color = "#71AD58";
@@ -220,8 +224,10 @@ const Game = () => {
             const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
             if (response.status !== 200) {
                 alert("This move is not possible!");
+                playPlacementNotPossibleEffect();
             } else {
                 console.log("Placement of " + pickedUpBlock.name + " at (" + row + "/" + col + ") successful");
+                playBlockPlacingEffect();
                 await removeBlockFromCursor();
                 await updateInventory();
                 // TODO: When SSE works, remove the next line (loadGameboard()), as it will be done when receiving the event - no matter which player's turn it was
@@ -229,6 +235,7 @@ const Game = () => {
             }
         } catch (e) {
             alert("This move is not possible!");
+            playPlacementNotPossibleEffect();
         }
 
         removeBlockFromCursor();
