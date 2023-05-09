@@ -61,18 +61,47 @@ const Game = () => {
     const numInvRows = 9;
     const numInvCols = 40;
 
+    const maxBlockHeight = 4;
+    const maxBlockLength = 5;
+
     const invSize = "1.46em";
 
     let pickedUpBlock = null;
 
+    function mouseCoordinates(event){
+        document.getElementById("cursor-cells").style.left = event.pageX + "px";
+        document.getElementById("cursor-cells").style.top = event.pageY + "px";
+
+    }
+    window.addEventListener('mousemove', mouseCoordinates);
+
     const removeBlockFromCursor = () => {
-        console.log("Removing block from cursor");
-        // TODO: Visualize
+
+        document.getElementById("cursor-cells").style.display = "none";
     }
 
     const fixBlockToCursor = (block) => {
-        console.log("Picking up block " + block.name);
-        // TODO: Visualize
+
+        // show cursor cells
+        document.getElementById("cursor-cells").style.display = "block";
+
+        // disable all cursor cells
+        for(let i = 0; i < maxBlockHeight; i++) {
+            for(let j = 0; j < maxBlockLength; j++) {
+                document.getElementById("cursor-cell-" + i + "-" + j).style.opacity = "0";
+            }
+        }
+
+        // enable all cursor cells which are part of the block
+        for(let i = 0; i < block.height; i++) {
+            for (let j = 0; j < block.length; j++) {
+                if (block.shape[i][j]) {
+                    document.getElementById("cursor-cell-" + i + "-" + j).style.opacity = "1";
+                    document.getElementById("cursor-cell-" + i + "-" + j).style.backgroundColor = inventoryColor;
+                }
+            }
+        }
+
     }
 
     const handleInvClick = (row, col) => {
@@ -103,6 +132,26 @@ const Game = () => {
             }
         }
     }
+
+    const cursorCells = [];
+    for (let row = 0; row < maxBlockHeight; row++) {
+        const rowCells = [];
+        for (let col = 0; col < maxBlockLength; col++) {
+            rowCells.push(
+                <Cell
+                    key={`cursor-${row}-${col}`}
+                    id={`cursor-cell-${row}-${col}`}
+                    style={{width: invSize, height: invSize}}
+                    row={row}
+                    col={col}
+                >
+                </Cell>
+            );
+        }
+        cursorCells.push(<div key={row} className="cell-row">{rowCells}</div>);
+    }
+
+
 
     const loadGameboard = async () => {
         const gameId = localStorage.getItem('gameId');
@@ -419,6 +468,9 @@ const Game = () => {
                 >
                     <u>Click to Reload page</u>
                 </p>
+
+                <div className="cell-field" id="cursor-cells" style={{pointerEvents: "none", position: "absolute", display: "none"}}>{cursorCells}</div>
+
             </BaseContainer>
         </BaseContainer>
     );
