@@ -15,6 +15,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import {FormControlLabel, IconButton, Tooltip} from "@mui/material";
 import Switch from '@mui/material/Switch';
+import useSound from 'use-sound';
+import lobbyMusic from '../../assets/lobbyMusic.mp3';
 
 const Player = ({player}) => {
     return (<div className="player container">
@@ -45,6 +47,11 @@ const Lobby = () => {
     const history = useHistory();
     //const username = localStorage.getItem('username')
     //const token = localStorage.getItem('token')
+
+    const [play, {stop}] = useSound(lobbyMusic, {volume: 0.2, loop: true});
+
+    stop();
+    play();
 
     let tokendisplay
     let startbutton
