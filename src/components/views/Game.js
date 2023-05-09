@@ -44,7 +44,7 @@ const Game = () => {
     const id = params.id
     const numRows = 20;
     const numCols = 20;
-    const [play] = useSound(backgroundMusic, { volume: 0.5 });
+    const [play, {stop}] = useSound(backgroundMusic, { volume: 0.4, loop: true });
 
     const player1Color = "#CF141E";
     const player2Color = "#71AD58";
@@ -418,6 +418,7 @@ const Game = () => {
 
     }, [id, baseURL]);
 
+    stop();
     play();
 
     useEffect(() => {
