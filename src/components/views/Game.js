@@ -10,6 +10,8 @@ import {
     Block15, Block16, Block17, Block18, Block19, Block20, Block21
 } from "../Game/Block";
 import {getDomain} from "../../helpers/getDomain";
+import useSound from 'use-sound';
+import backgroundMusic from '../../assets/backgroundMusic.mp3';
 
 const Timer = () => {
     const timerEl = document.getElementById("Timer")
@@ -34,6 +36,7 @@ const Timer = () => {
 
 
 const Game = () => {
+
     const baseURL = getDomain()
     const [evtSource, setEvtSource] = useState(null)
     const [currentPlayer, setCurrentPlayer] = useState(null)
@@ -41,6 +44,7 @@ const Game = () => {
     const id = params.id
     const numRows = 20;
     const numCols = 20;
+    const [play] = useSound(backgroundMusic, { volume: 0.5 });
 
     const player1Color = "#CF141E";
     const player2Color = "#71AD58";
@@ -413,6 +417,8 @@ const Game = () => {
         fetchData();
 
     }, [id, baseURL]);
+
+    play();
 
     useEffect(() => {
         updateInventory();
