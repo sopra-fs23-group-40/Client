@@ -227,6 +227,7 @@ const Game = () => {
             alert("This move is not possible!");
         }
 
+        removeBlockFromCursor();
         pickedUpBlock = null;
     };
 
