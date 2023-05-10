@@ -233,6 +233,7 @@ const Lobby = () => {
         }
         evtSource.close()
         localStorage.removeItem('lobbytoken');
+        stopLobbyMusic();
         history.push("/overview")
     }
 
