@@ -48,10 +48,10 @@ const Lobby = () => {
     //const username = localStorage.getItem('username')
     //const token = localStorage.getItem('token')
 
-    const [play, {stop}] = useSound(lobbyMusic, {volume: 0.2, loop: true});
+    const [playLobbyMusic, {pause: pauseLobbyMusic, stop: stopLobbyMusic}] = useSound(lobbyMusic, {volume: 0.2, loop: true});
 
-    stop();
-    play();
+    pauseLobbyMusic();
+    playLobbyMusic();
 
     let tokendisplay
     let startbutton
@@ -182,10 +182,12 @@ const Lobby = () => {
                         console.error("Details:", error);
                     }
                 } else if (parse.message === "DELETED") {
+                    stopLobbyMusic();
                     history.push("/overview")
                 } else if (parse.message.split(',')[0] === "START") {
                     localStorage.setItem("gameId", parse.message.split(',')[1])
                     evtSource.close()
+                    stopLobbyMusic();
                     history.push("/game/" + parse.message.split(',')[1])
                 }
             }
@@ -268,7 +270,6 @@ const Lobby = () => {
     }
 
     async function startGame() {
-        stop();
         try {
             const username = localStorage.getItem('username')
             const token = localStorage.getItem('token')
@@ -280,6 +281,7 @@ const Lobby = () => {
             const gameId = await api.post('/games', id, config);
             console.log("GameId = " + gameId.data);
             localStorage.setItem('gameId', gameId.data);
+            stopLobbyMusic();
             history.push(`/game/` + gameId.data);
         } catch (error) {
             alert(`Something went wrong, try again \n${handleError(error)}`);

@@ -46,7 +46,8 @@ const Game = () => {
     const id = params.id
     const numRows = 20;
     const numCols = 20;
-    const [play, {stop}] = useSound(backgroundMusic, { volume: 0.4, loop: true });
+    // TODO: When redirecting to the winner screen, use stop from {stop: stopBackgroundMusic, pause: pauseBackgroundMusic}
+    const [playBackgroundMusic, {pause: pauseBackgroundMusic}] = useSound(backgroundMusic, { volume: 0.4, loop: true });
     const [playBlockPlacingEffect] = useSound(blockPlacingEffect, { volume: 0.4, loop: false });
     const [playPlacementNotPossibleEffect] = useSound(placementNotPossibleEffect, { volume: 0.2, loop: false });
 
@@ -217,16 +218,11 @@ const Game = () => {
 
         const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col});
 
-        console.log("BODY:");
-        console.log(requestBody);
-
         try {
             const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
             if (response.status !== 200) {
-                alert("This move is not possible!");
                 playPlacementNotPossibleEffect();
             } else {
-                console.log("Placement of " + pickedUpBlock.name + " at (" + row + "/" + col + ") successful");
                 playBlockPlacingEffect();
                 await removeBlockFromCursor();
                 await updateInventory();
@@ -234,7 +230,6 @@ const Game = () => {
                 await loadGameboard();
             }
         } catch (e) {
-            alert("This move is not possible!");
             playPlacementNotPossibleEffect();
         }
 
@@ -272,7 +267,6 @@ const Game = () => {
 
     var blocks = [];
     const updateInventory = async () => {
-        console.log("Updating inventory from backend");
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
         const response = await api.get("/games/" + gameId + "/" + username + "/inventory");
@@ -350,9 +344,6 @@ const Game = () => {
             }
         }
 
-        console.log("Blocks from backend:")
-        console.log(blocks);
-
         for (let i = 0; i < numInvRows; i++) {
             for (let j = 0; j < numInvCols; j++) {
                 document.getElementById("invcell-" + i + "-" + j).style.backgroundColor = "#eeeeee";
@@ -411,7 +402,6 @@ const Game = () => {
             try {
                 setEvtSource(new EventSource(baseURL + 'gameboard-updates'))
                 const response = await api.get('/games/' + id + "/players");
-                console.log(JSON.stringify(response))
 
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -425,8 +415,8 @@ const Game = () => {
 
     }, [id, baseURL]);
 
-    stop();
-    play();
+    pauseBackgroundMusic();
+    playBackgroundMusic();
 
     useEffect(() => {
         updateInventory();
@@ -435,8 +425,8 @@ const Game = () => {
 
     if (evtSource) {
         evtSource.onerror = (error) => {
-            console.log("An error occurred while attempting to connect.");
-            console.log(error)
+            console.error("An error occurred while attempting to connect.");
+            console.error(error)
         }
 
         evtSource.onmessage = async (e) => {
