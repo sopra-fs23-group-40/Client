@@ -18,13 +18,12 @@ import placementNotPossibleEffect from '../../assets/placementNotPossibleEffect.
 const Timer = () => {
     const timerEl = document.getElementById("Timer")
     if (timerEl) {
-        const start = Date.now();
         let newMins = 0
         let newSecs = 0
-        setInterval(function () {
-            const delta = Math.floor((Date.now() - start) / 1000);
-            newMins = (Math.floor(delta / 60))
-            newSecs = (delta % 60)
+        setInterval(async function () {
+            const runningTime = await api.get("/games/" + localStorage.getItem('gameId') + "/time")
+            newMins = (Math.floor(runningTime.data / 60))
+            newSecs = (runningTime.data % 60)
             newMins = pad(newMins)
             newSecs = pad(newSecs)
             timerEl.innerHTML = `${newMins}:${newSecs}`
