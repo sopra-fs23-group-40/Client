@@ -403,6 +403,8 @@ const Game = () => {
                 setEvtSource(new EventSource(baseURL + 'gameboard-updates'))
                 const response = await api.get('/games/' + id + "/players");
 
+                console.log(JSON.stringify(response));
+
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
             } catch (error) {
