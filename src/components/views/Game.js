@@ -5,10 +5,7 @@ import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
 import {api} from "../../helpers/api";
 import {useParams} from "react-router-dom";
-import {
-    Block1, Block2, Block3, Block4, Block5, Block6, Block7, Block8, Block9, Block10, Block11, Block12, Block13, Block14,
-    Block15, Block16, Block17, Block18, Block19, Block20, Block21
-} from "../Game/Block";
+import {BlockType} from "../Game/Block";
 import {getDomain} from "../../helpers/getDomain";
 import useSound from 'use-sound';
 import backgroundMusic from '../../assets/backgroundMusic.mp3';
@@ -37,7 +34,6 @@ const Timer = () => {
 
 
 const Game = () => {
-
     const baseURL = getDomain()
     const [evtSource, setEvtSource] = useState(null)
     const [currentPlayer, setCurrentPlayer] = useState(null)
@@ -82,6 +78,35 @@ const Game = () => {
 
     }
     window.addEventListener('mousemove', mouseCoordinates);
+
+    window.addEventListener('keyup', async (e) => {
+        switch (e.key) {
+            case 'ArrowLeft':
+                if(pickedUpBlock != null) {
+                    try {
+                        const gameId = localStorage.getItem("gameId")
+                        const username = localStorage.getItem("username")
+                        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, rotationDirection: "CLOCKWISE"});
+                        const response = await api.put('/games/' + gameId + '/' + username + '/rotate', requestBody)
+                        console.log("Respo: "+ JSON.stringify(response.data))
+                        await updateInventory();
+                        const new_BlockOnCursor = new BlockType(response.data.shape, response.data.length, response.data.height, response.data.blockName)
+                        console.log("New: " +new_BlockOnCursor)
+                        fixBlockToCursor(new_BlockOnCursor)
+
+                    } catch (error) {
+                        console.error("Something went wrong while fetching the game!");
+                        console.error("Details:", error);
+                    }
+                }
+                return
+            case 'ArrowRight':
+                // TODO: counter-clockwise rotation
+                return
+            default:
+                return
+        }
+    })
 
     const removeBlockFromCursor = () => {
 
@@ -273,74 +298,7 @@ const Game = () => {
         blocks = [];
 
         for (let block of response.data) {
-            switch (block.blockName) {
-                case "Block1":
-                    blocks.push(new Block1());
-                    break;
-                case "Block2":
-                    blocks.push(new Block2());
-                    break;
-                case "Block3":
-                    blocks.push(new Block3());
-                    break;
-                case "Block4":
-                    blocks.push(new Block4());
-                    break;
-                case "Block5":
-                    blocks.push(new Block5());
-                    break;
-                case "Block6":
-                    blocks.push(new Block6());
-                    break;
-                case "Block7":
-                    blocks.push(new Block7());
-                    break;
-                case "Block8":
-                    blocks.push(new Block8());
-                    break;
-                case "Block9":
-                    blocks.push(new Block9());
-                    break;
-                case "Block10":
-                    blocks.push(new Block10());
-                    break;
-                case "Block11":
-                    blocks.push(new Block11());
-                    break;
-                case "Block12":
-                    blocks.push(new Block12());
-                    break;
-                case "Block13":
-                    blocks.push(new Block13());
-                    break;
-                case "Block14":
-                    blocks.push(new Block14());
-                    break;
-                case "Block15":
-                    blocks.push(new Block15());
-                    break;
-                case "Block16":
-                    blocks.push(new Block16());
-                    break;
-                case "Block17":
-                    blocks.push(new Block17());
-                    break;
-                case "Block18":
-                    blocks.push(new Block18());
-                    break;
-                case "Block19":
-                    blocks.push(new Block19());
-                    break;
-                case "Block20":
-                    blocks.push(new Block20());
-                    break;
-                case "Block21":
-                    blocks.push(new Block21());
-                    break;
-                default:
-                    console.log("Block not found: " + block.blockName);
-                    break;
-            }
+            blocks.push(new BlockType(block.shape, block.length, block.height, block.blockName));
         }
 
         for (let i = 0; i < numInvRows; i++) {
