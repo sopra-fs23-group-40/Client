@@ -27,10 +27,10 @@ const Profile = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                const token = localStorage.getItem('token');
+                const username = localStorage.getItem('username');
                 const config = {
                     headers: {
-                        token
+                        username
                     }
                 }
                 const response = await api.get('/statistics', config);
