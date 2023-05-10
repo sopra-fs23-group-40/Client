@@ -78,8 +78,8 @@ const Game = () => {
     let pickedUpBlock = null;
 
     function mouseCoordinates(event){
-        document.getElementById("cursor-cells").style.left = event.pageX + "px";
-        document.getElementById("cursor-cells").style.top = event.pageY + "px";
+        document.getElementById("cursor-cells").style.left = (event.pageX - 10) + "px";
+        document.getElementById("cursor-cells").style.top = (event.pageY - 10) + "px";
 
     }
     window.addEventListener('mousemove', mouseCoordinates);
