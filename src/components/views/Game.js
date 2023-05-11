@@ -230,6 +230,7 @@ const Game = () => {
                             } else if (i === numRows - 1 && j === numCols - 1) {
                                 document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = player4Color+opacity;
                             }
+                            // TODO: remove this (?)
                             else {
                                 document.getElementById("cell-" + (j) + "-" + (i)).style.backgroundColor = "#eeeeee";
                             }
