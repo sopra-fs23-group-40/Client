@@ -101,7 +101,23 @@ const Game = () => {
                 }
                 return
             case 'ArrowRight':
-                // TODO: counter-clockwise rotation
+                if(pickedUpBlock != null) {
+                    try {
+                        const gameId = localStorage.getItem("gameId")
+                        const username = localStorage.getItem("username")
+                        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, rotationDirection: "COUNTER_CLOCKWISE"});
+                        const response = await api.put('/games/' + gameId + '/' + username + '/rotate', requestBody)
+                        console.log("Respo: "+ JSON.stringify(response.data))
+                        await updateInventory();
+                        const new_BlockOnCursor = new BlockType(response.data.shape, response.data.length, response.data.height, response.data.blockName)
+                        console.log("New: " +new_BlockOnCursor)
+                        fixBlockToCursor(new_BlockOnCursor)
+
+                    } catch (error) {
+                        console.error("Something went wrong while fetching the game!");
+                        console.error("Details:", error);
+                    }
+                }
                 return
             default:
                 return
