@@ -5,7 +5,6 @@ import HeaderSmall from "./HeaderSmall";
 import {Button} from "../ui/Button";
 import {api, handleError} from "../../helpers/api";
 import React, {useEffect, useState} from "react";
-import LobbyModel from "../../models/LobbyModel";
 import {Spinner} from "../ui/Spinner";
 import PropTypes from "prop-types";
 import {getDomain} from "../../helpers/getDomain";
@@ -39,7 +38,6 @@ const Lobby = () => {
     const params = useParams();
     const id = params.id
     const [tip, setTip] = useState(null)
-    const [evtSource, setEvtSource] = useState(null)
     const [lobbyName, setLobbyName] = useState(null)
     const [lobbyType, setLobbyType] = useState(null)
     const [playerList, setPlayerList] = useState(null)
@@ -117,8 +115,6 @@ const Lobby = () => {
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
-                setEvtSource(new EventSource(baseURL + 'lobby-updates'))
-                console.log("The url for updates: " + baseURL + 'lobby-updates')
                 const username = localStorage.getItem('username')
                 const token = localStorage.getItem('token')
                 const config = {
@@ -127,15 +123,13 @@ const Lobby = () => {
                     }
                 }
                 const response = await api.get('/lobby/' + params.id, config);
-                const lobby = new LobbyModel(response.data);
-                setLobbyType(lobby.lobbyType)
-                setLobbyName(lobby.name)
-                const split = lobby.playerList.split(',')
+                setLobbyType(response.data.lobbyType)
+                setLobbyName(response.data.name)
+                const split = response.data.playerList.split(',')
                 setPlayerList(split)
 
-
-                if (lobby.lobbyToken != null) {
-                    localStorage.setItem('lobbytoken', lobby.lobbyToken)
+                if (response.data.lobbyToken != null) {
+                    localStorage.setItem('lobbytoken', response.data.lobbyToken)
                 }
 
                 const isHost = await api.get("/lobby/" + params.id + "/checkhost", config)
@@ -153,46 +147,37 @@ const Lobby = () => {
 
     }, [history, params, baseURL]);
 
-    if (evtSource) {
-        evtSource.onerror = (error) => {
-            console.log("An error occurred while attempting to connect.");
-            console.log(error)
-        }
-
-        evtSource.onmessage = async (e) => {
-            console.log("The eventsource URL is: " + evtSource.url)
-            console.log("Event was received:" + JSON.stringify(e))
-            const parse = JSON.parse(e.data)
-            if (parse.id.toString() === params.id.toString()) {
-                if (parse.message === "JOINED" || parse.message === "LEFT") {
-                    try {
-                        const username = localStorage.getItem('username')
-                        const token = localStorage.getItem('token')
-                        const config = {
-                            headers: {
-                                token, username
-                            }
-                        }
-                        const response = await api.get('/lobby/' + id, config);
-                        const lobby = new LobbyModel(response.data);
-                        const split = lobby.playerList.split(',')
-                        setPlayerList(split)
-                    } catch (error) {
-                        console.error("Something went wrong while fetching the lobbydata!");
-                        console.error("Details:", error);
+    useEffect(() => {
+        const interval = setInterval(async () =>{
+            try {
+                const username = localStorage.getItem('username')
+                const token = localStorage.getItem('token')
+                const config = {
+                    headers: {
+                        token, username
                     }
-                } else if (parse.message === "DELETED") {
-                    stopLobbyMusic();
-                    history.push("/overview")
-                } else if (parse.message.split(',')[0] === "START") {
-                    localStorage.setItem("gameId", parse.message.split(',')[1])
-                    evtSource.close()
-                    stopLobbyMusic();
-                    history.push("/game/" + parse.message.split(',')[1])
                 }
+                const response = await api.get('/lobby/' + params.id, config);
+                setLobbyType(response.data.lobbyType)
+                const split = response.data.playerList.split(',')
+                setPlayerList(split)
+                console.log(response.data)
+                if(response.data.status === "INGAME"){
+                    console.log(response.data.gameId)
+                    if(response.data.gameId){
+                    localStorage.setItem("gameId", response.data.gameId)
+                    history.push("/game/" + response.data.gameId)
+                    }
+                }
+            } catch (error) {
+                console.error("Something went wrong while fetching the lobbydata!");
+                console.error("Details:", error);
             }
-        }
-    }
+        }, 1500)
+
+        return() => clearInterval(interval)
+
+    }, [params.id, history]);
 
     const change_lobbytype = async () => {
         const username = localStorage.getItem('username')
@@ -231,7 +216,6 @@ const Lobby = () => {
                 console.error("Details:", error)
             }
         }
-        evtSource.close()
         localStorage.removeItem('lobbytoken');
         stopLobbyMusic();
         history.push("/overview")
