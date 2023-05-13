@@ -56,10 +56,10 @@ const Game = () => {
         if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
     });
 
-    const numInvRows = 9;
+    const numInvRows = 10;
     const numInvCols = 40;
 
-    const maxBlockHeight = 4;
+    const maxBlockHeight = 5;
     const maxBlockLength = 5;
 
     const invSize = "1.46em";
@@ -83,9 +83,9 @@ const Game = () => {
                         const requestBody = JSON.stringify({blockName: pickedUpBlock.name, rotationDirection: "CLOCKWISE"});
                         const response = await api.put('/games/' + gameId + '/' + username + '/rotate', requestBody)
                         console.log("Respo: "+ JSON.stringify(response.data))
-                        await updateInventory();
+                        //await updateInventory();
                         const new_BlockOnCursor = new BlockType(response.data.shape, response.data.length, response.data.height, response.data.blockName)
-                        console.log("New: " +new_BlockOnCursor)
+                        console.log("New: " +JSON.stringify(new_BlockOnCursor))
                         fixBlockToCursor(new_BlockOnCursor)
 
                     } catch (error) {
@@ -102,7 +102,7 @@ const Game = () => {
                         const requestBody = JSON.stringify({blockName: pickedUpBlock.name, rotationDirection: "COUNTER_CLOCKWISE"});
                         const response = await api.put('/games/' + gameId + '/' + username + '/rotate', requestBody)
                         console.log("Respo: "+ JSON.stringify(response.data))
-                        await updateInventory();
+                        //await updateInventory();
                         const new_BlockOnCursor = new BlockType(response.data.shape, response.data.length, response.data.height, response.data.blockName)
                         console.log("New: " +new_BlockOnCursor)
                         fixBlockToCursor(new_BlockOnCursor)
@@ -328,6 +328,9 @@ const Game = () => {
                     if (block.shape[row][col]) {
                         invCells[row + rowOffset][col + colOffset] = block;
                         document.getElementById("invcell-" + (row + rowOffset) + "-" + (col + colOffset)).style.backgroundColor = inventoryColor;
+                    }
+                    else {
+                        invCells[row + rowOffset][col + colOffset] = null;
                     }
                 }
             }
