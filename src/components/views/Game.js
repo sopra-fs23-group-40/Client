@@ -340,7 +340,6 @@ const Game = () => {
         const interval = setInterval(async () =>{
             try {
                 await loadGameboard()
-                await updateInventory()
 
             } catch (error) {
                 console.error("Something went wrong while fetching the lobbydata!");
@@ -376,6 +375,13 @@ const Game = () => {
         }
         inventoryCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
+
+    useEffect(() =>{
+        async function fetchInventory(){
+            await updateInventory()
+        }
+        fetchInventory()
+    })
 
     pauseBackgroundMusic();
     playBackgroundMusic();
