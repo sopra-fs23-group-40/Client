@@ -132,6 +132,28 @@ const Overview = () => {
         fetchData();
     }, [history]);
 
+    useEffect(() => {
+        const interval = setInterval(async () =>{
+            try {
+                const token = localStorage.getItem('token')
+                const config = {
+                    headers: {
+                        token
+                    }
+                }
+                const response = await api.get('/lobbies', config);
+                setLobbies(response.data);
+
+            } catch (error) {
+                console.error("Something went wrong while fetching the lobbydata!");
+                console.error("Details:", error);
+            }
+        }, 2500)
+
+        return() => clearInterval(interval)
+
+    }, []);
+
     let content = <Spinner/>;
 
     if (lobbies) {
