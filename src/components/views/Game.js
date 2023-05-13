@@ -4,9 +4,7 @@ import React, {useEffect, useState} from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
 import {api} from "../../helpers/api";
-import {useParams} from "react-router-dom";
 import {BlockType} from "../Game/Block";
-import {getDomain} from "../../helpers/getDomain";
 import useSound from 'use-sound';
 import backgroundMusic from '../../assets/backgroundMusic.mp3';
 import blockPlacingEffect from '../../assets/blockPlacingEffect.mp3';
@@ -34,11 +32,7 @@ const Timer = () => {
 
 
 const Game = () => {
-    const baseURL = getDomain()
-    const [evtSource, setEvtSource] = useState(null)
     const [currentPlayer, setCurrentPlayer] = useState(null)
-    const params = useParams();
-    const id = params.id
     const numRows = 20;
     const numCols = 20;
     // TODO: When redirecting to the winner screen, use stop from {stop: stopBackgroundMusic, pause: pauseBackgroundMusic}
@@ -200,8 +194,6 @@ const Game = () => {
         cursorCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
 
-
-
     const loadGameboard = async () => {
         const gameId = localStorage.getItem('gameId');
         const response = await api.get("/games/" + gameId + "/status");
@@ -344,6 +336,22 @@ const Game = () => {
 
     }
 
+    useEffect(() => {
+        const interval = setInterval(async () =>{
+            try {
+                await loadGameboard()
+                await updateInventory()
+
+            } catch (error) {
+                console.error("Something went wrong while fetching the lobbydata!");
+                console.error("Details:", error);
+            }
+        }, 2000)
+
+        return() => clearInterval(interval)
+
+    }, );
+
     const invCells = [];
     for (let i = 0; i < numInvRows; i++) {
         invCells.push(new Array(numInvCols).fill(null));
@@ -369,61 +377,8 @@ const Game = () => {
         inventoryCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
 
-
-    useEffect(() => {
-        // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
-        async function fetchData() {
-            try {
-                setEvtSource(new EventSource(baseURL + 'gameboard-updates'))
-                const response = await api.get('/games/' + id + "/players");
-
-                console.log(JSON.stringify(response));
-
-                await new Promise(resolve => setTimeout(resolve, 2000));
-
-            } catch (error) {
-                console.error("Something went wrong while fetching the game!");
-                console.error("Details:", error);
-            }
-        }
-
-        fetchData();
-
-    }, [id, baseURL]);
-
     pauseBackgroundMusic();
     playBackgroundMusic();
-
-    useEffect(() => {
-        updateInventory();
-        loadGameboard();
-    })
-
-    if (evtSource) {
-        evtSource.onerror = (error) => {
-            console.error("An error occurred while attempting to connect.");
-            console.error(error)
-        }
-
-        evtSource.onmessage = async (e) => {
-            const parse = JSON.parse(e.data)
-            if (parse.id === localStorage.getItem("gameId")) {
-                console.log("Event was received:" + JSON.stringify(e))
-                const parse = JSON.parse(e.data)
-                if (parse.id.toString() === params.id.toString()) {
-                    if (parse.message === "MOVE") {
-                        try {
-                            await loadGameboard()
-                            await updateInventory();
-                        } catch (error) {
-                            console.error("Something went wrong while fetching the gameboard!");
-                            console.error("Details:", error);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     let timer = <p id="Timer">00:00</p>
     if(timer){
