@@ -83,7 +83,7 @@ const Game = () => {
                         const requestBody = JSON.stringify({blockName: pickedUpBlock.name, rotationDirection: "CLOCKWISE"});
                         const response = await api.put('/games/' + gameId + '/' + username + '/rotate', requestBody)
                         console.log("Respo: "+ JSON.stringify(response.data))
-                        //await updateInventory();
+                        await updateInventory();
                         const new_BlockOnCursor = new BlockType(response.data.shape, response.data.length, response.data.height, response.data.blockName)
                         console.log("New: " +JSON.stringify(new_BlockOnCursor))
                         fixBlockToCursor(new_BlockOnCursor)
@@ -102,7 +102,7 @@ const Game = () => {
                         const requestBody = JSON.stringify({blockName: pickedUpBlock.name, rotationDirection: "COUNTER_CLOCKWISE"});
                         const response = await api.put('/games/' + gameId + '/' + username + '/rotate', requestBody)
                         console.log("Respo: "+ JSON.stringify(response.data))
-                        //await updateInventory();
+                        await updateInventory();
                         const new_BlockOnCursor = new BlockType(response.data.shape, response.data.length, response.data.height, response.data.blockName)
                         console.log("New: " +new_BlockOnCursor)
                         fixBlockToCursor(new_BlockOnCursor)
@@ -340,17 +340,20 @@ const Game = () => {
     }
 
     useEffect(() => {
-        const interval = setInterval(async () =>{
-            try {
-                await loadGameboard()
+        async function fetchData() {
+            const interval = setInterval(async () =>{
+                try {
+                    await loadGameboard()
 
-            } catch (error) {
-                console.error("Something went wrong while fetching the lobbydata!");
-                console.error("Details:", error);
-            }
-        }, 2000)
+                } catch (error) {
+                    console.error("Something went wrong while fetching the lobbydata!");
+                    console.error("Details:", error);
+                }
+            }, 2000)
 
-        return() => clearInterval(interval)
+            return() => clearInterval(interval)
+        }
+        fetchData();
 
     }, );
 
