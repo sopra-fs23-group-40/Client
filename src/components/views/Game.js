@@ -247,7 +247,9 @@ const Game = () => {
         window.removeEventListener('mousemove', mouseCoordinates);
         window.removeEventListener('keydown', keyDown);
 
-        history.push('/gameOver');
+        if (response.data.gameOver){
+            history.push('/gameOver');
+        }
     }
 
     const loadGameboard = async () => {
