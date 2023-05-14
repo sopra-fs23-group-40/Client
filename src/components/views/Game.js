@@ -243,12 +243,18 @@ const Game = () => {
     const checkGameOver = async () => {
         const gameId = localStorage.getItem('gameId');
         const response = await api.get("/games/" + gameId + "/isGameOver");
-        localStorage.setItem('gameOverInformation', response.data);
 
-        window.removeEventListener('mousemove', mouseCoordinates);
-        window.removeEventListener('keydown', keyDown);
 
-        if(response.data.gameOver) history.push('/gameOver');
+        if(response.data.gameOver) {
+            window.removeEventListener('mousemove', mouseCoordinates);
+            window.removeEventListener('keydown', keyDown);
+
+            localStorage.setItem('winnerName', response.data.winnerName);
+            localStorage.setItem('gameDuration', response.data.gameDuration);
+            // you can add here more information to the local storage that can be displayed in the game over view
+
+            history.push('/gameOver');
+        }
 
     }
 
