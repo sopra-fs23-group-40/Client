@@ -274,6 +274,7 @@ const Lobby = () => {
             };
             const gameId = await api.post('/games', id, config);
             console.log("GameId = " + gameId.data);
+            initializeGame(gameId.data)
             localStorage.setItem('gameId', gameId.data);
             stopLobbyMusic();
             history.push(`/game/` + gameId.data);

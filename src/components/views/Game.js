@@ -349,6 +349,7 @@ const Game = () => {
             return "It's your turn!";
         }
         else if(currentPlayer == null){
+            localStorage.setItem("currentPlayer", null)
             return "Please wait.. Game is loading."
         }
         else {
@@ -415,9 +416,6 @@ const Game = () => {
         async function fetchData() {
             const interval = setInterval(async () =>{
                 try {
-                    if(currentPlayer == null) {
-                        await loadGameboard();
-                    }
                     if(await hasCurrentPlayerChanged()) {
                         console.log("Loaded new Gameboard-Status!")
                         await loadGameboard()
