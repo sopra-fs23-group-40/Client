@@ -231,6 +231,14 @@ const Game = () => {
 
             localStorage.setItem('winnerName', response.data.winnerName);
             localStorage.setItem('gameDuration', response.data.gameDuration);
+            localStorage.setItem('player1Name', response.data.placedBlocks[0].key);
+            localStorage.setItem('player2Name', response.data.placedBlocks[1].key);
+            localStorage.setItem('player3Name', response.data.placedBlocks[2].key);
+            localStorage.setItem('player4Name', response.data.placedBlocks[3].key);
+            localStorage.setItem('player1Score', response.data.placedBlocks[0].value);
+            localStorage.setItem('player2Score', response.data.placedBlocks[1].value);
+            localStorage.setItem('player3Score', response.data.placedBlocks[2].value);
+            localStorage.setItem('player4Score', response.data.placedBlocks[3].value);
             // you can add here more information to the local storage that can be displayed in the game over view
 
             history.push('/gameOver');
