@@ -75,43 +75,15 @@ const Game = () => {
 
     window.addEventListener('keyup', async (e) => {
         switch (e.key) {
+            case 'Escape':
+                removeBlockFromCursor();
+                pickedUpBlock = null;
+                return
             case 'ArrowLeft':
-                if(pickedUpBlock != null) {
-                    try {
-                        const gameId = localStorage.getItem("gameId")
-                        const username = localStorage.getItem("username")
-                        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, rotationDirection: "CLOCKWISE"});
-                        const response = await api.put('/games/' + gameId + '/' + username + '/rotate', requestBody)
-                        console.log("Respo: "+ JSON.stringify(response.data))
-                        await updateInventory();
-                        const new_BlockOnCursor = new BlockType(response.data.shape, response.data.length, response.data.height, response.data.blockName)
-                        console.log("New: " +JSON.stringify(new_BlockOnCursor))
-                        fixBlockToCursor(new_BlockOnCursor)
-
-                    } catch (error) {
-                        console.error("Something went wrong while fetching the game!");
-                        console.error("Details:", error);
-                    }
-                }
+                if(pickedUpBlock != null) rotatePickedUpBlock(270);
                 return
             case 'ArrowRight':
-                if(pickedUpBlock != null) {
-                    try {
-                        const gameId = localStorage.getItem("gameId")
-                        const username = localStorage.getItem("username")
-                        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, rotationDirection: "COUNTER_CLOCKWISE"});
-                        const response = await api.put('/games/' + gameId + '/' + username + '/rotate', requestBody)
-                        console.log("Respo: "+ JSON.stringify(response.data))
-                        await updateInventory();
-                        const new_BlockOnCursor = new BlockType(response.data.shape, response.data.length, response.data.height, response.data.blockName)
-                        console.log("New: " +new_BlockOnCursor)
-                        fixBlockToCursor(new_BlockOnCursor)
-
-                    } catch (error) {
-                        console.error("Something went wrong while fetching the game!");
-                        console.error("Details:", error);
-                    }
-                }
+                if(pickedUpBlock != null) rotatePickedUpBlock(90);
                 return
             default:
                 return
@@ -121,6 +93,56 @@ const Game = () => {
     const removeBlockFromCursor = () => {
 
         document.getElementById("cursor-cells").style.display = "none";
+        pickedUpBlock = null;
+        pickedUpBlockRotation = 0;
+    }
+
+    function rotateArray(array, degrees) {
+        const rows = array.length;
+        const cols = array[0].length;
+        const rotated = [];
+
+        // Create a new matrix to hold the rotated values
+        for (let i = 0; i < cols; i++) {
+            rotated.push(new Array(rows).fill(false));
+        }
+
+        if (degrees === 90) {
+            // Rotate the matrix by 90 degrees
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    rotated[j][rows-1-i] = array[i][j];
+                }
+            }
+        } else if (degrees === 180) {
+            // Rotate the matrix by 180 degrees
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    rotated[rows-1-i][cols-1-j] = array[i][j];
+                }
+            }
+        } else if (degrees === 270) {
+            // Rotate the matrix by 270 degrees
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    rotated[cols-1-j][i] = array[i][j];
+                }
+            }
+        } else {
+            // Invalid degree value
+            console.error('Invalid degree value. Please use 90, 180, or 270.');
+            return null;
+        }
+
+        return rotated;
+    }
+
+
+    let pickedUpBlockRotation = 0;
+    const rotatePickedUpBlock = (rot) => {
+        pickedUpBlockRotation = (pickedUpBlockRotation + rot) % 360;
+        pickedUpBlock.shape = rotateArray(pickedUpBlock.shape, rot);
+        fixBlockToCursor(pickedUpBlock);
     }
 
     const fixBlockToCursor = (block) => {
@@ -136,8 +158,8 @@ const Game = () => {
         }
 
         // enable all cursor cells which are part of the block
-        for(let i = 0; i < block.height; i++) {
-            for (let j = 0; j < block.length; j++) {
+        for(let i = 0; i < block.shape.length; i++) {
+            for (let j = 0; j < block.shape[i].length; j++) {
                 if (block.shape[i][j]) {
                     document.getElementById("cursor-cell-" + i + "-" + j).style.opacity = "1";
                     document.getElementById("cursor-cell-" + i + "-" + j).style.backgroundColor = inventoryColor;
@@ -244,7 +266,7 @@ const Game = () => {
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
 
-        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col});
+        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col, rotation: pickedUpBlockRotation, flipped: false});
 
         try {
             const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
