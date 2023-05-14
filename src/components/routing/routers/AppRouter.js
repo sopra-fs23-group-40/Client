@@ -14,6 +14,7 @@ import Game from "../../views/Game";
 import Overview from "../../views/Overview";
 import {OverviewGuard} from "../routeProtectors/OverviewGuard";
 import JoinPrivateLobby from "../../views/JoinPrivateLobby";
+import GameOver from "../../views/GameOver";
 
 /**
  * Main router of your application.
@@ -66,6 +67,11 @@ const AppRouter = () => {
                 <Route exact path="/game/:id">
                     <GameGuard>
                         <Game/>
+                    </GameGuard>
+                </Route>
+                <Route exact path="/gameOver">
+                    <GameGuard>
+                        <GameOver/>
                     </GameGuard>
                 </Route>
                 <Route exact path="/">
