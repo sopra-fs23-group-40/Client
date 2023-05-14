@@ -11,36 +11,15 @@ import blockPlacingEffect from '../../assets/blockPlacingEffect.mp3';
 import placementNotPossibleEffect from '../../assets/placementNotPossibleEffect.mp3';
 import {useHistory} from "react-router-dom";
 
-// const Timer = () => {
-//     const timerEl = document.getElementById("Timer")
-//     if (timerEl) {
-//         let newMins = 0
-//         let newSecs = 0
-//         setInterval(async function () {
-//             const runningTime = await api.get("/games/" + localStorage.getItem('gameId') + "/time")
-//             newMins = (Math.floor(runningTime.data / 60))
-//             newSecs = (runningTime.data % 60)
-//             newMins = pad(newMins)
-//             newSecs = pad(newSecs)
-//             timerEl.innerHTML = `${newMins}:${newSecs}`
-//
-//             function pad(unit) {
-//                 return (("0") + unit).length > 2 ? unit : "0" + unit
-//             }
-//         }, 1000)
-//     }
-// }
-
-
 const Game = () => {
     const history = useHistory();
     const [currentPlayer, setCurrentPlayer] = useState(null)
     const numRows = 20;
     const numCols = 20;
     // TODO: When redirecting to the winner screen, use stop from {stop: stopBackgroundMusic, pause: pauseBackgroundMusic}
-    const [playBackgroundMusic, {pause: pauseBackgroundMusic}] = useSound(backgroundMusic, { volume: 0.4, loop: true });
-    const [playBlockPlacingEffect] = useSound(blockPlacingEffect, { volume: 0.4, loop: false });
-    const [playPlacementNotPossibleEffect] = useSound(placementNotPossibleEffect, { volume: 0.2, loop: false });
+    const [playBackgroundMusic, {pause: pauseBackgroundMusic}] = useSound(backgroundMusic, {volume: 0.4, loop: true});
+    const [playBlockPlacingEffect] = useSound(blockPlacingEffect, {volume: 0.4, loop: false});
+    const [playPlacementNotPossibleEffect] = useSound(placementNotPossibleEffect, {volume: 0.2, loop: false});
 
     const player1Color = "#CF141E";
     const player2Color = "#71AD58";
@@ -67,6 +46,7 @@ const Game = () => {
     const invSize = "1.46em";
 
     let pickedUpBlock = null;
+    let runningTime = null;
 
     function mouseCoordinates(event){
         if(document.getElementById("cursor-cells") == null) return;
@@ -255,7 +235,6 @@ const Game = () => {
 
             history.push('/gameOver');
         }
-
     }
 
     const loadGameboard = async () => {
@@ -438,6 +417,21 @@ const Game = () => {
 
     }, );
 
+    function timerUpdate() {
+        setTimeout(function () {
+            const timerEl = document.getElementById("Timer");
+            runningTime = runningTime + 1
+            const newMins = pad(Math.floor(runningTime / 60))
+            const newSecs = pad(runningTime % 60)
+            timerEl.innerHTML = `${newMins}:${newSecs}`
+            timerUpdate()
+
+            function pad(unit) {
+                return (("0") + unit).length > 2 ? unit : "0" + unit
+            }
+        }, 1000)
+    }
+
     const invCells = [];
     for (let i = 0; i < numInvRows; i++) {
         invCells.push(new Array(numInvCols).fill(null));
@@ -463,27 +457,27 @@ const Game = () => {
         inventoryCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
 
-    useEffect(() =>{
-        async function fetchInventory(){
+    if (!runningTime) {
+        async function fetchInventory() {
+            const newTime = await api.get("/games/" + localStorage.getItem('gameId') + "/time")
+            runningTime = newTime.data
             await updateInventory()
+            timerUpdate()
         }
         fetchInventory()
-    })
+    }
 
     pauseBackgroundMusic();
     playBackgroundMusic();
 
-    // let timer = <p id="Timer">00:00</p>
-    // if(timer){
-    //     Timer()
-    // }
+    let timer = <p id="Timer">00:00</p>
 
 
     return (
         <BaseContainer>
             <HeaderSmall height="10"/>
             <BaseContainer className='game container'>
-                {/*{timer}*/}
+                {timer}
                 <h1 style={{color: "black"}}>{getCurrentPlayer()}</h1>
                 <div className="cell-field">{cells}</div>
                 <br/>
