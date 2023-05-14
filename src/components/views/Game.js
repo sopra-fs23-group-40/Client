@@ -73,17 +73,24 @@ const Game = () => {
     }
     window.addEventListener('mousemove', mouseCoordinates);
 
-    window.addEventListener('keyup', async (e) => {
+    window.addEventListener('keydown', async (e) => {
         switch (e.key) {
             case 'Escape':
                 removeBlockFromCursor();
-                pickedUpBlock = null;
                 return
             case 'ArrowLeft':
                 if(pickedUpBlock != null) rotatePickedUpBlock(270);
                 return
             case 'ArrowRight':
                 if(pickedUpBlock != null) rotatePickedUpBlock(90);
+                return
+            case 'ArrowUp':
+                e.preventDefault()
+                if(pickedUpBlock != null) flipPickedUpBlock();
+                return
+            case 'ArrowDown':
+                e.preventDefault()
+                if(pickedUpBlock != null) flipPickedUpBlock();
                 return
             default:
                 return
@@ -95,6 +102,7 @@ const Game = () => {
         document.getElementById("cursor-cells").style.display = "none";
         pickedUpBlock = null;
         pickedUpBlockRotation = 0;
+        pickedUpBlockFlipped = false;
     }
 
     function rotateArray(array, degrees) {
@@ -145,6 +153,13 @@ const Game = () => {
         fixBlockToCursor(pickedUpBlock);
     }
 
+    let pickedUpBlockFlipped = false;
+    const flipPickedUpBlock = () => {
+        pickedUpBlockFlipped = !pickedUpBlockFlipped;
+        pickedUpBlock.shape = pickedUpBlock.shape.reverse();
+        fixBlockToCursor(pickedUpBlock);
+    }
+
     const fixBlockToCursor = (block) => {
 
         // show cursor cells
@@ -182,16 +197,14 @@ const Game = () => {
             fixBlockToCursor(block);
         } else {
             if (block === null) {
-                pickedUpBlock = null;
                 removeBlockFromCursor();
             } else {
                 // Swapping Blocks
                 if (pickedUpBlock === block) {
-                    pickedUpBlock = null;
                     removeBlockFromCursor();
                 } else {
-                    pickedUpBlock = block;
                     removeBlockFromCursor();
+                    pickedUpBlock = block;
                     fixBlockToCursor(block);
                 }
             }
@@ -266,7 +279,7 @@ const Game = () => {
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
 
-        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col, rotation: pickedUpBlockRotation, flipped: false});
+        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col, rotation: pickedUpBlockRotation, flipped: pickedUpBlockFlipped});
 
         try {
             const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
@@ -274,7 +287,6 @@ const Game = () => {
                 playPlacementNotPossibleEffect();
             } else {
                 playBlockPlacingEffect();
-                await removeBlockFromCursor();
                 await updateInventory();
                 // TODO: When SSE works, remove the next line (loadGameboard()), as it will be done when receiving the event - no matter which player's turn it was
                 await loadGameboard();
@@ -284,7 +296,6 @@ const Game = () => {
         }
 
         removeBlockFromCursor();
-        pickedUpBlock = null;
     };
 
     // Create a 2D array to store the Cells
