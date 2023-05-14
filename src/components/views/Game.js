@@ -9,6 +9,7 @@ import useSound from 'use-sound';
 import backgroundMusic from '../../assets/backgroundMusic.mp3';
 import blockPlacingEffect from '../../assets/blockPlacingEffect.mp3';
 import placementNotPossibleEffect from '../../assets/placementNotPossibleEffect.mp3';
+import {useHistory} from "react-router-dom";
 
 const Timer = () => {
     const timerEl = document.getElementById("Timer")
@@ -32,6 +33,7 @@ const Timer = () => {
 
 
 const Game = () => {
+    const history = useHistory();
     const [currentPlayer, setCurrentPlayer] = useState(null)
     const numRows = 20;
     const numCols = 20;
@@ -73,8 +75,8 @@ const Game = () => {
     }
     window.addEventListener('mousemove', mouseCoordinates);
 
-    window.addEventListener('keydown', async (e) => {
-        switch (e.key) {
+    function keyDown(event) {
+        switch (event.key) {
             case 'Escape':
                 removeBlockFromCursor();
                 return
@@ -85,17 +87,19 @@ const Game = () => {
                 if(pickedUpBlock != null) rotatePickedUpBlock(90, true);
                 return
             case 'ArrowUp':
-                e.preventDefault()
+                event.preventDefault()
                 if(pickedUpBlock != null) flipPickedUpBlock(true);
                 return
             case 'ArrowDown':
-                e.preventDefault()
+                event.preventDefault()
                 if(pickedUpBlock != null) flipPickedUpBlock(true);
                 return
             default:
                 return
         }
-    })
+    }
+
+    window.addEventListener('keydown', keyDown)
 
     const removeBlockFromCursor = () => {
 
@@ -235,6 +239,17 @@ const Game = () => {
         cursorCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
 
+    const checkGameOver = async () => {
+        const gameId = localStorage.getItem('gameId');
+        const response = await api.get("/games/" + gameId + "/isGameOver");
+        localStorage.setItem('gameOverInformation', response.data);
+
+        window.removeEventListener('mousemove', mouseCoordinates);
+        window.removeEventListener('keydown', keyDown);
+
+        history.push('/gameOver');
+    }
+
     const loadGameboard = async () => {
         const gameId = localStorage.getItem('gameId');
         const response = await api.get("/games/" + gameId + "/status");
@@ -268,6 +283,8 @@ const Game = () => {
 
             }
         }
+
+        await checkGameOver();
 
         await api.get("/games/" + localStorage.getItem('gameId') + "/currentPlayer").then((response) => {
             setCurrentPlayer(response.data.playerName);
