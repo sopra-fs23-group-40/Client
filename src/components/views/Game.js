@@ -69,6 +69,7 @@ const Game = () => {
     let pickedUpBlock = null;
 
     function mouseCoordinates(event){
+        if(document.getElementById("cursor-cells") == null) return;
         document.getElementById("cursor-cells").style.left = (event.pageX - 10) + "px";
         document.getElementById("cursor-cells").style.top = (event.pageY - 10) + "px";
 
@@ -247,7 +248,8 @@ const Game = () => {
         window.removeEventListener('mousemove', mouseCoordinates);
         window.removeEventListener('keydown', keyDown);
 
-        history.push('/gameOver');
+        if(response.data.gameOver) history.push('/gameOver');
+
     }
 
     const loadGameboard = async () => {
@@ -305,6 +307,7 @@ const Game = () => {
         const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col, rotation: pickedUpBlockRotation, flipped: pickedUpBlockFlipped});
 
         try {
+            removeBlockFromCursor();
             const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
             if (response.status !== 200) {
                 playPlacementNotPossibleEffect();
@@ -312,14 +315,12 @@ const Game = () => {
             } else {
                 playBlockPlacingEffect();
                 await updateInventory();
-                // TODO: When SSE works, remove the next line (loadGameboard()), as it will be done when receiving the event - no matter which player's turn it was
                 await loadGameboard();
             }
         } catch (e) {
             playPlacementNotPossibleEffect();
         }
 
-        removeBlockFromCursor();
     };
 
     // Create a 2D array to store the Cells
