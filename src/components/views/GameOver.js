@@ -9,6 +9,10 @@ const GameOver = () => {
 
     const history = useHistory();
 
+    // TODO: load the scores (left/placed blocks) into the local storage
+    // TODO: show avatars of the players
+    // TODO: Redirect back to the lobby?
+
   return (
 
     <BaseContainer>
