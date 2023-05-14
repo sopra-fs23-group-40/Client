@@ -46,7 +46,10 @@ const Lobby = () => {
     //const username = localStorage.getItem('username')
     //const token = localStorage.getItem('token')
 
-    const [playLobbyMusic, {pause: pauseLobbyMusic, stop: stopLobbyMusic}] = useSound(lobbyMusic, {volume: 0.2, loop: true});
+    const [playLobbyMusic, {pause: pauseLobbyMusic, stop: stopLobbyMusic}] = useSound(lobbyMusic, {
+        volume: 0.2,
+        loop: true
+    });
 
     pauseLobbyMusic();
     playLobbyMusic();
@@ -147,8 +150,13 @@ const Lobby = () => {
 
     }, [history, params, baseURL]);
 
+    function initializeGame(gameId) {
+        localStorage.setItem("gameId", gameId);
+        localStorage.setItem("currentPlayer", null);
+    }
+
     useEffect(() => {
-        const interval = setInterval(async () =>{
+        const interval = setInterval(async () => {
             try {
                 const username = localStorage.getItem('username')
                 const token = localStorage.getItem('token')
@@ -163,11 +171,11 @@ const Lobby = () => {
                 setPlayerList(split)
                 console.log(response.data)
                 // Todo: If lobby is deleted, redirect to overview page.
-                if(response.data.status === "INGAME"){
+                if (response.data.status === "INGAME") {
                     console.log(response.data.gameId)
-                    if(response.data.gameId){
-                    localStorage.setItem("gameId", response.data.gameId)
-                    history.push("/game/" + response.data.gameId)
+                    if (response.data.gameId) {
+                        initializeGame(response.data.gameId)
+                        history.push("/game/" + response.data.gameId)
                     }
                 }
             } catch (error) {
@@ -176,7 +184,7 @@ const Lobby = () => {
             }
         }, 1500)
 
-        return() => clearInterval(interval)
+        return () => clearInterval(interval)
 
     }, [params.id, history]);
 
@@ -286,7 +294,7 @@ const Lobby = () => {
                     {content}
                 </BaseContainer>
                 <br/>
-                <div style={{display: isHost? "inline": "none", marginTop: "10px", marginBottom: "10px"}}>
+                <div style={{display: isHost ? "inline" : "none", marginTop: "10px", marginBottom: "10px"}}>
                     <Grid container direction="row" alignItems="center">
                         <Grid item>
 

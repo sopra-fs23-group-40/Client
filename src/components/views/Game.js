@@ -11,25 +11,25 @@ import blockPlacingEffect from '../../assets/blockPlacingEffect.mp3';
 import placementNotPossibleEffect from '../../assets/placementNotPossibleEffect.mp3';
 import {useHistory} from "react-router-dom";
 
-const Timer = () => {
-    const timerEl = document.getElementById("Timer")
-    if (timerEl) {
-        let newMins = 0
-        let newSecs = 0
-        setInterval(async function () {
-            const runningTime = await api.get("/games/" + localStorage.getItem('gameId') + "/time")
-            newMins = (Math.floor(runningTime.data / 60))
-            newSecs = (runningTime.data % 60)
-            newMins = pad(newMins)
-            newSecs = pad(newSecs)
-            timerEl.innerHTML = `${newMins}:${newSecs}`
-
-            function pad(unit) {
-                return (("0") + unit).length > 2 ? unit : "0" + unit
-            }
-        }, 1000)
-    }
-}
+// const Timer = () => {
+//     const timerEl = document.getElementById("Timer")
+//     if (timerEl) {
+//         let newMins = 0
+//         let newSecs = 0
+//         setInterval(async function () {
+//             const runningTime = await api.get("/games/" + localStorage.getItem('gameId') + "/time")
+//             newMins = (Math.floor(runningTime.data / 60))
+//             newSecs = (runningTime.data % 60)
+//             newMins = pad(newMins)
+//             newSecs = pad(newSecs)
+//             timerEl.innerHTML = `${newMins}:${newSecs}`
+//
+//             function pad(unit) {
+//                 return (("0") + unit).length > 2 ? unit : "0" + unit
+//             }
+//         }, 1000)
+//     }
+// }
 
 
 const Game = () => {
@@ -345,7 +345,11 @@ const Game = () => {
     function getCurrentPlayer() {
         if (currentPlayer === localStorage.getItem('username')) {
             return "It's your turn!";
-        } else {
+        }
+        else if(currentPlayer == null){
+            return "Please wait.. Game is loading."
+        }
+        else {
             return "Please wait... current player: " + currentPlayer;
         }
     }
@@ -391,12 +395,32 @@ const Game = () => {
 
     }
 
+    async function hasCurrentPlayerChanged() {
+        const responseName = await api.get("/games/" + localStorage.getItem('gameId') + "/currentPlayer").then((response) => {
+            return response.data.playerName;
+        });
+        const local_currentPlayer = localStorage.getItem("currentPlayer")
+
+        if (responseName != null && responseName !== local_currentPlayer) {
+            console.log("Current Player has changed!: "+ responseName)
+            localStorage.setItem("currentPlayer", responseName)
+            return true;
+        }
+        return false;
+    }
+
     useEffect(() => {
         async function fetchData() {
             const interval = setInterval(async () =>{
                 try {
-                    await loadGameboard()
+                    if(currentPlayer == null) {
+                        await loadGameboard();
+                    }
+                    if(await hasCurrentPlayerChanged()) {
+                        console.log("Loaded new Gameboard-Status!")
+                        await loadGameboard()
 
+                    }
                 } catch (error) {
                     console.error("Something went wrong while fetching the lobbydata!");
                     console.error("Details:", error);
@@ -444,17 +468,17 @@ const Game = () => {
     pauseBackgroundMusic();
     playBackgroundMusic();
 
-    let timer = <p id="Timer">00:00</p>
-    if(timer){
-        Timer()
-    }
+    // let timer = <p id="Timer">00:00</p>
+    // if(timer){
+    //     Timer()
+    // }
 
 
     return (
         <BaseContainer>
             <HeaderSmall height="10"/>
             <BaseContainer className='game container'>
-                {timer}
+                {/*{timer}*/}
                 <h1 style={{color: "black"}}>{getCurrentPlayer()}</h1>
                 <div className="cell-field">{cells}</div>
                 <br/>
