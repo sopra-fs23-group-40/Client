@@ -169,7 +169,6 @@ const Lobby = () => {
                 setLobbyType(response.data.lobbyType)
                 const split = response.data.playerList.split(',')
                 setPlayerList(split)
-                // Todo: If lobby is deleted, redirect to overview page.
                 if (response.data.status === "INGAME") {
                     console.log(response.data.gameId)
                     if (response.data.gameId) {
@@ -180,6 +179,7 @@ const Lobby = () => {
             } catch (error) {
                 console.error("Something went wrong while fetching the lobbydata!");
                 console.error("Details:", error);
+                history.push("/overview")
             }
         }, 1500)
 

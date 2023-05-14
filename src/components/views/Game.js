@@ -46,7 +46,7 @@ const Game = () => {
     const invSize = "1.46em";
 
     let pickedUpBlock = null;
-    let runningTime = null;
+    let startDate = null;
 
     function mouseCoordinates(event){
         if(document.getElementById("cursor-cells") == null) return;
@@ -349,7 +349,7 @@ const Game = () => {
         }
     }
 
-    var blocks = [];
+    var blocks;
     const updateInventory = async () => {
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
@@ -387,7 +387,13 @@ const Game = () => {
             }
             colOffset += block.length + 1;
         }
+    }
 
+    if(!blocks){
+        async function fetchInventory() {
+            await updateInventory()
+        }
+        fetchInventory()
     }
 
     async function hasCurrentPlayerChanged() {
@@ -428,7 +434,8 @@ const Game = () => {
     function timerUpdate() {
         setTimeout(function () {
             const timerEl = document.getElementById("Timer");
-            runningTime = runningTime + 1
+            const nowDate = new Date()
+            const runningTime = Math.floor((nowDate - startDate)/1000)
             const newMins = pad(Math.floor(runningTime / 60))
             const newSecs = pad(runningTime % 60)
             timerEl.innerHTML = `${newMins}:${newSecs}`
@@ -465,15 +472,22 @@ const Game = () => {
         inventoryCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
 
-    if (!runningTime) {
-        async function fetchInventory() {
-            const newTime = await api.get("/games/" + localStorage.getItem('gameId') + "/time")
-            runningTime = newTime.data
-            await updateInventory()
+    if (localStorage.getItem('startDate') == null) {
+        async function fetchStartDate() {
+            const response = await api.get("/games/" + localStorage.getItem('gameId') + "/time")
+            localStorage.setItem('startDate', response.data)
+            startDate = new Date(response.data)
             timerUpdate()
         }
-        fetchInventory()
+        fetchStartDate()
+    } else {
+        if(!startDate){
+            startDate = new Date(localStorage.getItem('startDate'))
+            timerUpdate()
+        }
     }
+
+
 
     pauseBackgroundMusic();
     playBackgroundMusic();
