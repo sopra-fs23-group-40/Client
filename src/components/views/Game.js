@@ -79,18 +79,18 @@ const Game = () => {
                 removeBlockFromCursor();
                 return
             case 'ArrowLeft':
-                if(pickedUpBlock != null) rotatePickedUpBlock(270);
+                if(pickedUpBlock != null) rotatePickedUpBlock(270, true);
                 return
             case 'ArrowRight':
-                if(pickedUpBlock != null) rotatePickedUpBlock(90);
+                if(pickedUpBlock != null) rotatePickedUpBlock(90, true);
                 return
             case 'ArrowUp':
                 e.preventDefault()
-                if(pickedUpBlock != null) flipPickedUpBlock();
+                if(pickedUpBlock != null) flipPickedUpBlock(true);
                 return
             case 'ArrowDown':
                 e.preventDefault()
-                if(pickedUpBlock != null) flipPickedUpBlock();
+                if(pickedUpBlock != null) flipPickedUpBlock(true);
                 return
             default:
                 return
@@ -100,6 +100,12 @@ const Game = () => {
     const removeBlockFromCursor = () => {
 
         document.getElementById("cursor-cells").style.display = "none";
+
+        if (pickedUpBlock != null) {
+            if(pickedUpBlockRotation !== 0) rotatePickedUpBlock(360 - pickedUpBlockRotation, false);
+            if (pickedUpBlockFlipped) flipPickedUpBlock(false);
+        }
+
         pickedUpBlock = null;
         pickedUpBlockRotation = 0;
         pickedUpBlockFlipped = false;
@@ -147,17 +153,17 @@ const Game = () => {
 
 
     let pickedUpBlockRotation = 0;
-    const rotatePickedUpBlock = (rot) => {
+    const rotatePickedUpBlock = (rot, fixToCursor) => {
         pickedUpBlockRotation = (pickedUpBlockRotation + rot) % 360;
         pickedUpBlock.shape = rotateArray(pickedUpBlock.shape, rot);
-        fixBlockToCursor(pickedUpBlock);
+        if(fixToCursor) fixBlockToCursor(pickedUpBlock);
     }
 
     let pickedUpBlockFlipped = false;
-    const flipPickedUpBlock = () => {
+    const flipPickedUpBlock = (fix) => {
         pickedUpBlockFlipped = !pickedUpBlockFlipped;
         pickedUpBlock.shape = pickedUpBlock.shape.reverse();
-        fixBlockToCursor(pickedUpBlock);
+        if(fix) fixBlockToCursor(pickedUpBlock);
     }
 
     const fixBlockToCursor = (block) => {
@@ -285,6 +291,7 @@ const Game = () => {
             const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
             if (response.status !== 200) {
                 playPlacementNotPossibleEffect();
+                // TODO: Notification that placement was not possible
             } else {
                 playBlockPlacingEffect();
                 await updateInventory();
