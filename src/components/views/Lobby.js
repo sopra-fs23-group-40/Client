@@ -169,7 +169,6 @@ const Lobby = () => {
                 setLobbyType(response.data.lobbyType)
                 const split = response.data.playerList.split(',')
                 setPlayerList(split)
-                console.log(response.data)
                 // Todo: If lobby is deleted, redirect to overview page.
                 if (response.data.status === "INGAME") {
                     console.log(response.data.gameId)
