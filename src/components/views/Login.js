@@ -82,7 +82,7 @@ const Login = () => {
       <BaseContainer>
         <Header height="100"/>
         <div className="login container">
-          <h2>Login</h2>
+          <h1 className={"login h1-heading"}>Login</h1>
           <div className="login form">
             <FormField
                 label="Username"
