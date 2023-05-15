@@ -220,29 +220,41 @@ const Game = () => {
         cursorCells.push(<div key={row} className="cell-row">{rowCells}</div>);
     }
 
-    const checkGameOver = async () => {
+    async function checkGameOver() {
         const gameId = localStorage.getItem('gameId');
         const response = await api.get("/games/" + gameId + "/isGameOver");
 
+        return response.data.gameOver;
+    }
 
-        if(response.data.gameOver) {
-            window.removeEventListener('mousemove', mouseCoordinates);
-            window.removeEventListener('keydown', keyDown);
+    async function endGame() {
+        window.removeEventListener('mousemove', mouseCoordinates);
+        window.removeEventListener('keydown', keyDown);
 
-            localStorage.setItem('winnerName', response.data.winnerName);
-            localStorage.setItem('gameDuration', response.data.gameDuration);
-            localStorage.setItem('player1Name', response.data.placedBlocks[0].key);
-            localStorage.setItem('player2Name', response.data.placedBlocks[1].key);
-            localStorage.setItem('player3Name', response.data.placedBlocks[2].key);
-            localStorage.setItem('player4Name', response.data.placedBlocks[3].key);
-            localStorage.setItem('player1Score', response.data.placedBlocks[0].value);
-            localStorage.setItem('player2Score', response.data.placedBlocks[1].value);
-            localStorage.setItem('player3Score', response.data.placedBlocks[2].value);
-            localStorage.setItem('player4Score', response.data.placedBlocks[3].value);
-            // you can add here more information to the local storage that can be displayed in the game over view
+        const gameId = localStorage.getItem('gameId');
+        const response = await api.get("/games/" + gameId + "/isGameOver");
 
-            history.push('/gameOver');
+        const playerNames = [];
+        for (const key in response.data.placedBlocks) {
+            if (response.data.placedBlocks.hasOwnProperty(key)) {
+                playerNames.push(key);
+            }
         }
+        const scores = [];
+        playerNames.forEach(
+            name => scores.push(response.data.placedBlocks[name])
+        );
+
+        for(let i = 0; i < scores.length; i++) {
+            localStorage.setItem('player' + (i+1) + 'Name', playerNames[i].toString());
+            localStorage.setItem('player' + (i+1) + 'Score', scores[i]);
+        }
+
+        localStorage.setItem('winnerName', response.data.winnerName);
+        localStorage.setItem('gameDuration', response.data.gameDuration);
+        // you can add here more information to the local storage that can be displayed in the game over view
+
+        history.push('/gameOver');
     }
 
     const loadGameboard = async () => {
@@ -279,8 +291,6 @@ const Game = () => {
             }
         }
 
-        await checkGameOver();
-
         await api.get("/games/" + localStorage.getItem('gameId') + "/currentPlayer").then((response) => {
             setCurrentPlayer(response.data.playerName);
         });
@@ -302,6 +312,7 @@ const Game = () => {
         try {
             removeBlockFromCursor();
             const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
+            console.log(requestBody);
             if (response.status !== 200) {
                 playPlacementNotPossibleEffect();
                 // TODO: Notification that placement was not possible
@@ -417,7 +428,12 @@ const Game = () => {
                     if(await hasCurrentPlayerChanged()) {
                         console.log("Loaded new Gameboard-Status!")
                         await loadGameboard()
-
+                    }
+                    console.log("Checking game Over")
+                    if(await checkGameOver()) {
+                        clearInterval(interval);
+                        await endGame();
+                        return() => clearInterval(interval)
                     }
                 } catch (error) {
                     console.error("Something went wrong while fetching the lobbydata!");
@@ -434,6 +450,7 @@ const Game = () => {
     function timerUpdate() {
         setTimeout(function () {
             const timerEl = document.getElementById("Timer");
+            if(timerEl == null) return
             const nowDate = new Date()
             const runningTime = Math.floor((nowDate - startDate)/1000)
             const newMins = pad(Math.floor(runningTime / 60))
