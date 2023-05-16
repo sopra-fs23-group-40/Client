@@ -51,8 +51,26 @@ const Lobby = () => {
         loop: true
     });
 
-    pauseLobbyMusic();
-    playLobbyMusic();
+    const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+    const enableMusic = async() => {
+        playLobbyMusic();
+        setIsMusicPlaying(true);
+    }
+    const pauseMusic = async() => {
+        pauseLobbyMusic();
+        setIsMusicPlaying(false);
+    }
+    const stopMusic = async() => {
+        stopLobbyMusic();
+        setIsMusicPlaying(false);
+    }
+    const toggleMusic = async() => {
+        if (isMusicPlaying) {
+            await pauseMusic();
+        } else {
+            await enableMusic();
+        }
+    }
 
     let tokendisplay
     let startbutton
@@ -113,8 +131,8 @@ const Lobby = () => {
         )
     }
 
-
     useEffect(() => {
+
         // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
@@ -225,7 +243,7 @@ const Lobby = () => {
             }
         }
         localStorage.removeItem('lobbytoken');
-        stopLobbyMusic();
+        stopMusic();
         history.push("/overview")
     }
 
@@ -275,7 +293,7 @@ const Lobby = () => {
             console.log("GameId = " + gameId.data);
             initializeGame(gameId.data)
             localStorage.setItem('gameId', gameId.data);
-            stopLobbyMusic();
+            stopMusic();
             history.push(`/game/` + gameId.data);
         } catch (error) {
             alert(`Something went wrong, try again \n${handleError(error)}`);
@@ -324,6 +342,16 @@ const Lobby = () => {
                     leave lobby
                 </Button>
                 <br/>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={isMusicPlaying}
+                            id={"toggleMusic"}
+                            onChange={() => toggleMusic()}
+                        />
+                    }
+                    label={"Lobby Music"}
+                />
                 <div onClick={setRandomTip} style={{cursor: 'pointer'}}>
                     <Grid container direction="row" alignItems="center">
                         <Grid item>
