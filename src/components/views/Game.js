@@ -6,6 +6,7 @@ import {Cell} from "../ui/Cell";
 import {api} from "../../helpers/api";
 import PopUp from '../ui/PopUp';
 import {BlockType} from "../Game/Block";
+import InlineSpinner from "../ui/InlineSpinner";
 import useSound from 'use-sound';
 import backgroundMusic from '../../assets/backgroundMusic.mp3';
 import blockPlacingEffect from '../../assets/blockPlacingEffect.mp3';
@@ -369,7 +370,11 @@ const Game = () => {
         }
         else if(currentPlayer == null){
             localStorage.setItem("currentPlayer", null)
-            return "Please wait.. Game is loading."
+            return (
+                  <React.Fragment>
+                    Game is loading <InlineSpinner />
+                  </React.Fragment>
+                );
         }
         else {
             return "Please wait... current player: " + currentPlayer;
