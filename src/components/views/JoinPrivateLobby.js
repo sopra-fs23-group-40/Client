@@ -53,7 +53,7 @@ const JoinPrivateLobby = () => {
             const requestBody = JSON.stringify({id, passcode});
 
             await api.post('/joinLobby', requestBody, config);
-
+            localStorage.setItem('lobbyId', id)
             history.push(`/lobby/`+id);
         } catch (error) {
             alert(`Something went wrong, try again \n${handleError(error)}`);

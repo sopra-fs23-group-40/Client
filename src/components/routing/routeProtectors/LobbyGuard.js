@@ -1,11 +1,12 @@
-import {Redirect} from "react-router-dom";
+import {Redirect, useParams} from "react-router-dom";
 import PropTypes from "prop-types";
 
 export const LobbyGuard = props => {
-    if (localStorage.getItem("token")) {
+    const params = useParams()
+    if (localStorage.getItem("token") && localStorage.getItem('lobbyId') === params.id) {
         return props.children;
     }
-    return <Redirect to="/login"/>;
+    return <Redirect to="/overview"/>;
 };
 
 LobbyGuard.propTypes = {

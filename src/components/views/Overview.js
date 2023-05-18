@@ -24,7 +24,7 @@ const Lobby = ({lobby}) => {
             const requestBody = JSON.stringify({id, passcode:""});
 
             await api.post('/joinLobby', requestBody, config);
-
+            localStorage.setItem('lobbyId', id)
             history.push(`/lobby/` + id);
         } catch (error) {
             alert(`Something went wrong, try again \n${handleError(error)}`);
@@ -93,6 +93,7 @@ const Overview = () => {
         try {
             const response = await api.post('/createLobby', requestBody);
             const id = response.data
+            localStorage.setItem('lobbyId', id)
             history.push('/lobby/' + id)
         } catch (error) {
             console.error("Something went wrong while creating a lobby!");

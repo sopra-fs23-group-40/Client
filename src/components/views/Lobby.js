@@ -197,6 +197,7 @@ const Lobby = () => {
             } catch (error) {
                 console.error("Something went wrong while fetching the lobbydata!");
                 console.error("Details:", error);
+                localStorage.removeItem('lobbyId')
                 history.push("/overview")
             }
         }, 1500)
@@ -243,6 +244,7 @@ const Lobby = () => {
             }
         }
         localStorage.removeItem('lobbytoken');
+        localStorage.removeItem('lobbyId')
         stopMusic();
         history.push("/overview")
     }

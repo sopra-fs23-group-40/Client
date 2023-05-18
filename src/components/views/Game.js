@@ -22,7 +22,7 @@ const Game = () => {
     const [playBackgroundMusic, {pause: pauseBackgroundMusic}] = useSound(backgroundMusic, {volume: 0.4, loop: true});
     const [playBlockPlacingEffect] = useSound(blockPlacingEffect, {volume: 0.4, loop: false});
     const [playPlacementNotPossibleEffect] = useSound(placementNotPossibleEffect, {volume: 0.2, loop: false});
-    const [showPopup, setShowPopup] = useState(true);
+    const [showPopup, setShowPopup] = useState(false);
     const player1Color = "#CF141E";
     const player2Color = "#71AD58";
     const player3Color = "#F1DD5D";
@@ -300,10 +300,8 @@ const Game = () => {
 
     useEffect(() => {
         // Check if it's the user's first visit
-        const isFirstVisit = localStorage.getItem("firstVisit") === null;
-
         // If it's the first visit, show the popup and set the flag in localStorage
-        if (isFirstVisit) {
+        if (!localStorage.getItem('firstVisit')) {
           setShowPopup(true);
           localStorage.setItem("firstVisit", "false");
         }
