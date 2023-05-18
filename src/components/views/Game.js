@@ -1,5 +1,5 @@
 import "styles/views/Game.scss";
-import HeaderSmall from "./HeaderSmall";
+import HeaderSmallInGame from "./HeaderSmallInGame";
 import React, {useEffect, useState} from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
@@ -533,7 +533,7 @@ const Game = () => {
     return (
 
         <BaseContainer>
-            <HeaderSmall height="10"/>
+            <HeaderSmallInGame height="10"/>
             {showPopup && <PopUp closePopup={closePopup} />} {/* Use the PopUp component */}
             <BaseContainer className='game container'>
                 {timer}
