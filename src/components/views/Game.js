@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Cell} from "../ui/Cell";
 import {api} from "../../helpers/api";
+import PopUp from '../ui/PopUp';
 import {BlockType} from "../Game/Block";
 import useSound from 'use-sound';
 import backgroundMusic from '../../assets/backgroundMusic.mp3';
@@ -20,7 +21,7 @@ const Game = () => {
     const [playBackgroundMusic, {pause: pauseBackgroundMusic}] = useSound(backgroundMusic, {volume: 0.4, loop: true});
     const [playBlockPlacingEffect] = useSound(blockPlacingEffect, {volume: 0.4, loop: false});
     const [playPlacementNotPossibleEffect] = useSound(placementNotPossibleEffect, {volume: 0.2, loop: false});
-
+    const [showPopup, setShowPopup] = useState(true);
     const player1Color = "#CF141E";
     const player2Color = "#71AD58";
     const player3Color = "#F1DD5D";
@@ -296,6 +297,21 @@ const Game = () => {
         });
     }
 
+    useEffect(() => {
+        // Check if it's the user's first visit
+        const isFirstVisit = localStorage.getItem("firstVisit") === null;
+
+        // If it's the first visit, show the popup and set the flag in localStorage
+        if (isFirstVisit) {
+          setShowPopup(true);
+          localStorage.setItem("firstVisit", "false");
+        }
+      }, []);
+
+      const closePopup = () => {
+        setShowPopup(false);
+      };
+
     const handleCellClick = async (row, col) => {
         console.log(`Clicked cell (${row},${col})`);
 
@@ -513,8 +529,10 @@ const Game = () => {
 
 
     return (
+
         <BaseContainer>
             <HeaderSmall height="10"/>
+            {showPopup && <PopUp closePopup={closePopup} />} {/* Use the PopUp component */}
             <BaseContainer className='game container'>
                 {timer}
                 <h1 style={{color: "black"}}>{getCurrentPlayer()}</h1>
