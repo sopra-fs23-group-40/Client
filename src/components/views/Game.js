@@ -379,7 +379,7 @@ const Game = () => {
         }
     }
 
-    var blocks;
+    var blocks = null;
     const updateInventory = async () => {
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
@@ -419,7 +419,7 @@ const Game = () => {
         }
     }
 
-    if(!blocks){
+    if(blocks === null){
         async function fetchInventory() {
             await updateInventory()
         }
@@ -448,7 +448,6 @@ const Game = () => {
                         console.log("Loaded new Gameboard-Status!")
                         await loadGameboard()
                     }
-                    console.log("Checking game Over")
                     if(await checkGameOver()) {
                         clearInterval(interval);
                         await endGame();
