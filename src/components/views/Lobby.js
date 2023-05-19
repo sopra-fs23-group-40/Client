@@ -101,6 +101,7 @@ const Lobby = () => {
 
     // returns the START button if Host, else return element which includes Hourglass-Icon and Text "Waiting for Host"
     if (isHost) {
+        let waitingText = playerList && playerList.length < 4 ? "Need 4 Players to start the Game" : "Start Game!";
         startbutton = (
             <Button
                 width={"25%"}
@@ -112,10 +113,11 @@ const Lobby = () => {
                 }}
                 title={!isHost || playerList.length < 4 ? "You need to be the host and have 4 players in the lobby to be able to start the game." : "Start the game!"}
             >
-                Start Game
+                {waitingText}
             </Button>
         )
     } else {
+        let waitingText = playerList && playerList.length < 4 ? "Need 4 Players to start the Game!" : "Waiting for the Host to start the Game!";
         startbutton = (
             <div className={"lobby containerWaitingForHost"}>
                 <Grid container direction="row" alignItems="center">
@@ -123,7 +125,7 @@ const Lobby = () => {
                         <HourglassBottomTwoToneIcon/>
                     </Grid>
                     <Grid item>
-                        Waiting for the Host to start the Game!
+                        {waitingText}
                     </Grid>
                 </Grid>
             </div>
@@ -310,7 +312,7 @@ const Lobby = () => {
 
                 {tokendisplay}
 
-                <BaseContainer className={"lobby container"}>
+                <BaseContainer className={"lobby container"} style={{ boxShadow: "none" }}>
                     {content}
                 </BaseContainer>
                 <br/>
