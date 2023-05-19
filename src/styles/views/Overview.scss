@@ -54,10 +54,14 @@
       &.toggleable {
         display: none;
       }
-      position: static;
+      position: relative;
       & p {
         color: #000000;
-        display: inline-block;
+        //display: inline-block;
+        position: relative;
+        top:35%;
+        transform: translateY(-50%);
+        margin-left: 3px;
       }
       & svg {
         margin: 1%;
