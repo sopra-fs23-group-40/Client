@@ -18,7 +18,7 @@ import useSound from 'use-sound';
 import lobbyMusic from '../../assets/lobbyMusic.mp3';
 
 const Player = ({player}) => {
-    return (<div className="player container">
+    return (<div className="player container" style={{width: '100%'}}>
             <img
                 src={`https://api.dicebear.com/6.x/bottts/svg?seed=${player}`}
                 alt="avatar"
@@ -255,13 +255,11 @@ const Lobby = () => {
 
     if (playerList) {
         content = (
-            <div className="lobby">
                 <ul className="lobby user-list">
                     {playerList.map(player => (
                         <Player player={player} key={player}/>
                     ))}
                 </ul>
-            </div>
         );
     }
 
@@ -312,9 +310,9 @@ const Lobby = () => {
 
                 {tokendisplay}
 
-                <BaseContainer className={"lobby container"} style={{ boxShadow: "none" }}>
+                <div className={"lobby content"} style={{ boxShadow: "none" }}>
                     {content}
-                </BaseContainer>
+                </div>
                 <br/>
                 <div style={{display: isHost ? "inline" : "none", marginTop: "10px", marginBottom: "10px"}}>
                     <Grid container direction="row" alignItems="center">

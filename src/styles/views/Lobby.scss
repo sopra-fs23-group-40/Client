@@ -19,5 +19,12 @@
   &.user-list {
     list-style: none;
     padding-left: 0;
+    width: 40%; /*changing this value changes size of box with username in it*/
+  }
+  &.content {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }

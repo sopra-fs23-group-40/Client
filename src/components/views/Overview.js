@@ -157,6 +157,7 @@ const Overview = () => {
 
     let content = <Spinner/>;
 
+    // TODO: Do we still need/want the RELOAD button?
     if (lobbies) {
         content = (
             <div className="overview">
@@ -165,21 +166,24 @@ const Overview = () => {
                         <Lobby lobby={lobby} key={lobby.id}/>
                     ))}
                 </ul>
-                <Button
-                    width="100%"
-                    onClick={createLobby}
-                >
-                    Create New Lobby
-                </Button>
-                <br/><br/>
-                <Button
-                    width="100%"
-                    onClick={() => window.location.reload()}
-                >
-                    Reload
-                </Button>
+                <div className="button-container">
+                    <Button
+                        width="60%"
+                        onClick={createLobby}
+                    >
+                        Create New Lobby
+                    </Button>
+                    <br style={{ height: '10px' }}/>
+                    <Button
+                        width="60%"
+                        onClick={() => window.location.reload()}
+                    >
+                        Reload
+                    </Button>
+                </div>
             </div>
         );
+
     }
 
     function toggleItems() {
