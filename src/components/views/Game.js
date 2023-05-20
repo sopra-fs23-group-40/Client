@@ -535,7 +535,7 @@ const Game = () => {
         <BaseContainer>
             <HeaderSmallInGame height="10"/>
             {showPopup && <PopUp closePopup={closePopup} />} {/* Use the PopUp component */}
-            <BaseContainer className='game container'>
+            <BaseContainer className='game container'  style={{ boxShadow: "none" }}>
                 {timer}
                 <h1 style={{color: "black"}}>{getCurrentPlayer()}</h1>
                 <div className="cell-field">{cells}</div>

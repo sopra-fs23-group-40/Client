@@ -160,7 +160,7 @@ const Overview = () => {
     // TODO: Do we still need/want the RELOAD button?
     if (lobbies) {
         content = (
-            <div className="overview">
+            <div className="overview" style={{minWidth: '400px'}}>
                 <ul className="overview user-list">
                     {lobbies.map(lobby => (
                         <Lobby lobby={lobby} key={lobby.id}/>
