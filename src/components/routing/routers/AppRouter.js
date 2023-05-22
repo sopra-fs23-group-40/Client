@@ -60,9 +60,9 @@ const AppRouter = () => {
                     </LobbyGuard>
                 </Route>
                 <Route exact path="/join/lobby/:id">
-                    <OverviewGuard>
+                    <LobbyGuard>
                         <JoinPrivateLobby/>
-                    </OverviewGuard>
+                    </LobbyGuard>
                 </Route>
                 <Route exact path="/game/:id">
                     <GameGuard>
