@@ -19,7 +19,7 @@
     font-weight: 300;
     padding-left: 37px;
     padding-right: 37px;
-    border-radius: 0.75em;
+    border-radius: 1em;
     background-color: $background;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;
@@ -33,14 +33,13 @@
     height: 35px;
     padding-left: 15px;
     margin-left: -4px;
-    border: none;
-    border-radius: 0.75em;
+    border-radius: 0.5em;
     margin-bottom: 20px;
     background: transparentize(white, 0.85);
     color: $textColor;
   }
   &.label {
-    color: $textColor;
+    color: textColor;
     margin-bottom: 10px;
     text-transform: lowercase;
     font-weight: 300;
@@ -62,6 +61,8 @@
     text-align: center;
   }
   &.h1-heading{
-    color: $background;
+    color: black;
+    text-shadow: 2px 2px 0 #bcbcbc, 4px 4px 0 #9c9c9c;
+
   }
 }

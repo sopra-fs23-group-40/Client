@@ -7,12 +7,15 @@
    these values control the colors of your application.
    feel free to play around with these and see what other look you can come up with! :D
 */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Silkscreen:wght@400;700&display=swap');
 
-$accent: #E6E3E3;
-$accentDark: #E6E3E3;
-$accentButton: #E6E3E3;
+$accent: green;
+$grad: #828ec7;
+$accentDark: #828ec7;
+$accentButton: blue;
 $textColor: white;
-$background: #262632;
+
+$background: rgb(155,155,155);
 
 /* some constants */
 
@@ -23,13 +26,12 @@ $SMALL_WIDTH: 768px;
 
 /* some standard elements */
 /* fonts */
-$fontDefault: "Oswald", sans-serif;
-$fontMono: "Oswald", monospace;
-
+$fontDefault: 'Silkscreen', "Oswald", sans-serif;
+$fontMono: 'Silkscreen', "Oswald", monospace;
 /* a standard drop shadow */
-$dropShadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.25);
+$dropShadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.1);
 
-$borderRadius: 0.75em;
+$borderRadius: 2em;
 
 /* mixins
 
