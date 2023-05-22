@@ -1,4 +1,4 @@
-import "styles/_theme.scss";
+import "styles/views/Rules.scss";
 import {useHistory} from "react-router-dom";
 import React from "react";
 import BaseContainer from "../ui/BaseContainer";
