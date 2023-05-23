@@ -3,14 +3,10 @@
 .profile {
   &.container {
     border-radius: 2em;
-    margin-top: 2em;
+    //margin-top: 2em;
     min-height: 100px;
     @include center;
     flex-direction: column;
-  }
-
-  h2 {
-    background: lightgrey;
   }
 
   &.tableCont {
@@ -18,15 +14,16 @@
     display: flex;
     align-content: center;
     justify-content: center;
-    padding-top: 50px;
+    //padding-top: 50px;
     color: #262632;
   }
   &.row-style {
-    background-color: lightgrey;
+    background-color:  #a8a8a8;
     padding: 20px;
     border: solid white 20px;
     margin-top: 1em;
     width: 1000px;
+    height: 3rem;
   }
 
 }

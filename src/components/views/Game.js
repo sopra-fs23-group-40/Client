@@ -537,7 +537,7 @@ const Game = () => {
             {showPopup && <PopUp closePopup={closePopup} />} {/* Use the PopUp component */}
             <BaseContainer className='game container'  style={{ boxShadow: "none" }}>
                 {timer}
-                <h1 style={{color: "black"}}>{getCurrentPlayer()}</h1>
+                <h1>{getCurrentPlayer()}</h1>
                 <div className="cell-field">{cells}</div>
                 <br/>
                 <p style={{color: "black"}}>Your block-inventory</p>

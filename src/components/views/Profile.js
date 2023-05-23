@@ -52,28 +52,23 @@ const Profile = () => {
             <HeaderSmall height="10"/>
             <BaseContainer className="profile tableCont">
                 <div className="profile container">
-                    <Button
-                        width="100%"
-                        onClick={() => history.push("/overview")}
-                    >
-                        {String.fromCharCode(8592)}Go Back to Lobby Overview
-                    </Button>
-                        <Grid container direction="row" alignItems="center" margin={"10px"} justifyContent="center">
-                            <Grid item>
-                                <h2>{loggedInUser}'s statistics</h2>
-                            </Grid>
-                            <Grid item>
-                                <img
-                                    src={`https://api.dicebear.com/6.x/bottts/svg?seed=${loggedInUser}`}
-                                    alt="avatar"
-                                    style={{width: "80px", height: "80px"}}
-                                />
-                            </Grid>
+                    <Grid container direction="column" alignItems="center" margin={"10px"} justifyContent="center">
+                        <Grid item>
+                            <img
+                                src={`https://api.dicebear.com/6.x/bottts/svg?seed=${loggedInUser}`}
+                                alt="avatar"
+                                style={{ width: "150px", height: "150px" }}
+                            />
                         </Grid>
+                        <Grid item>
+                            <h2 style={{ fontSize: '36px', marginTop: '0', marginBottom: '5px' }}>{loggedInUser}'s statistics
+                            </h2>
+                        </Grid>
+                    </Grid>
                     <table id="vertical-1">
                         <tbody>
                         <tr className="profile row-style">
-                            <th style ={{width: '150px'}}>Total games Played:</th>
+                            <th>Total games Played:</th>
                             <td>{stat.gamesPlayed}</td>
                         </tr>
                         <tr className="profile row-style">
@@ -94,6 +89,13 @@ const Profile = () => {
                         </tr>
                         </tbody>
                     </table>
+                    <br/>
+                    <Button
+                        width="17rem"
+                        onClick={() => history.push("/overview")}
+                    >
+                        Back to Lobby Overview
+                    </Button>
                     <br/>
                 </div>
             </BaseContainer>

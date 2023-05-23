@@ -366,13 +366,6 @@ const Lobby = () => {
                 </div>
                 <br/>
                 {startbutton}
-                <br/>
-                <p
-                    onClick={() => window.location.reload()}
-                    title={"This text is here because synchronization doesn't work over google app engine yet"}
-                >
-                    <u>Click to Reload page</u>
-                </p>
             </BaseContainer>
         </BaseContainer>
     );
