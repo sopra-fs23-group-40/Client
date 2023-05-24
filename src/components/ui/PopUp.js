@@ -13,7 +13,7 @@ const PopUp = ({ closePopup }) => {
           Press Esc or the space bar to cancel the block placement.
         </p>
         <p>
-          Except for the very first move of the game each player has <strong>30 sec</strong>. to make a move
+          Each player has <strong>30 sec</strong> to make a move
         </p>
         <button onClick={closePopup}>Close</button>
       </div>
