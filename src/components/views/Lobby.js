@@ -109,7 +109,8 @@ const Lobby = () => {
                 disabled={!isHost || playerList.length < 4}
                 style={{
                     cursor: !isHost || playerList.length < 4 ? "not-allowed" : "pointer",
-                    visibility: isHost ? "visible" : "hidden"
+                    visibility: isHost ? "visible" : "hidden",
+                    width: "400px"
                 }}
                 title={!isHost || playerList.length < 4 ? "You need to be the host and have 4 players in the lobby to be able to start the game." : "Start the game!"}
             >
@@ -266,7 +267,7 @@ const Lobby = () => {
     function setRandomTip() {
         const tips = [
             "You can change whether a Lobby is public or private with the button above.",
-            "You can start the game by clicking on the button below when the Lobby is full (currently 4 Players).",
+            "You can start the game by clicking on the button below when the Lobby is full.",
             "You can invite your friends by sending them the lobbytoken.",
             "Try to cover up as much space as possible to prevent others from placing their blocks.",
             "Pick your blocks wisely, you can only place them once.",

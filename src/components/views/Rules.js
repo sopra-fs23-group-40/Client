@@ -4,6 +4,7 @@ import React from "react";
 import BaseContainer from "../ui/BaseContainer";
 import {Button} from "../ui/Button";
 import HeaderSmall from "./HeaderSmall";
+import RulesGraphic from 'assets/RulesGraphic.png'
 
 const Rules = () => {
     // use react-router-dom's hook to access the history
@@ -25,7 +26,7 @@ const Rules = () => {
                 <br />The game ends when both players have passed their turn.
                 <br />Once the game ends, the player with the most pieces on the board wins.
             </p>
-            <img src={require("assets/RulesGraphic.png")} alt="RulesGraphic" width="50%"/>
+            <img src={RulesGraphic} alt="RulesGraphic" width="50%"/>
             <br />
             <Button
                 width="20em"
