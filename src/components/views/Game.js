@@ -103,12 +103,10 @@ const Game = () => {
         const cols = array[0].length;
         const rotated = [];
 
-        // Create a new matrix to hold the rotated values
-        for (let i = 0; i < cols; i++) {
-            rotated.push(new Array(rows).fill(false));
-        }
-
         if (degrees === 90) {
+            for(let i = 0; i < cols; i++) {
+                rotated.push(new Array(rows).fill(false));
+            }
             // Rotate the matrix by 90 degrees
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols; j++) {
@@ -116,6 +114,9 @@ const Game = () => {
                 }
             }
         } else if (degrees === 180) {
+            for(let i = 0; i < rows; i++) {
+                rotated.push(new Array(cols).fill(false));
+            }
             // Rotate the matrix by 180 degrees
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols; j++) {
@@ -123,6 +124,9 @@ const Game = () => {
                 }
             }
         } else if (degrees === 270) {
+            for(let i = 0; i < cols; i++) {
+                rotated.push(new Array(rows).fill(false));
+            }
             // Rotate the matrix by 270 degrees
             for (let i = 0; i < rows; i++) {
                 for (let j = 0; j < cols; j++) {
