@@ -133,6 +133,8 @@ const Overview = () => {
         fetchData();
     }, [history]);
 
+    let lobbiesChanged = false;
+
     useEffect(() => {
         const interval = setInterval(async () =>{
             try {
@@ -144,6 +146,7 @@ const Overview = () => {
                 }
                 const response = await api.get('/lobbies', config);
                 setLobbies(response.data);
+                lobbiesChanged = true;
 
             } catch (error) {
                 console.error("Something went wrong while fetching the lobbydata!");
@@ -158,7 +161,7 @@ const Overview = () => {
     let content = <Spinner/>;
 
     // TODO: Do we still need/want the RELOAD button?
-    if (lobbies) {
+    if (lobbies || lobbiesChanged) {
         content = (
             <div className="overview" style={{minWidth: '400px'}}>
                 <ul className="overview user-list">
