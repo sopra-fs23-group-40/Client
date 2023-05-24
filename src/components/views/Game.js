@@ -445,28 +445,21 @@ const Game = () => {
     }
 
     useEffect(() => {
-        async function fetchData() {
-            const interval = setInterval(async () =>{
+            const interval = setInterval(async () => {
                 try {
-                    if(await hasCurrentPlayerChanged()) {
+                    if (await hasCurrentPlayerChanged()) {
                         console.log("Loaded new Gameboard-Status!")
                         await loadGameboard()
                     }
-                    if(await checkGameOver()) {
-                        clearInterval(interval);
+                    if (await checkGameOver()) {
                         await endGame();
-                        return() => clearInterval(interval)
                     }
                 } catch (error) {
                     console.error("Something went wrong while fetching the lobbydata!");
                     console.error("Details:", error);
                 }
             }, 2000)
-
-            return() => clearInterval(interval)
-        }
-        fetchData();
-
+            return () => clearInterval(interval)
     }, );
 
     function timerUpdate() {
