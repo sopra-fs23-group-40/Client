@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import "styles/views/HeaderSmall.scss";
 import {Button} from "../ui/Button";
 import LeaveGamePopup from "../ui/LeaveGamePopup";
+import logo from 'assets/BigLogoNew.png'
 
 const HeaderSmallInGame = props => {
     const [showPopup, setShowPopup] = useState(false)
@@ -12,7 +13,7 @@ const HeaderSmallInGame = props => {
     };
     return (
     <div className="headersmall container" style={{height: props.height}}>
-        <img src={require("assets/BigLogo.png")} alt="BigLogo"
+        <img src={logo} alt="BigLogo"
              style={{marginTop: "1px", marginBottom: "10px", width: "184px", height: "50px"}}/>
         <Button
             onClick={() => setShowPopup(true)}
