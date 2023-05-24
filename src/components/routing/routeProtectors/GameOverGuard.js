@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
  * @param props
  */
 export const GameOverGuard = props => {
-  if (localStorage.getItem("token") && localStorage.getItem("gameOverInformation")) {
+  if (localStorage.getItem("token") && localStorage.getItem("winnerName")) {
     return props.children;
   }
   return <Redirect to="/login"/>;

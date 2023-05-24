@@ -18,8 +18,9 @@ const LeaveGamePopup = ({ closePopup }) => {
         };
         console.log(token)
         await api.post("/games/" + gameId + "/leaveGame", null, config);
+        localStorage.removeItem('gameId')
+        localStorage.removeItem('startDate')
         history.push('/overview');
-        // TODO: handle localstorage (clear gameId?)
     }
   return (
     <div className="popup">

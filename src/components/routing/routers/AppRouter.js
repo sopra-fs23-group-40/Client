@@ -15,6 +15,7 @@ import Overview from "../../views/Overview";
 import {OverviewGuard} from "../routeProtectors/OverviewGuard";
 import JoinPrivateLobby from "../../views/JoinPrivateLobby";
 import GameOver from "../../views/GameOver";
+import {GameOverGuard} from "../routeProtectors/GameOverGuard";
 
 /**
  * Main router of your application.
@@ -70,9 +71,9 @@ const AppRouter = () => {
                     </GameGuard>
                 </Route>
                 <Route exact path="/gameOver">
-                    <GameGuard>
+                    <GameOverGuard>
                         <GameOver/>
-                    </GameGuard>
+                    </GameOverGuard>
                 </Route>
                 <Route exact path="/">
                     <Redirect to="/overview"/>
