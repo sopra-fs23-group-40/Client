@@ -31,14 +31,24 @@ const Game = () => {
 
     var inventoryColor = "";
 
-    // get player list form backend
-    api.get("/games/" + localStorage.getItem('gameId') + "/players").then((response) => {
-        if (response.data[0].playerName === localStorage.getItem('username')) inventoryColor = player1Color;
-        if (response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
-        if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
-        if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
-        console.log("New Color: "+ JSON.stringify(inventoryColor))
-    });
+    // // get player list form backend
+    // api.get("/games/" + localStorage.getItem('gameId') + "/players").then((response) => {
+    //     if (response.data[0].playerName === localStorage.getItem('username')) inventoryColor = player1Color;
+    //     if (response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
+    //     if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
+    //     if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
+    //     console.log("New Color: "+ JSON.stringify(inventoryColor))
+    // });
+
+    async function getColors() {
+        await api.get("/games/" + localStorage.getItem('gameId') + "/players").then((response) => {
+            if (response.data[0].playerName === localStorage.getItem('username')) inventoryColor = player1Color;
+            if (response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
+            if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
+            if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
+            console.log("New Color: " + JSON.stringify(inventoryColor))
+        });
+    }
 
     const numInvRows = 10;
     const numInvCols = 40;
@@ -430,6 +440,7 @@ const Game = () => {
 
     if(blocks === null){
         async function fetchInventory() {
+            await getColors()
             await updateInventory()
         }
         fetchInventory()
