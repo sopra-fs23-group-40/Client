@@ -37,6 +37,7 @@ const Game = () => {
         if (response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
         if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
         if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
+        console.log("New Color: "+ JSON.stringify(inventoryColor))
     });
 
     const numInvRows = 10;
@@ -413,6 +414,9 @@ const Game = () => {
                 for (let col = 0; col < block.length; col++) {
                     if (block.shape[row][col]) {
                         invCells[row + rowOffset][col + colOffset] = block;
+                        if(inventoryColor === "") {
+                            console.log("NO INV COLOR")
+                        }
                         document.getElementById("invcell-" + (row + rowOffset) + "-" + (col + colOffset)).style.backgroundColor = inventoryColor;
                     }
                     else {
@@ -450,7 +454,7 @@ const Game = () => {
                 try {
                     if (await hasCurrentPlayerChanged()) {
                         console.log("Loaded new Gameboard-Status!")
-                        await loadGameboard()
+                        await loadGameboard();
                     }
                     if (await checkGameOver()) {
                         await endGame();
