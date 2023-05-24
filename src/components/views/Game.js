@@ -325,8 +325,9 @@ const Game = () => {
 
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
+        console.log(pickedUpBlock.shape)
 
-        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col, rotation: pickedUpBlockRotation, flipped: pickedUpBlockFlipped});
+        const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col, shape: pickedUpBlock.shape});
 
         try {
             removeBlockFromCursor();
