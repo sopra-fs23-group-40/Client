@@ -66,6 +66,7 @@ const Overview = () => {
     // a component can have as many state variables as you like.
     // more information can be found under https://reactjs.org/docs/hooks-state.html
     const [lobbies, setLobbies] = useState(null);
+    const [lobbiesChanged, setLobbiesChanged] = useState(false);
 
     const logout = async () => {
         const token = localStorage.getItem('token');
@@ -133,8 +134,6 @@ const Overview = () => {
         fetchData();
     }, [history]);
 
-    let lobbiesChanged = false;
-
     useEffect(() => {
         const interval = setInterval(async () =>{
             try {
@@ -146,7 +145,7 @@ const Overview = () => {
                 }
                 const response = await api.get('/lobbies', config);
                 setLobbies(response.data);
-                lobbiesChanged = true;
+                setLobbiesChanged(true);
 
             } catch (error) {
                 console.error("Something went wrong while fetching the lobbydata!");
