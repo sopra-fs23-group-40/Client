@@ -86,7 +86,7 @@ so make sure to chat that beforehand._
 - a game history in the statistics
 - the possibility to play against a computer/AI
 
-## Authors and Acknowledgment
+## Authors
 
 ### Authors
 - [thomi100](https://github.com/thomi100)
@@ -96,9 +96,7 @@ so make sure to chat that beforehand._
 - [jverho](https://github.com/jverho)
 - Group's Coach / Teaching Assistant [luis-tm](https://github.com/luis-tm)
 
-### Acknowledgment
-
-
+_no acknowledgements_
 
 ## License
 MIT License
