@@ -17,6 +17,7 @@ import Alert from "@mui/material/Alert";
 const Game = () => {
     const history = useHistory();
     const [currentPlayer, setCurrentPlayer] = useState(null)
+    const [canPlay, setCanPlay] = useState(true);
     const [alert, setAlert] = useState(false)
     const [alertContent, setAlertContent] = useState("");
     const numRows = 20;
@@ -39,6 +40,7 @@ const Game = () => {
             if (response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
             if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
             if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
+            console.log("New Color: " + JSON.stringify(inventoryColor))
             localStorage.setItem('inventoryColor', inventoryColor)
         });
     }
@@ -310,6 +312,18 @@ const Game = () => {
         });
     }
 
+
+    const playerCanPlaceBrick = async () => {
+        try {
+            const gameId = localStorage.getItem('gameId');
+            const username = localStorage.getItem('username');
+            const response = await api.get(`/games/${gameId}/${username}/can_place_brick`);
+            return response.data;
+        } catch (error) {
+            console.error("Error checking if player can place brick:", error);
+        }
+    };
+
     useEffect(() => {
         // Check if it's the user's first visit
         // If it's the first visit, show the popup and set the flag in localStorage
@@ -476,6 +490,10 @@ const Game = () => {
                     if (await checkGameOver()) {
                         await endGame();
                     }
+                    if (! await playerCanPlaceBrick()){
+                        const canPlayResponse = await playerCanPlaceBrick();
+                        setCanPlay(canPlayResponse);
+                    }
                 } catch (error) {
                     console.error("Something went wrong while fetching the lobbydata!");
                     console.error("Details:", error);
@@ -560,8 +578,9 @@ const Game = () => {
                 <h1>{getCurrentPlayer()}</h1>
                 <div className="cell-field">{cells}</div>
                 <br/>
-                <p style={{color: "black"}}>Your block-inventory</p>
-                <div className="cell-field">{inventoryCells}</div>
+                <div className="canPlaceBrick-container" style={{display: canPlay? "none" : "inline"}}>You cannot place any more pieces!</div>
+                <p style={{color: "black", display: canPlay? "inline" : "none"}}>Your block-inventory</p>
+                <div className="cell-field" style={{display: canPlay? "inline" : "none", paddingBottom: "20px"}}>{inventoryCells}</div>
 
                 <div className="cell-field" id="cursor-cells" style={{pointerEvents: "none", position: "absolute", display: "none"}}>{cursorCells}</div>
 

@@ -37,5 +37,10 @@
     color: black;
     font-size: 25px;
   }
+  .canPlaceBrick-container {
+    background: rgba(182, 41, 41, 0.64);
+    border-radius: $borderRadius;
+    margin: 1em;
+    padding: 0.5em;
+  }
 }
-
