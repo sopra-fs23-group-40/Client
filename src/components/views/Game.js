@@ -356,6 +356,7 @@ const Game = () => {
             playPlacementNotPossibleEffect();
             setAlert(true);
             getAlertContent();
+            window.scrollTo(0, 0)
             const timeId = setTimeout(() => {
                 // After 3 seconds set the show value to false
                 setAlert(false)
