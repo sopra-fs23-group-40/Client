@@ -6,7 +6,7 @@ import {Button} from "../ui/Button";
 import {useHistory} from "react-router-dom";
 
 const Player = ({playerName, playerScore}) => {
-    return (<div className="player container" style={{width: '100%'}}>
+    return (<div className="player container" style={{width: '100%', cursor: 'default'}}>
             <img
                 src={`https://api.dicebear.com/6.x/bottts/svg?seed=${playerName}`}
                 alt="avatar"
