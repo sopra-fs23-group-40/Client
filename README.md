@@ -48,34 +48,44 @@ so make sure to chat that beforehand._
 ### 1. Login & Registration
 
 #### Login
+<img width="1728" alt="Login" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/4d457d4b-3cf7-4e17-80b5-2f09a889d34c">
 
 #### Registration
+<img width="1728" alt="Register" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/eac08458-2f40-4810-a612-e8586ea8c410">
 
-### 2. Finding & Creating a Lobby
+### 2. Rules
+<img width="1728" alt="Rules" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/15633c0d-8936-4a34-a117-0d196556fc02">
 
-#### Additional Menu
+### 3. Finding & Creating a Lobby
 
-#### Joining a Lobby
+#### Lobby Overview
+<img width="1728" alt="LobbyOverview" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/c018d2ab-5742-4358-818c-f94d5cfdcc25">
 
-#### Creating a new Lobby
-
-### 3. Waiting for Players & start the game
-
-#### Options in the Lobby
-
-#### Starting the game
+#### Lobby
+<img width="1728" alt="Lobby" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/8b55561b-6eea-4e35-bd1c-bcf1e2f66216">
 
 ### 4. Playing the game
 
-#### Game Board
+#### Welcome Information
+<img width="1728" alt="Welcome" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/32d15d42-af0f-4650-b9a6-ec43dbbc5ace">
 
-#### Placing blocks
+#### Empty Board
+<img width="1728" alt="EmptyBoard" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/7a060b04-5f12-49be-ac51-ef8886b3e5eb">
 
-#### Turns & Timer
+#### No moves possible
+<img width="1728" alt="NoMovesPossible" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/b501b536-b6bf-423b-a056-f7586d51d4bf">
 
-### 5. Game finished
+#### Resigning from placing blocks
+<img width="1728" alt="Resign" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/f0231519-0818-4999-8dad-a776f39e3d3c">
 
-#### Finish screen
+#### Leaving the game
+<img width="1728" alt="Leaving" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/7943e1ce-006c-49c7-8191-a7c8e6e87cf1">
+
+### 5. Game over screen
+<img width="1728" alt="GameOver" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/e2af8eef-51e0-4d17-809a-9366d39dacab">
+
+### 6. Statistics
+<img width="1728" alt="Statistics" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/e9c973d4-7d8d-4ef9-8a3c-c2a5c5be19b0">
 
 ## Roadmap
 ### Possible features for the future:
