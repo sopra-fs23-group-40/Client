@@ -36,8 +36,6 @@ const Profile = () => {
                 const response = await api.get('/statistics', config);
                 setStat(response.data)
                 await fetchLoggedInUsername();
-                console.log(JSON.stringify(response.data))
-
 
             } catch (error) {
                 alert(`Something went wrong during fetching the statistics \n${handleError(error)}`);

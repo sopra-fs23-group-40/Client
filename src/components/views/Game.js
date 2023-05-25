@@ -33,22 +33,12 @@ const Game = () => {
 
     var inventoryColor = "";
 
-    // // get player list form backend
-    // api.get("/games/" + localStorage.getItem('gameId') + "/players").then((response) => {
-    //     if (response.data[0].playerName === localStorage.getItem('username')) inventoryColor = player1Color;
-    //     if (response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
-    //     if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
-    //     if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
-    //     console.log("New Color: "+ JSON.stringify(inventoryColor))
-    // });
-
     async function getColors() {
         await api.get("/games/" + localStorage.getItem('gameId') + "/players").then((response) => {
             if (response.data[0].playerName === localStorage.getItem('username')) inventoryColor = player1Color;
             if (response.data[1].playerName === localStorage.getItem('username')) inventoryColor = player2Color;
             if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
             if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
-            console.log("New Color: " + JSON.stringify(inventoryColor))
             localStorage.setItem('inventoryColor', inventoryColor)
         });
     }
@@ -200,14 +190,12 @@ const Game = () => {
 
     const handleInvClick = (row, col) => {
         const block = invCells[row][col];
-        console.log(`Clicked inventory cell (${row},${col})`);
 
         if (pickedUpBlock === null) {
             if (block === null) return;
 
             // Picking up new block
             pickedUpBlock = block;
-            console.log(pickedUpBlock);
             fixBlockToCursor(block);
         } else {
             if (block === null) {
@@ -336,23 +324,17 @@ const Game = () => {
       };
 
     const handleCellClick = async (row, col) => {
-        console.log(`Clicked cell (${row},${col})`);
 
         if (pickedUpBlock === null) return;
 
-        console.log("Placing block : " + pickedUpBlock.name);
-
-
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
-        console.log(pickedUpBlock.shape)
 
         const requestBody = JSON.stringify({blockName: pickedUpBlock.name, row: row, column: col, shape: pickedUpBlock.shape});
 
         try {
             removeBlockFromCursor();
             await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
-            console.log(requestBody);
             playBlockPlacingEffect();
             await updateInventory();
             await loadGameboard();
@@ -447,7 +429,6 @@ const Game = () => {
                     if (block.shape[row][col]) {
                         invCells[row + rowOffset][col + colOffset] = block;
                         if(inventoryColor === "") {
-                            console.log("NO INV COLOR")
                         }
                         document.getElementById("invcell-" + (row + rowOffset) + "-" + (col + colOffset)).style.backgroundColor = inventoryColor;
                     }
@@ -480,7 +461,6 @@ const Game = () => {
         const local_currentPlayer = localStorage.getItem("currentPlayer")
 
         if (responseName != null && responseName !== local_currentPlayer) {
-            console.log("Current Player has changed!: "+ responseName)
             localStorage.setItem("currentPlayer", responseName)
             return true;
         }
@@ -491,7 +471,6 @@ const Game = () => {
             const interval = setInterval(async () => {
                 try {
                     if (await hasCurrentPlayerChanged()) {
-                        console.log("Loaded new Gameboard-Status!")
                         await loadGameboard();
                     }
                     if (await checkGameOver()) {

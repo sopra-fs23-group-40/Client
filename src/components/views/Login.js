@@ -53,11 +53,8 @@ const Login = () => {
   const doLogin = async () => {
     try {
       const requestBody = JSON.stringify({username, password});
-      console.log("requestBody:" + JSON.stringify(requestBody));
 
       const response = await api.post('/login', requestBody);
-
-      console.log("response:" + JSON.stringify(response.status));
 
       // Get the returned user and update a new object.
       const user = new User(response.data);
@@ -65,7 +62,6 @@ const Login = () => {
         const token = response.headers["token"];
         // Store the token into the local storage.
         localStorage.setItem('token', token);
-        console.log("HEADER TOKEN: "+JSON.stringify(token));
       }
       // Store the username into the local storage.
       localStorage.setItem('username', user.username)

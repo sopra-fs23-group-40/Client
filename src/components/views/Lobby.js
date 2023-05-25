@@ -191,7 +191,6 @@ const Lobby = () => {
                 const split = response.data.playerList.split(',')
                 setPlayerList(split)
                 if (response.data.status === "INGAME") {
-                    console.log(response.data.gameId)
                     if (response.data.gameId) {
                         initializeGame(response.data.gameId)
                         history.push("/game/" + response.data.gameId)
@@ -293,7 +292,6 @@ const Lobby = () => {
                 }
             };
             const gameId = await api.post('/games', id, config);
-            console.log("GameId = " + gameId.data);
             initializeGame(gameId.data)
             localStorage.setItem('gameId', gameId.data);
             stopMusic();
