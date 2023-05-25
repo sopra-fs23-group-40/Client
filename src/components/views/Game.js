@@ -561,14 +561,6 @@ const Game = () => {
                 <p style={{color: "black"}}>Your block-inventory</p>
                 <div className="cell-field">{inventoryCells}</div>
 
-                <p
-                    style={{color: "red"}}
-                    onClick={() => window.location.reload()}
-                    title={"This text is here because synchronization doesn't work over google app engine yet"}
-                >
-                    <u>Click to Reload page</u>
-                </p>
-
                 <div className="cell-field" id="cursor-cells" style={{pointerEvents: "none", position: "absolute", display: "none"}}>{cursorCells}</div>
 
             </BaseContainer>
