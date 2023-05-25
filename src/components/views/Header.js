@@ -13,7 +13,7 @@ import logo from 'assets/Logo.png'
  */
 const Header = props => (
   <div className="header container" style={{height: props.height}}>
-      <img src={logo} alt="BigLogo" style={{marginTop: "10px"}}/>
+      <img src={logo} alt="BigLogo" style={{marginTop: "10px", height: '15em'}}/>
   </div>
 );
 
