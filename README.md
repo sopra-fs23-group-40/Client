@@ -67,7 +67,7 @@ so make sure to chat that beforehand._
 ### 4. Playing the game
 
 #### Welcome Information
-<img width="1728" alt="Welcome" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/32d15d42-af0f-4650-b9a6-ec43dbbc5ace">
+<img width="1728" alt="WelcomeInfo" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/c36b14b4-2069-4653-9da2-d112061c2fc1">
 
 #### Empty Board
 <img width="1728" alt="EmptyBoard" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/7a060b04-5f12-49be-ac51-ef8886b3e5eb">
