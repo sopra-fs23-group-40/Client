@@ -67,13 +67,16 @@ so make sure to chat that beforehand._
 ### 4. Playing the game
 
 #### Welcome Information
-<img width="1728" alt="WelcomeInfo" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/c36b14b4-2069-4653-9da2-d112061c2fc1">
+<img width="1728" alt="Welcome" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/d9fdd65c-3a6b-4f3f-a956-aeb0cfb97087">
 
 #### Empty Board
 <img width="1728" alt="EmptyBoard" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/7a060b04-5f12-49be-ac51-ef8886b3e5eb">
 
 #### No moves possible
 <img width="1728" alt="NoMovesPossible" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/b501b536-b6bf-423b-a056-f7586d51d4bf">
+
+#### Ingame Rules
+<img width="1728" alt="WelcomeInfo" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/c36b14b4-2069-4653-9da2-d112061c2fc1">
 
 #### Resigning from placing blocks
 <img width="1728" alt="Resign" src="https://github.com/sopra-fs23-group-40/Client/assets/10245334/f0231519-0818-4999-8dad-a776f39e3d3c">
