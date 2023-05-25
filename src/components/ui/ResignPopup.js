@@ -1,14 +1,10 @@
 import "styles/ui/PopUp.scss";
 import {api} from "../../helpers/api";
-import {useHistory} from 'react-router-dom';
 
 
 const ResignPopup = ({ closePopup }) => {
-    const history = useHistory();
-
 
     const resign = async () => {
-        //TODO: COMPLETE THIS, THOMAS
         const gameId = localStorage.getItem('gameId');
         const username = localStorage.getItem('username');
         const token = localStorage.getItem('token');
@@ -19,9 +15,7 @@ const ResignPopup = ({ closePopup }) => {
         };
         console.log(token)
         await api.post("/games/" + gameId + "/leaveGame", null, config);
-        localStorage.removeItem('gameId')
-        localStorage.removeItem('startDate')
-        history.push('/overview');
+        closePopup()
     }
     return (
         <div className="popup">
