@@ -4,11 +4,12 @@
   &.background {
     display: flex;
     flex-direction: column;
-    height: 40em;
+    height: auto !important;
     font-size: 16px;
     font-weight: 300;
     padding: 0 10em;
-    border-radius: 0.75em;
+    border-radius: 2em;
+    padding-bottom: 2em;
     background-color: $background;
     transition: opacity 0.5s ease, transform 0.5s ease;
     box-shadow: $dropShadow;

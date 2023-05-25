@@ -5,6 +5,19 @@ import HeaderSmall from "./HeaderSmall";
 import {Button} from "../ui/Button";
 import {useHistory} from "react-router-dom";
 
+const Player = ({playerName, playerScore}) => {
+    return (<div className="player container" style={{width: '100%'}}>
+            <img
+                src={`https://api.dicebear.com/6.x/bottts/svg?seed=${playerName}`}
+                alt="avatar"
+                style={{width: "40px", height: "40px"}}
+            />
+            <div className="player username">{playerName}</div>
+            <div className="player score" style={{marginRight: 0, marginLeft: 'auto'}}>{playerScore} Tiles</div>
+        </div>
+    )
+}
+
 const GameOver = () => {
 
     const history = useHistory();
@@ -13,28 +26,46 @@ const GameOver = () => {
     // TODO: show avatars of the players
     // TODO: Redirect back to the lobby?
 
-  return (
+     return (
 
     <BaseContainer>
           <HeaderSmall height="10"/>
           <div className="gameOver background">
-              <h2>Player {localStorage.getItem("winnerName")} wins the game!</h2>
+              <h2
+                  style={{fontSize: '50px', marginBottom: '0px'}}
+              >
+                  {localStorage.getItem("winnerName")} wins!
+              </h2>
 
-              <h3>Scores</h3>
-              <p>Player {localStorage.getItem("player1Name")}: {localStorage.getItem("player1Score")} Blocks
-                  <br/>Player {localStorage.getItem("player2Name")}: {localStorage.getItem("player2Score")} Blocks
-                  <br/>Player {localStorage.getItem("player3Name")}: {localStorage.getItem("player3Score")} Blocks
-                  <br/>Player {localStorage.getItem("player4Name")}: {localStorage.getItem("player4Score")} Blocks</p>
+              <center>
+                  <img
+                      src={`https://api.dicebear.com/6.x/bottts/svg?seed=${localStorage.getItem("winnerName")}`}
+                      alt="avatar"
+                      style={{width: "30%", height: "30%"}}
+                  />
+                  <h3
+                      style={{fontSize: '30px', margin: '0px'}}
+                  >
+                      Scores
+                  </h3>
+                  <ul className="lobby user-list">
+                      <Player playerName={localStorage.getItem("player1Name")} playerScore={localStorage.getItem("player1Score")}/>
+                      <Player playerName={localStorage.getItem("player2Name")} playerScore={localStorage.getItem("player2Score")}/>
+                      <Player playerName={localStorage.getItem("player3Name")} playerScore={localStorage.getItem("player3Score")}/>
+                      <Player playerName={localStorage.getItem("player4Name")} playerScore={localStorage.getItem("player4Score")}/>
+                  </ul>
               <p>Game duration: {localStorage.getItem("gameDuration")} Minutes</p>
-
+              </center>
               <Button
                   onClick={() => history.push("/overview")}
+                  style={{width: '40%'}}
               >
                   Back to the Lobbies
               </Button>
               <br/>
               <Button
                   onClick={() => history.push("/profile")}
+                  style={{width: '40%'}}
               >
                   View your Profile
               </Button>
