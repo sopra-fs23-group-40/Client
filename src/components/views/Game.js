@@ -49,6 +49,7 @@ const Game = () => {
             if (response.data[2].playerName === localStorage.getItem('username')) inventoryColor = player3Color;
             if (response.data[3].playerName === localStorage.getItem('username')) inventoryColor = player4Color;
             console.log("New Color: " + JSON.stringify(inventoryColor))
+            localStorage.setItem('inventoryColor', inventoryColor)
         });
     }
 
@@ -461,7 +462,12 @@ const Game = () => {
 
     if(blocks === null){
         async function fetchInventory() {
-            await getColors()
+            if(!localStorage.getItem('inventoryColor')){
+                await getColors();
+            }
+            else {
+                inventoryColor = localStorage.getItem('inventoryColor')
+            }
             await updateInventory()
         }
         fetchInventory()

@@ -22,9 +22,14 @@ const GameOver = () => {
 
     const history = useHistory();
 
-    // TODO: load the scores (left/placed blocks) into the local storage
-    // TODO: show avatars of the players
-    // TODO: Redirect back to the lobby?
+    const redirect = (url) => {
+        for(let item in localStorage) {
+            if(!(item === "username" || item === "token")){
+                localStorage.removeItem(item)
+            }
+        }
+        history.push(url)
+    }
 
      return (
 
@@ -57,14 +62,14 @@ const GameOver = () => {
               <p>Game duration: {localStorage.getItem("gameDuration")} Minutes</p>
               </center>
               <Button
-                  onClick={() => history.push("/overview")}
+                  onClick={() => redirect("/overview")}
                   style={{width: '40%'}}
               >
                   Back to the Lobbies
               </Button>
               <br/>
               <Button
-                  onClick={() => history.push("/profile")}
+                  onClick={() => redirect("/profile")}
                   style={{width: '40%'}}
               >
                   View your Profile

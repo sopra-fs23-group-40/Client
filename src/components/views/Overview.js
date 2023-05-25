@@ -159,7 +159,6 @@ const Overview = () => {
 
     let content = <Spinner/>;
 
-    // TODO: Do we still need/want the RELOAD button?
     if (lobbies || lobbiesChanged) {
         content = (
             <div className="overview" style={{minWidth: '400px'}}>
