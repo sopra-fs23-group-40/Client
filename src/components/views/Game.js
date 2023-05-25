@@ -12,10 +12,13 @@ import backgroundMusic from '../../assets/backgroundMusic.mp3';
 import blockPlacingEffect from '../../assets/blockPlacingEffect.mp3';
 import placementNotPossibleEffect from '../../assets/placementNotPossibleEffect.mp3';
 import {useHistory} from "react-router-dom";
+import Alert from "@mui/material/Alert";
 
 const Game = () => {
     const history = useHistory();
     const [currentPlayer, setCurrentPlayer] = useState(null)
+    const [alert, setAlert] = useState(false)
+    const [alertContent, setAlertContent] = useState("");
     const numRows = 20;
     const numCols = 20;
     const [playBackgroundMusic, {pause: pauseBackgroundMusic, stop: stopBackgroundMusic}] = useSound(backgroundMusic, {volume: 0.4, loop: true});
@@ -347,21 +350,34 @@ const Game = () => {
 
         try {
             removeBlockFromCursor();
-            const response = await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
+            await api.put("/games/" + gameId + "/" + username + "/move", requestBody);
             console.log(requestBody);
-            if (response.status !== 200) {
-                playPlacementNotPossibleEffect();
-                // TODO: Notification that placement was not possible
-            } else {
-                playBlockPlacingEffect();
-                await updateInventory();
-                await loadGameboard();
-            }
+            playBlockPlacingEffect();
+            await updateInventory();
+            await loadGameboard();
         } catch (e) {
             playPlacementNotPossibleEffect();
+            setAlert(true);
+            getAlertContent();
+            const timeId = setTimeout(() => {
+                // After 3 seconds set the show value to false
+                setAlert(false)
+            }, 3000)
+            return () => {
+                clearTimeout(timeId)
+            }
         }
 
     };
+
+    function getAlertContent() {
+        if(localStorage.getItem('username') !== currentPlayer) {
+            setAlertContent("It's not your turn! Please wait.")
+        }
+        else {
+            setAlertContent("Invalid Move!")
+        }
+    }
 
     // Create a 2D array to store the Cells
     const cells = [];
@@ -552,6 +568,7 @@ const Game = () => {
 
         <BaseContainer>
             <HeaderSmallInGame height="10"/>
+            {alert ? <Alert style={{position: 'absolute', left: window.innerWidth/2-150, top: "10px", width: "300px"}} severity='error'>{alertContent}</Alert> : <></> }
             {showPopup && <PopUp closePopup={closePopup} />} {/* Use the PopUp component */}
             <BaseContainer className='game container'  style={{ boxShadow: "none" }}>
                 {timer}
