@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "styles/views/HeaderSmall.scss";
-import logo from 'assets/BigLogoNew.png'
+import logo from 'assets/Logo.png'
 
 const HeaderSmall = props => (
   <div className="headersmall container" style={{height: props.height}}>

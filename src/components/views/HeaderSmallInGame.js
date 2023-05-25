@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import "styles/views/HeaderSmall.scss";
 import {Button} from "../ui/Button";
 import LeaveGamePopup from "../ui/LeaveGamePopup";
-import logo from 'assets/BigLogoNew.png'
+import logo from 'assets/Logo.png'
 
 const HeaderSmallInGame = props => {
     const [showPopup, setShowPopup] = useState(false)

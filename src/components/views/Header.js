@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "styles/views/Header.scss";
-import logo from 'assets/BigLogoNew.png'
+import logo from 'assets/Logo.png'
 
 /**
  * This is an example of a Functional and stateless component (View) in React. Functional components are not classes and thus don't handle internal state changes.
