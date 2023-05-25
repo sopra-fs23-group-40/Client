@@ -313,6 +313,7 @@ const Game = () => {
         }
 
         await api.get("/games/" + localStorage.getItem('gameId') + "/currentPlayer").then((response) => {
+            if(getCurrentPlayer() !== null && getCurrentPlayer() !== response.data.playerName) removeBlockFromCursor();
             setCurrentPlayer(response.data.playerName);
         });
     }
