@@ -85,6 +85,7 @@ so make sure to chat that beforehand._
 - a chat in the lobby or game
 - a game history in the statistics
 - the possibility to play against a computer/AI
+- the functionality to see another player's profile/statistics
 
 ## Authors
 
