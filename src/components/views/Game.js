@@ -18,8 +18,7 @@ const Game = () => {
     const [currentPlayer, setCurrentPlayer] = useState(null)
     const numRows = 20;
     const numCols = 20;
-    // TODO: When redirecting to the winner screen, use stop from {stop: stopBackgroundMusic, pause: pauseBackgroundMusic}
-    const [playBackgroundMusic, {pause: pauseBackgroundMusic}] = useSound(backgroundMusic, {volume: 0.4, loop: true});
+    const [playBackgroundMusic, {pause: pauseBackgroundMusic, stop: stopBackgroundMusic}] = useSound(backgroundMusic, {volume: 0.4, loop: true});
     const [playBlockPlacingEffect] = useSound(blockPlacingEffect, {volume: 0.4, loop: false});
     const [playPlacementNotPossibleEffect] = useSound(placementNotPossibleEffect, {volume: 0.2, loop: false});
     const [showPopup, setShowPopup] = useState(false);
@@ -273,6 +272,8 @@ const Game = () => {
         localStorage.setItem('winnerName', response.data.winnerName);
         localStorage.setItem('gameDuration', response.data.gameDuration);
         // you can add here more information to the local storage that can be displayed in the game over view
+
+        stopBackgroundMusic();
 
         history.push('/gameOver');
     }
