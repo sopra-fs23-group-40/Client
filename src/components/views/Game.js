@@ -88,6 +88,9 @@ const Game = () => {
                 event.preventDefault()
                 if(pickedUpBlock != null) flipPickedUpBlock(true);
                 return
+            case 'Space':
+                event.preventDefault()
+                return
             default:
                 return
         }
