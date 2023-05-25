@@ -4,10 +4,10 @@ import "styles/views/HeaderSmall.scss";
 import {Button} from "../ui/Button";
 import LeaveGamePopup from "../ui/LeaveGamePopup";
 import logo from 'assets/Logo.png'
-import PopUp from "../ui/PopUp";
 import {IconButton, Tooltip} from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import ResignPopup from "../ui/ResignPopup";
+import RulesPopUp from "../ui/RulesPopUp";
 
 const HeaderSmallInGame = props => {
     const [showPopupLeaveGame, setShowPopupLeaveGame] = useState(false);
@@ -57,7 +57,7 @@ const HeaderSmallInGame = props => {
             </Button>
         </div>
         {showPopupResign && <ResignPopup closePopup={closePopupResign}/>}
-        {showPopupRules && <PopUp closePopup={closePopupRules}/>}
+        {showPopupRules && <RulesPopUp closePopup={closePopupRules}/>}
         {showPopupLeaveGame && <LeaveGamePopup closePopup={closePopupLeaveGame}/>}
     </div>
     )

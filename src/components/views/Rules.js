@@ -24,7 +24,7 @@ const Rules = () => {
                 <img src={CornerGraphic} alt="CornerGraphic" width="30%"/>
                 <br />Each new piece <b>must</b> touch at least one other piece of the same color, <b>but only at the corners</b>.
                 <br />Pieces of the same color can only touch at the corners, they <b>cannot</b> be in contact along an edge. <br />
-                <img src={EdgeGraphic} alt="CornerGraphic" width="30%"/>
+                <img src={EdgeGraphic} alt="EdgeGraphic" width="30%"/>
                 <br />There are no restrictions on how pieces of different colors may contact each other.
                 <br />Once a piece has been placed on the board, it cannot be moved.
                 <br />Whenever a player is unable to place a piece on the board, that player must pass their turn.
