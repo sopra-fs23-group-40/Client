@@ -19,6 +19,7 @@ const LeaveGamePopup = ({ closePopup }) => {
         await api.post("/games/" + gameId + "/leaveGame", null, config);
         localStorage.removeItem('gameId')
         localStorage.removeItem('startDate')
+        localStorage.removeItem('inventoryColor')
         history.push('/overview');
     }
   return (
